@@ -1,0 +1,2 @@
+The program needs only one argument.
+USAGE: flipbyte <number>

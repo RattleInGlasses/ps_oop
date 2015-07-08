@@ -1,0 +1,2 @@
+ERROR: not enough arguments
+Usage: replace.exe <input file> <output file> [<search string>] [<replace string>]

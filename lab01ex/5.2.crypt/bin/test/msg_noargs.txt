@@ -1,0 +1,3 @@
+The program encrypts or decrypts given file using given key.
+The key must be an integer number no less than 0 and no more than 255.
+USAGE: crypt <encrypt | decrypt> <input file> <output file> <key>

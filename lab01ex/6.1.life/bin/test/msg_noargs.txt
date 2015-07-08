@@ -1,0 +1,3 @@
+The program calculates next generation of cells based on input file
+and prints the result out into a file or the standart output.
+USAGE: life <input file> [<output file>]

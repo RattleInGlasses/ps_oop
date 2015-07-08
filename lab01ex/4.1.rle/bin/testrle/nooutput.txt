@@ -1,0 +1,2 @@
+Error opening output file.
+Make sure you have enough rights.

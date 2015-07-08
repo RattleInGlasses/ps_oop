@@ -1,0 +1,4 @@
+The program reverses bit structure of a given number.
+The number must be integer with base of 10 that is
+no less than 0 and no more than 255.
+USAGE: flipbyte <number>

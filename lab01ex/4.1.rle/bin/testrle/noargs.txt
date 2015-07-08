@@ -1,0 +1,2 @@
+The program packs file into rle archive or unpacks rle archive.
+USAGE: rle pack | unpack <input file> <output file>

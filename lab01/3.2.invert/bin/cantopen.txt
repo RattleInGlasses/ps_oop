@@ -1,0 +1,1 @@
+Error opening file (not enough rights or the file doesn't exists)

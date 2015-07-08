@@ -1,0 +1,4 @@
+The program is trying to calculate the invert matrix for
+a given one in a text file.
+The matrix must have size of 3 x 3.
+USAGE: invert <matrix file>

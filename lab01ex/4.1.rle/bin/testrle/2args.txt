@@ -1,0 +1,2 @@
+The program needs at least 3 arguments.
+USAGE: rle pack | unpack <input file> <output file>

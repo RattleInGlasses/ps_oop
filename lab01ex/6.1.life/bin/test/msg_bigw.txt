@@ -1,0 +1,2 @@
+The given file doesn't contain a valid life field.
+Width is too big, it must be no more than 256

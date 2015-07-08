@@ -1,0 +1,2 @@
+Program replaces all entries of a substring in a text file by another substring
+Usage: replace.exe <input file> <output file> [<search string>] [<replace string>]
