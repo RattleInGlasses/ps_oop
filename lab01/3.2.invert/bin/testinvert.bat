@@ -29,7 +29,20 @@ FC /B output brokenfile.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM содержит не только числа
-invert brokenmatrix.txt > output
+REM нецифровой символ в начале числа
+invert brokenmatrix1.txt > output
+IF NOT ERRORLEVEL 1 GOTO err
+FC /B output brokenfile.txt
+IF ERRORLEVEL 1 GOTO err
+
+REM нецифровой символ в середине числа
+invert brokenmatrix2.txt > output
+IF NOT ERRORLEVEL 1 GOTO err
+FC /B output brokenfile.txt
+IF ERRORLEVEL 1 GOTO err
+
+REM нецифровой символ после числа
+invert brokenmatrix3.txt > output
 IF NOT ERRORLEVEL 1 GOTO err
 FC /B output brokenfile.txt
 IF ERRORLEVEL 1 GOTO err

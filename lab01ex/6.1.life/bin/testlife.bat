@@ -5,7 +5,7 @@ IF NOT ERRORLEVEL 0 GOTO err
 FC /B test\output test\msg_noargs.txt
 IF ERRORLEVEL 1 GOTO err
 
-REM запуск с 3-мя. параметрами
+REM запуск с 3-мя параметрами
 life.exe input.txt out.txt andonemore > test\output
 IF NOT ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_3args.txt
