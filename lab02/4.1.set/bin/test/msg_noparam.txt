@@ -1,0 +1,4 @@
+The program prints set of integer numbers from 1 to N that are satisfy following conditions:
+1. reminder after division of the number by sum of its digits is zero;
+2. sum of number's digits is even.
+USAGE: sets <number>

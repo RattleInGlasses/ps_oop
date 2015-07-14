@@ -1,0 +1,7 @@
+Testing of processing vectors completed successfully.
+The program reads array, adds to it's every element sum of it's 3 minimal elements, output result in ascending order.
+================================================================================
+Enter a sequence of real numbers.
+The amount of numbers must be no less than 3.
+The delimiter between numbers must be one or more spaces.
+-2.9 1.2 2.1 

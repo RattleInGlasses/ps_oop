@@ -1,0 +1,2 @@
+The program needs at least 2 argumnets. You need to specify output file.
+USAGE: expand_template.exe <input file> <output file> [<param> <value> [<param> <value> ...]]

@@ -1,0 +1,3 @@
+The program replaces substrings of a file by other strings
+(<param> is beeing replaced by <value>) and stores the result in specified file
+USAGE: expand_template.exe <input file> <output file> [<param> <value> [<param> <value> ...]]
