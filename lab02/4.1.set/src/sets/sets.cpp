@@ -14,30 +14,31 @@
 
 using namespace std;
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		cout << MSG_DESCRIPTION;
-		exit(0);
+		return false;
 	}
 	if (argc > 2)
 	{
 		cout << MSG_TOO_MANY_ARGS;
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
-int StrToInt(char *const pStr)
+bool StrToInt(char *const pStr, int &num)
 {
 	char *pEndPoint;
-	int num = strtol(pStr, &pEndPoint, 10);
+	num = strtol(pStr, &pEndPoint, 10);
 	if ((*pStr == '\0') || (*pEndPoint != '\0'))
 	{
 		cout << MSG_NOT_INTEGER;
-		exit(1);
+		return false;
 	}
-	return num;
+	return true;
 }
 
 int DigitsSum(int num)
@@ -128,19 +129,30 @@ int main(int argc, char* argv[])
 {
 	//TestCrossSet;
 	
-	CheckArgc(argc);
-	int N = StrToInt(argv[1]);
-	if (N < 1)
+	if (!CheckArgc(argc))
 	{
-		cout << MSG_LESS_1;
 		return 1;
 	}
 
-	set<int> set1 = CreateSet1(N);
-	set<int> set2 = CreateSet2(N);
-	set<int> intersection = CrossSet(set1, set2);
+	int n;
+	if (StrToInt(argv[1], n))
+	{
+		if (n < 1)
+		{
+			cout << MSG_LESS_1;
+			return 1;
+		}
 
-	PrintSet(intersection);
+		set<int> set1 = CreateSet1(n);
+		set<int> set2 = CreateSet2(n);
+		set<int> intersection = CrossSet(set1, set2);
+
+		PrintSet(intersection);
+	}
+	else
+	{
+		return 1;
+	}
 
 	return 0;
 }

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <locale>
 
 
 

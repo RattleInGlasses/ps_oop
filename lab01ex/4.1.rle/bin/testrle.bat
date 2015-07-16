@@ -1,7 +1,7 @@
 REM параметры
 REM запуск без параметров
 rle.exe > testrle\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B testrle\output testrle\noargs.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -75,37 +75,37 @@ REM ==================================================================
 REM упаковка
 REM пустой файл
 rle.exe pack testrle\empty.txt testrle\emptypack.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\empty.txt testrle\emptypack.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с одним байтом
 rle.exe pack testrle\input1byte.txt testrle\package.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\package.txt testrle\pack1byte.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с двумя одинаковыми байтами
 rle.exe pack testrle\input2bytes.txt testrle\package.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\package.txt testrle\pack2bytes.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл без повторяющихся байтов
 rle.exe pack testrle\inputdiffbytes.txt testrle\package.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\package.txt testrle\packdiffbytes.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с последовательностями в 255, 256, 257 байт
 rle.exe pack testrle\inputLongStreaks.txt testrle\package.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\package.txt testrle\packLongStreaks.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с символами №255
 rle.exe pack testrle\inputSyms255.txt testrle\package.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\package.txt testrle\packSyms255.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -114,31 +114,31 @@ REM ==================================================================
 REM распаковка
 REM пустой файл
 rle.exe unpack testrle\emptypack.txt testrle\emptyunpacked.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\emptypack.txt testrle\emptyunpacked.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с одной закодированной последовательностью
 rle.exe unpack testrle\pack2bytes.txt testrle\unpacked2bytes.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\input2bytes.txt testrle\unpacked2bytes.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с несколькими закодированными последовательностями
 rle.exe unpack testrle\packdiffbytes.txt testrle\unpackedDiffBytes.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\unpackedDiffBytes.txt testrle\inputdiffbytes.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с последовательностями в 255, 256, 257 байт
 rle.exe unpack testrle\packLongStreaks.txt testrle\unpackedLongStreaks.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\unpackedLongStreaks.txt testrle\inputLongStreaks.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM файл с символами №255
 rle.exe unpack testrle\packSyms255.txt testrle\unpackedSyms255.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B testrle\unpackedSyms255.txt testrle\inputSyms255.txt
 IF ERRORLEVEL 1 GOTO err
 

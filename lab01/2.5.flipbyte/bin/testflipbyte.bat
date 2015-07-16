@@ -4,7 +4,7 @@ REM ++++++++++++++++++++++++++++
 REM количество аргументов
 REM без аргументов
 flipbyte > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B output noparam.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -32,7 +32,7 @@ REM содержит пробелы и табуляцию
 REM ---------------------
 REM пробелы
 flipbyte " 	 2	 " > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output 2.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -73,19 +73,19 @@ REM ==================================================================
 REM проверка правильности выполнения преобразований
 REM 0 -> 0
 flipbyte 0 > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output 0.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM 255 -> 255
 flipbyte 255 > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output 255.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM +25 -> 152
 flipbyte +25 > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output 25.txt
 IF ERRORLEVEL 1 GOTO err
 

@@ -108,11 +108,11 @@ void TestExpandTemplate()
 	parametrs["DQA"] = "[dqa]";
 	assert(ExpandTemplate(tmpl, parametrs) == "-[dqa][a][bb][cc][cc][c][a][b][c]+");
 
-	tmpl = "Строка с параметром {param} и слоПУСТОПУСТОвом ПУСТО";
+	tmpl = "Строка с параметром {param} и слоПУСТОПУСТОвом ПУСТПУСТО";
 	parametrs.clear();
 	parametrs["{param}"] = "{1}";
 	parametrs["ПУСТО"] = "";
-	assert(ExpandTemplate(tmpl, parametrs) == "Строка с параметром {1} и словом ");
+	assert(ExpandTemplate(tmpl, parametrs) == "Строка с параметром {1} и словом ПУСТ");
 
 	tmpl = "BBADC";
 	parametrs.clear();
@@ -132,4 +132,6 @@ void TestExpandTemplate()
 	tmpl = "Что-то есть";
 	// parametrs.clear();
 	assert(ExpandTemplate(tmpl, parametrs) == "Что-то есть");
+
+	cout << "ExpandTemplate have passed the test";
 }

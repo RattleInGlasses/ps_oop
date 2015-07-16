@@ -1,0 +1,2 @@
+The program is a translator. To use it you need a vocabulary.
+USAGE: translator.exe <vocabulary file>

@@ -1,7 +1,7 @@
 REM количество параметров
 REM запуск без параметров
 replace > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B output noparam.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -42,7 +42,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM пустая строка вместо искомой и заменяющей строк
 replace infile.txt outfile.txt "" "" > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt infile.txt
@@ -50,7 +50,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM пустая строка вместо заменяющей строки
 replace infile.txt outfile.txt file "" > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt outNullReplaced.txt
@@ -61,7 +61,7 @@ REM ==================================================================
 REM файлы
 REM пустой файл копирование
 replace empty.txt outfile.txt > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodEmptyExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt empty.txt
@@ -69,7 +69,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM пустой файл копирование и замена
 replace empty.txt outfile.txt file life > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodEmptyExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt empty.txt
@@ -77,7 +77,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM в файле нечего заменять
 replace infile.txt outfile.txt youcantfindit smth > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt infile.txt
@@ -85,10 +85,18 @@ IF ERRORLEVEL 1 GOTO err
 
 REM замена на строку, повторяющую исходную
 replace infile.txt outfile.txt file filefile > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt outWordWord.txt
+IF ERRORLEVEL 1 GOTO err
+
+REM дополнительный тест
+replace infile1231234.txt outfile.txt 1231234 changed
+if ERRORLEVEL 1 GOTO err
+FC /B output goodExit.txt
+IF ERRORLEVEL 1 GOTO err
+FC /B outfile.txt outReplaced1231234.txt
 IF ERRORLEVEL 1 GOTO err
 
 
@@ -96,7 +104,7 @@ REM ==================================================================
 REM нормальная работа
 REM запуск с двумя параметрами (копирование)
 replace infile.txt outfile.txt
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt infile.txt
@@ -104,7 +112,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM запуск с тремя параметрами (не задана заменяющая строка - в этом случае происходит удаление искомой строки)
 replace infile.txt outfile.txt file
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt outNullReplaced.txt
@@ -112,7 +120,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM запуск с четыремя параметрами (обычная работа)
 replace infile.txt outfile.txt file life
-if NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output goodExit.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B outfile.txt outReplaced.txt

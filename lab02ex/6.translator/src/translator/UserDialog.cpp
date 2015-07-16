@@ -31,7 +31,7 @@ bool AskAboutSaving()
 bool HasForbiddenSymbols(string str)
 {
 	string unallowedSymbols = UNALLOWED_SYMBOLS;
-	for (int i = 0; i < unallowedSymbols.length(); i++)
+	for (size_t i = 0; i < unallowedSymbols.length(); i++)
 	{
 		if (str.find(unallowedSymbols[i]) != string::npos)
 		{
@@ -41,10 +41,20 @@ bool HasForbiddenSymbols(string str)
 	return false;
 }
 
+string ToLowerCase(string &const str)
+{
+	string result;
+	locale rusLoc(".866");
+	for (string::iterator it = str.begin(); it != str.end(); it++)
+	{
+		result += tolower(*it, rusLoc);
+	}
+	return result;
+}
+
 string GetCommand(string const &userRequest)
 {
-	string command = RemoveExtraSpaces(userRequest);
-	return command;
+	return ToLowerCase(RemoveExtraSpaces(userRequest));
 }
 
 void AddNewWord(string const &word, map<string, string> &vocabulary, bool &newWordAdded)

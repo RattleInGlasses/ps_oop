@@ -18,6 +18,7 @@
 #define MSG_ERR_ZERO_FIELD_HEIGHT       MSG_ERR_BAD_INPUT_FILE "Zero field height\n"
 #define MSG_ERR_TOO_BIG_FIELD_WIDTH     MSG_ERR_BAD_INPUT_FILE "Width is too big, it must be no more than 256\n"
 #define MSG_ERR_TOO_BIG_FIELD_HEIGHT    MSG_ERR_BAD_INPUT_FILE "Height is too big, it must be no more than 256\n"
+#define MSG_ERR_FIELD_HAS_NO_WIDTH      MSG_ERR_BAD_INPUT_FILE "Filed has no valid bounds\n"
 #define MSG_ERR_FIELD_HAS_NO_BOTTOM     MSG_ERR_BAD_INPUT_FILE "Field has no valid bottom\n"
 #define MSG_ERR_FIELD_INVALID_SYMBOL    MSG_ERR_BAD_INPUT_FILE "Invalid symbol on a field "
 #define MSG_GOOD_END                    "\nThe next generation of life has been successfully calculated\n"
@@ -32,7 +33,7 @@ struct CellsField
 {
 	int height;
 	int width;
-	CellState **cells;
+	CellState **cells = nullptr;
 };
 
 // work with field
@@ -54,11 +55,14 @@ CellsField CreateField(int width, int height)
 
 void DestroyField(CellsField &field)
 {
-	for (int i = 0; i < field.height; i++)
+	if (field.cells != nullptr)
 	{
-		free(field.cells[i]);
+		for (int i = 0; i < field.height; i++)
+		{
+			free(field.cells[i]);
+		}
+		free(field.cells);
 	}
-	free(field.cells);
 }
 
 // process field
@@ -120,8 +124,15 @@ CellsField CalcNextGenField(CellsField &const curGenField)
 
 // field output
 
-void PrintField(FILE *pOutFile, CellsField &const field)
+bool PrintField(char *pOutFileName, CellsField &const field)
 {
+	FILE *pOutFile = (pOutFileName != NULL) ? fopen(pOutFileName, "w") : stdout;
+	if (!pOutFile)
+	{
+		printf(MSG_ERR_NO_OUTPUT);
+		return false;
+	}
+	
 	for (int i = -1; i <= field.height; i++)
 	{
 		for (int j = -1; j <= field.width; j++)
@@ -142,6 +153,13 @@ void PrintField(FILE *pOutFile, CellsField &const field)
 		}
 		fputc('\n', pOutFile);
 	}
+
+	if (pOutFile != stdout)
+	{
+		fclose(pOutFile);
+	}
+
+	return true;
 }
 
 // field init
@@ -170,7 +188,8 @@ int GetFieldWidth(FILE *pFieldFile)
 	return count - 2;
 }
 
-// scans first and second chars of a line to get height of the field
+// scans first and second chars of lines to get height of the field
+// returns -1 in case of error
 int GetFieldHeight(FILE *pFieldFile)
 {
 	int ch;
@@ -186,8 +205,7 @@ int GetFieldHeight(FILE *pFieldFile)
 		}
 		else
 		{
-			printf(MSG_ERR_FIELD_HAS_NO_BOTTOM);
-			exit(1);
+			return -1;
 		}
 		// check second symbol of the line
 		ch = fgetc(pFieldFile);
@@ -203,21 +221,27 @@ int GetFieldHeight(FILE *pFieldFile)
 	return count - 1;
 }
 
-void CheckFieldDimension(int fieldDim, int min, int max, char *pLessMinErrMsg, char *pMoreMaxErrMsg)
+bool CheckFieldDimension(int fieldDim, int min, int max, char *pLessMinErrMsg, char *pMoreMaxErrMsg, char *pErrDimMsg)
 {
+	if (fieldDim < 0)
+	{
+		printf(pErrDimMsg);
+		return false;
+	}
 	if (fieldDim < min)
 	{
 		printf(pLessMinErrMsg);
-		exit(1);
+		return false;
 	}
 	if (fieldDim > max)
 	{
 		printf(pMoreMaxErrMsg);
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
-void FillField(CellsField &field, FILE *pFieldFile)
+bool FillField(CellsField &field, FILE *pFieldFile)
 {
 	for (int i = 0; i < field.height; i++)
 	{
@@ -241,78 +265,101 @@ void FillField(CellsField &field, FILE *pFieldFile)
 			{
 				printf(MSG_ERR_FIELD_INVALID_SYMBOL);
 				printf("at line %d column %d\n", (i + 1), (j + 1));
-				exit(1);
+				return false;
 			}
 		}
 	}
+	return true;
 }
 
-CellsField ReadField(FILE *pFieldFile)
+bool ReadField(char *pFieldFileName, CellsField &field)
 {
-	int width = GetFieldWidth(pFieldFile);
-	CheckFieldDimension(width, 1, 256, MSG_ERR_ZERO_FIELD_WIDTH, MSG_ERR_TOO_BIG_FIELD_WIDTH);
-	int height = GetFieldHeight(pFieldFile);
-	CheckFieldDimension(height, 1, 256, MSG_ERR_ZERO_FIELD_HEIGHT, MSG_ERR_TOO_BIG_FIELD_HEIGHT);
-
-	CellsField field = CreateField(width, height);
-	FillField(field, pFieldFile);
-
-	return field;
+	FILE *pFieldFile = fopen(pFieldFileName, "r");
+	if (pFieldFile)
+	{
+		int width = GetFieldWidth(pFieldFile);
+		if (CheckFieldDimension(width, 1, 256, MSG_ERR_ZERO_FIELD_WIDTH, MSG_ERR_TOO_BIG_FIELD_WIDTH, MSG_ERR_FIELD_HAS_NO_WIDTH))
+		{
+			int height = GetFieldHeight(pFieldFile);
+			if (CheckFieldDimension(height, 1, 256, MSG_ERR_ZERO_FIELD_HEIGHT, MSG_ERR_TOO_BIG_FIELD_HEIGHT, MSG_ERR_FIELD_HAS_NO_BOTTOM))
+			{
+				field = CreateField(width, height);
+				if (FillField(field, pFieldFile))
+				{
+					fclose(pFieldFile);
+				}
+				else
+				{
+					fclose(pFieldFile);
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		printf(MSG_ERR_NO_INPUT);
+		return false;
+	}
+	
+	return true;
 }
 
 // first check
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		printf(MSG_DESCRIPTION);
-		exit(0);
+		return false;
 	}
 	if (argc > 3)
 	{
 		printf(MSG_ERR_TOO_MANY_ARGS);
-		exit(1);
+		return false;
 	}
-}
-
-FILE *OpenFile(char *pFileName, char* pMode, char* ErrorMessage)
-{
-	FILE *pFile = fopen(pFileName, pMode);
-	if (!pFile)
-	{
-		printf(ErrorMessage);
-		exit(1);
-	}
-	return pFile;
-}
-
-// deinit
-
-void CloseFile(FILE *pFile)
-{
-	if (pFile != stdout)
-		fclose(pFile);
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
-	// init
-	CheckArgc(argc);
-	FILE *pFieldFile = OpenFile(argv[1], "r", MSG_ERR_NO_INPUT);
-	FILE *pOutFile = (argc == 3) ? OpenFile(argv[2], "w", MSG_ERR_NO_OUTPUT) : stdout;
-	CellsField field = ReadField(pFieldFile);
-
-	// calc and print
-	CellsField nextGenField = CalcNextGenField(field);
-	PrintField(pOutFile, nextGenField);
-	printf(MSG_GOOD_END);
-
-	// deinit
+	if (!CheckArgc(argc))
+	{
+		return 1;
+	}
+	
+	CellsField field;
+	if (ReadField(argv[1], field))
+	{
+		// calc and print
+		CellsField nextGenField = CalcNextGenField(field);
+		char *pOutFileName = (argc == 3) ? argv[2] : NULL;
+		if (PrintField(pOutFileName, nextGenField))
+		{
+			DestroyField(nextGenField);
+			printf(MSG_GOOD_END);
+		}
+		else
+		{
+			DestroyField(nextGenField);
+			return 1;
+		}
+	}
+	else
+	{
+		DestroyField(field);
+		return 1;
+	}
 	DestroyField(field);
-	DestroyField(nextGenField);
-	CloseFile(pFieldFile);
-	CloseFile(pOutFile);
 
 	return 0;
 }

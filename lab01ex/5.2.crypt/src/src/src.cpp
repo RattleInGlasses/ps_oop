@@ -32,12 +32,6 @@ enum ErrReadByte
 	BYTE_MORE_THAN_255
 };
 
-enum ErrReadTask
-{
-	TASK_OK,
-	TASK_UNDEFINED
-};
-
 // main functions
 
 void PutBit(unsigned char &dest, char pos, unsigned char bit)
@@ -108,16 +102,47 @@ void DecryptFile(FILE *pEncryptedFile, FILE *pDecryptedFile, unsigned char key)
 	}
 }
 
-void PerformAction(Task task, FILE *pInFile, FILE *pOutFile, unsigned char key)
+bool OpenFile(char *pFileName, char *pMode, char *pErrMsg, FILE *&pFile)
 {
-	if (task == ENCRYPT)
+	pFile = fopen(pFileName, pMode);
+	if (!pFile)
 	{
-		EncryptFile(pInFile, pOutFile, key);
+		printf(pErrMsg);
+		return false;
 	}
-	else if (task == DECRYPT)
+	return true;
+}
+
+void CloseFile(FILE *pFile)
+{
+	if (pFile)
 	{
-		DecryptFile(pInFile, pOutFile, key);
+		fclose(pFile);
 	}
+}
+
+bool PerformAction(Task task, char *pInFileName, char *pOutFileName, unsigned char key)
+{
+	FILE *pInFile;
+	FILE *pOutFile;
+	if ((OpenFile(pInFileName, "rb", MSG_ERR_CANT_OPEN_INPUT_FILE, pInFile))
+		&& (OpenFile(pOutFileName, "wb", MSG_ERR_CANT_OPEN_OUTPUT_FILE, pOutFile)))
+	{
+		if (task == ENCRYPT)
+		{
+			EncryptFile(pInFile, pOutFile, key);
+		}
+		else if (task == DECRYPT)
+		{
+			DecryptFile(pInFile, pOutFile, key);
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 // print end message function
@@ -131,27 +156,6 @@ void PrintGoodEndMsg(Task task)
 	if (task == DECRYPT)
 	{
 		printf(MSG_DECRTYPTION_DONE);
-	}
-}
-
-// file functions
-
-FILE *OpenFile(char *pFileName, char *pMode, char *pErrMsg)
-{
-	FILE *pFile = fopen(pFileName, pMode);
-	if (!pFile)
-	{
-		printf(pErrMsg);
-		exit(1);
-	}
-	return pFile;
-}
-
-void CloseFile(FILE *pFile)
-{
-	if (pFile)
-	{
-		fclose(pFile);
 	}
 }
 
@@ -195,31 +199,27 @@ ErrReadByte StrToByte(char *const pStr, unsigned char &byte)
 	return BYTE_OK;
 }
 
-unsigned char GetKey(char *pKeyStr)
+bool GetKey(char *pKeyStr, unsigned char &key)
 {
-	unsigned char key;
-	ErrReadByte err = StrToByte(pKeyStr, key);
-
-	switch (err)
+	switch (StrToByte(pKeyStr, key))
 	{
 		case BYTE_NOT_INTEGER:
 			printf(MSG_ERR_KEY_NOT_INTEGER);
-			exit(1);
+			return false;
 			break;
 		case BYTE_LESS_THAN_0:
 			printf(MSG_ERR_KEY_LESS_THAN_0);
-			exit(1);
+			return false;
 			break;
 		case BYTE_MORE_THAN_255:
 			printf(MSG_ERR_KEY_MORE_THAN_255);
-			exit(1);
+			return false;
 			break;
 	}
-
-	return key;
+	return true;
 }
 
-ErrReadTask StrToProgramTask(char *const pTaskStr, Task &task)
+bool StrToProgramTask(char *const pTaskStr, Task &task)
 {
 	if (strcmp(pTaskStr, "encrypt") == 0)
 	{
@@ -231,59 +231,66 @@ ErrReadTask StrToProgramTask(char *const pTaskStr, Task &task)
 	}
 	else
 	{
-		return TASK_UNDEFINED;
+		return false;
 	}
 
-	return TASK_OK;
-}
-
-Task GetProgramTask(char *const pTaskStr)
-{
-	Task task;
-	ErrReadTask err = StrToProgramTask(pTaskStr, task);
-
-	if (err == TASK_UNDEFINED)
-	{
-		printf(MSG_ERR_WRONG_ACTION_ARGUMENT);
-		exit(1);
-	}
-
-	return task;
+	return true;
 }
 
 // check arguments function
 
-void CheckArgumentsCount(int argc)
+bool CheckArgumentsCount(int argc)
 {
 	if (argc < 2)
 	{
 		printf(MSG_NO_ARGS);
-		exit(0);
+		return false;
 	}
 	if (argc < 5)
 	{
 		printf(MSG_ERR_NOT_ENOUGH_ARGS);
-		exit(1);
+		return false;
 	}
 	if (argc > 5)
 	{
 		printf(MSG_ERR_TOO_MANY_ARGS);
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
-	CheckArgumentsCount(argc);
-	Task task = GetProgramTask(argv[1]);
-	unsigned char key = GetKey(argv[4]);
-	FILE *pInFile = OpenFile(argv[2], "rb", MSG_ERR_CANT_OPEN_INPUT_FILE);
-	FILE *pOutFile = OpenFile(argv[3], "wb", MSG_ERR_CANT_OPEN_OUTPUT_FILE);
-	PerformAction(task, pInFile, pOutFile, key);
-	
-	CloseFile(pInFile);
-	CloseFile(pOutFile);
-	PrintGoodEndMsg(task);
+	if (!CheckArgumentsCount(argc))
+	{
+		return 1;
+	}
+
+	Task task;
+	if (StrToProgramTask(argv[1], task))
+	{
+		unsigned char key;
+		if (GetKey(argv[4], key))
+		{
+			if (PerformAction(task, argv[2], argv[3], key))
+			{
+				PrintGoodEndMsg(task);
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		printf(MSG_ERR_WRONG_ACTION_ARGUMENT);
+		return 1;
+	}
 
 	return 0;
 }

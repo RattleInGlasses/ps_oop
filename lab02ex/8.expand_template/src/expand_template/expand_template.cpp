@@ -20,18 +20,33 @@ void PrintEndMessage(char *inFileName, char *outFileName)
 	cout << "File " << outFileName << " successfully created from file " << inFileName << endl;
 }
 
-void StreamExpandTemplate(istream &inStream, ostream &outStream, map<string, string> params)
+bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, string> params)
 {
-	string line;
-	while (getline(inStream, line))
+	ifstream inFileStream(pInFileName, ifstream::in);
+	if (!inFileStream.is_open())
 	{
-		outStream << ExpandTemplate(line, params);
-		inStream.unget();
-		if (inStream.get() == '\n')
+		cout << MSG_ERR_NO_INPUT;
+		return false;
+	}
+	ofstream outFileStream(pOutFileName, ofstream::out);
+	if (!outFileStream.is_open())
+	{
+		cout << MSG_ERR_NO_OUTPUT;
+		return false;
+	}		
+	
+	string line;
+	while (getline(inFileStream, line))
+	{
+		outFileStream << ExpandTemplate(line, params);
+		inFileStream.unget();
+		if (inFileStream.get() == '\n')
 		{
-			outStream << endl;
+			outFileStream << endl;
 		}
 	}
+
+	return true;
 }
 
 map<string, string> GetParams(int argc, char* argv[])
@@ -44,48 +59,45 @@ map<string, string> GetParams(int argc, char* argv[])
 	return params;
 }
 
-fstream OpenFile(char *fileName, ios_base::openmode mode, char *errMsg)
-{
-	fstream fileStream(fileName, mode);
-	if (!fileStream.is_open())
-	{
-		cout << errMsg;
-		exit(1);
-	}
-	return fileStream;
-}
-
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		cout << MSG_DESCRIPTION;
-		exit(0);
+		return false;
 	}
 	if (argc < 3)
 	{
 		cout << MSG_ERR_NOT_ENOUGH_ARGUMENTS;
-		exit(1);
+		return false;
 	}
 	if ((argc > 3) && ((argc % 2) != 1))
 	{
 		cout << MSG_ERR_PARAM_WITHOUT_VALUE;
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
 	//TestExpandTemplate();
 	
-	CheckArgc(argc);
-	istream &inFile  = OpenFile(argv[1], istream::in, MSG_ERR_NO_INPUT);
-	ostream &outFile = OpenFile(argv[2], ostream::out, MSG_ERR_NO_OUTPUT);
+	if (!CheckArgc(argc))
+	{
+		return 1;
+	}
+
 	map<string, string> params = GetParams(argc, argv);
 	
-	StreamExpandTemplate(inFile, outFile, params);
-
-	PrintEndMessage(argv[1], argv[2]);
+	if (StreamExpandTemplate(argv[1], argv[2], params))
+	{
+		PrintEndMessage(argv[1], argv[2]);
+	}
+	else
+	{
+		return 1;
+	}	
 
 	return 0;
 }

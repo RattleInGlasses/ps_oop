@@ -18,12 +18,15 @@
 enum ProgramMode
 {
 	PACK,
-	UNPACK
+	UNPACK,
+	UNDEFINED
 };
 
 enum ProgramError
 {
 	ERR_OK,
+	ERR_ERROR_OPENING_INPUT_FILE,
+	ERR_ERROR_OPENING_OUPUT_FILE,
 	ERR_ZERO_COUNT,
 	ERR_COUNT_WITHOUT_DATA
 };
@@ -74,23 +77,24 @@ void Pack(FILE *pInFile, FILE *pPackedFile)
 	} while (nextByte != EOF);
 }
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		printf(MSG_NO_ARGS);
-		exit(0);
+		return false;
 	}
 	if (argc < 4)
 	{
 		printf(MSG_ERR_NOT_ENOUGH_ARGS);
-		exit(1);
+		return false;
 	}
 	if (argc > 4)
 	{
 		printf(MSG_ERR_TOO_MANY_ARGS);
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
 ProgramMode GetProgramMode(char *pModeStr)
@@ -105,66 +109,76 @@ ProgramMode GetProgramMode(char *pModeStr)
 	}
 	else
 	{
-		printf(MSG_ERR_WRONG_ARG);
-		exit(1);
+		return UNDEFINED;
 	}
 }
 
-FILE *OpenFile(char *pFileName, char *pMode, char *pErrMsg)
+bool OpenFile(char *pFileName, char *pMode, FILE *&pFile)
 {
-	FILE *pFile = fopen(pFileName, pMode);
+	pFile = fopen(pFileName, pMode);
 	if (!pFile)
 	{
-		printf(pErrMsg);
-		exit(1);
+		return false;
 	}
-	return pFile;
+	return true;
 }
 
-ProgramError DoAction(ProgramMode mode, FILE *pInFile, FILE *pOutFile)
+ProgramError DoAction(ProgramMode mode, char *pInFileName, char *pOutFileName)
 {
+	FILE *pInFile;
+	if (!OpenFile(pInFileName, "rb", pInFile))
+	{
+		return ERR_ERROR_OPENING_INPUT_FILE;
+	}
+	FILE *pOutFile;
+	if (!OpenFile(pOutFileName, "wb", pOutFile))
+	{
+		return ERR_ERROR_OPENING_OUPUT_FILE;
+	}
+
 	ProgramError err = ERR_OK;
 	switch (mode)
 	{
-	case PACK:
-		Pack(pInFile, pOutFile);
-		break;
-	case UNPACK:
-		err = Unpack(pInFile, pOutFile);
-		break;
+		case PACK:
+			Pack(pInFile, pOutFile);
+			break;
+		case UNPACK:
+			err = Unpack(pInFile, pOutFile);
+			break;
 	}
 
+	fclose(pInFile);
+	fclose(pOutFile);
+
+	if (err != ERR_OK)
+	{
+		remove(pOutFileName);
+	}
 	return err;
 }
 
-void CheckProgramError(ProgramError err)
+bool CheckProgramError(ProgramError err)
 {
 	switch (err)
 	{
+		case ERR_ERROR_OPENING_INPUT_FILE:
+			printf(MSG_ERR_INPUT_FILE_OPENING_ERROR);
+			return false;
+			break;
+		case ERR_ERROR_OPENING_OUPUT_FILE:
+			printf(MSG_ERR_OUTPUT_FILE_OPENING_ERROR);
+			return false;
+			break;
 		case ERR_ZERO_COUNT:
 			printf(MSG_ERR_WRONG_RLE_ZERO_COUNT);
+			return false;
 			break;
 		case ERR_COUNT_WITHOUT_DATA:
 			printf(MSG_ERR_WRONG_RLE_ODD_LENGTH);
+			return false;
 			break;
 	}
-}
-
-void CloseFiles(FILE *pInFile, FILE *pOutFile, char* outFileName, ProgramError err)
-{
-	if (pInFile)
-	{
-		fclose(pInFile);
-	}
-	if (pOutFile)
-	{
-		fclose(pOutFile);
-	}
-	if (err != ERR_OK)
-	{
-		remove(outFileName);
-		exit(1);
-	}
+	return true;
 }
 
 void PrintGoodEndMsg(ProgramMode mode)
@@ -181,14 +195,28 @@ void PrintGoodEndMsg(ProgramMode mode)
 
 int main(int argc, char* argv[])
 {
-	CheckArgc(argc);
-	ProgramMode mode = GetProgramMode(argv[1]);
-	FILE *pInFile = OpenFile(argv[2], "rb", MSG_ERR_INPUT_FILE_OPENING_ERROR);
-	FILE *pOutFile = OpenFile(argv[3], "wb", MSG_ERR_OUTPUT_FILE_OPENING_ERROR);
-	ProgramError actionErr = DoAction(mode, pInFile, pOutFile);
-	CheckProgramError(actionErr);
-	CloseFiles(pInFile, pOutFile, argv[3], actionErr);
-	PrintGoodEndMsg(mode);
+	if (!CheckArgc(argc))
+	{
+		return 1;
+	}
+
+	ProgramMode mode;
+	if ((mode = GetProgramMode(argv[1])) != UNDEFINED)
+	{
+		if (CheckProgramError(DoAction(mode, argv[2], argv[3])))
+		{
+			PrintGoodEndMsg(mode);
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	else
+	{
+		printf(MSG_ERR_WRONG_ARG);
+		return 1;
+	}
 
 	return 0;
 }

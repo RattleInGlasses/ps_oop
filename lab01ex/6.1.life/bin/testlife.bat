@@ -1,7 +1,7 @@
 REM параметры
 REM запуск без параметров
 life.exe > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_noargs.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -21,7 +21,7 @@ FC /B test\output test\msg_noinput.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM не открывает output
-life.exe test\input_empty.txt 1ds:\ttt.xt > test\output
+life.exe test\input1.txt 1ds:\ttt.xt > test\output
 IF NOT ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_nooutput.txt
 IF ERRORLEVEL 1 GOTO err
@@ -32,7 +32,7 @@ REM ошибки входного файла
 REM пустой файл
 life.exe test\input_empty.txt > test\output
 IF NOT ERRORLEVEL 1 GOTO err
-FC /B test\output test\msg_0w.txt
+FC /B test\output test\msg_now.txt
 IF ERRORLEVEL 1 GOTO err
 
 REM незаконченный файл
@@ -58,7 +58,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM предел ширины
 life.exe test\input_256w.txt test\out_256w.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\input_256w.txt test\out_256w.txt
@@ -72,7 +72,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM предел высоты
 life.exe test\input_256h.txt test\out_256h.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\input_256h.txt test\out_256h.txt
@@ -97,7 +97,7 @@ REM ==================================================================
 REM направление вывода
 REM вывод в текстовый файл
 life.exe test\input1.txt test\out_1.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\out_1.txt test\out_standard1.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt
@@ -114,7 +114,7 @@ REM ==================================================================
 REM правильность вычислений
 REM пустое поле
 life.exe test\input_emptyfield.txt test\out_emptyfield.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\out_emptyfield.txt test\out_emptyfield.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt
@@ -122,7 +122,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM второй тест
 life.exe test\input2.txt test\out_2.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\out_2.txt test\out_standard2.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt
@@ -130,7 +130,7 @@ IF ERRORLEVEL 1 GOTO err
 
 REM третий тест
 life.exe test\input3.txt test\out_3.txt > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\out_3.txt test\out_standard3.txt
 IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_goodend.txt

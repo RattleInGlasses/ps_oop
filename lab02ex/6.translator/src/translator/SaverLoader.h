@@ -1,4 +1,4 @@
 #pragma once
 
-std::map<std::string, std::string> GetVocabularyMap(char const *pVocabualryFileName);
-void SaveVocabulary(std::map<std::string, std::string> const &vocabulary);
+bool GetVocabularyMap(char const *pVocabualryFileName, std::map<std::string, std::string> &vocabulary);
+bool SaveVocabulary(std::map<std::string, std::string> const &vocabulary, char *pVocabularyFileName);

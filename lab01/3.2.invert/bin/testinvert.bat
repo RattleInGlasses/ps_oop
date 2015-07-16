@@ -3,7 +3,7 @@ REM ++++++++++++++++++++++++++++
 REM количество аргументов
 REM без аргументов
 invert > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B output noparam.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -57,22 +57,22 @@ IF ERRORLEVEL 1 GOTO err
 REM ==================================================================
 REM проверка правильности выполнения преобразований
 invert matrix1.txt > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output inverted1.txt
 IF ERRORLEVEL 1 GOTO err
 
 invert matrix2.txt > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output inverted2.txt
 IF ERRORLEVEL 1 GOTO err
 
 invert matrix3.txt > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output inverted3.txt
 IF ERRORLEVEL 1 GOTO err
 
 invert "martrix4 (notInvertable).txt" > output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B output cantinvert.txt
 IF ERRORLEVEL 1 GOTO err
 

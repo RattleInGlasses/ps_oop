@@ -11,32 +11,46 @@
 
 using namespace std;
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		cout << MSG_DESCRIPTION;
-		exit(0);
+		return false;
 	}
 	if (argc > 2)
 	{
 		cout << MSG_ERR_TOO_MANY_ARGS;
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
-	CheckArgc(argc);
-	
-	map<string, string> vocabulary = GetVocabularyMap(argv[1]);
-
-	bool saveVocabularyRequest;
-	UserDialogCicle(vocabulary, saveVocabularyRequest);
-	if (saveVocabularyRequest)
+	if (!CheckArgc(argc))
 	{
-		SaveVocabulary(vocabulary);
+		return 1;
 	}
+	
+	map<string, string> vocabulary;
+	if (GetVocabularyMap(argv[1], vocabulary))
+	{
+		bool saveVocabularyRequest;
+		UserDialogCicle(vocabulary, saveVocabularyRequest);
+		if (saveVocabularyRequest)
+		{
+			if (!SaveVocabulary(vocabulary, argv[1]))
+			{
+				return 1;
+			}
+		}
+	}
+	else
+	{
+		return 1;
+	}
+
 	cout << "The program is closing\n";
 
 	return 0;

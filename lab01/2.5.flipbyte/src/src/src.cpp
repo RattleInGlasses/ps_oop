@@ -42,10 +42,10 @@ bool StrIsEmpty(char* str)
 
 ConversionError StringToByte(char* const pStr, unsigned char &byte)
 {
-	char* endP;
-	int number = strtol(pStr, &endP, 10);
+	char* pConversionEnd;
+	int number = strtol(pStr, &pConversionEnd, 10);
 
-	if ((!StrIsEmpty(endP)) || (StrIsEmpty(pStr)))
+	if ((!StrIsEmpty(pConversionEnd)) || (StrIsEmpty(pStr)))
 	{
 		return NOT_INTEGER;
 	}
@@ -63,7 +63,7 @@ ConversionError StringToByte(char* const pStr, unsigned char &byte)
 	return OK;
 }
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
@@ -71,43 +71,50 @@ void CheckArgc(int argc)
 		printf("The number must be integer with base of 10 that is\n");
 		printf("no less than 0 and no more than 255.\n");
 		printf("USAGE: flipbyte <number>\n");
-		exit(0);
+		return false;
 	}
 	if (argc > 2)
 	{
 		printf("The program needs only one argument.\n");
 		printf("USAGE: flipbyte <number>\n");
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
-void CheckConversionError(ConversionError error)
+bool CheckConversionError(ConversionError error)
 {
 	switch (error)
 	{
 		case LESS_THAN_0:
 			printf("The number must not be negative\n");
-			exit(1);
+			return false;
 			break;
 		case MORE_THAN_255:
 			printf("The number must be no more than 255\n");
-			exit(1);
+			return false;
 			break;
 		case NOT_INTEGER:
 			printf("The argument must be an integer number with base of 10\n");
-			exit(1);
+			return false;
 			break;
 	}
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
-	CheckArgc(argc);
+	if (!CheckArgc(argc))
+	{
+		return 1;
+	}
 
 	// convert string to byte
 	unsigned char byte;
-	ConversionError error = StringToByte(argv[1], byte);
-	CheckConversionError(error);	
+	if (!CheckConversionError(StringToByte(argv[1], byte)))
+	{
+		return 1;
+	}
 	// reverse byte structure
 	printf("%d\n", ReverseByte(byte));
 

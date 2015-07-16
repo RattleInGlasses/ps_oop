@@ -1,0 +1,5 @@
+Enter word to translate or "..." for exit
+> There is no word "global". Enter translation to save or empty string to skip
+> The word "global" hasn't been added
+Enter word to translate or "..." for exit
+> The program is closing

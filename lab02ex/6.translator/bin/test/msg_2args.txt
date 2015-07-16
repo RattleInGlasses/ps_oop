@@ -1,0 +1,2 @@
+The program needs only one argument
+USAGE: translator.exe <vocabulary file>

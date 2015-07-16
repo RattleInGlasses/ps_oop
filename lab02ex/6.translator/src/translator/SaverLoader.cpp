@@ -3,35 +3,30 @@
 #define WORD_BOUND_RIGHT ']'
 #define WORD_BOUND_LEFT  '['
 
-#define MSG_ERR_NOINPUT  "Can't open vocabulary file./nMake sure you have enough rights and the file really exists.\n"
-#define MSG_ERR_NOOUTPUT "Error saving vocabulary file./nMake sure you have enough rights.\n"
-#define MSG_END_SAVEING  "Changes in vocabulary have been saved\n"
+#define MSG_ERR_NOINPUT  "Can't open vocabulary file.\nMake sure you have enough rights and the file really exists.\n"
+#define MSG_ERR_NOOUTPUT "Error saving vocabulary file.\nMake sure you have enough rights.\n"
+#define MSG_END_SAVING  "Changes in vocabulary have been saved\n"
 
 using namespace std;
 
-char const *m_pVocabularyFileName;
-
-fstream OpenVocabularyFile(char const *pVocabularyFileName, ios_base::openmode mode, char const* pErrMsg)
+bool SaveVocabulary(map<string, string> const &vocabulary, char *pVocabularyFileName)
 {
-	fstream vocabularyFileStream(pVocabularyFileName, mode);
+	ofstream vocabularyFileStream(pVocabularyFileName, ofstream::out);
 	if (!vocabularyFileStream.is_open())
 	{
-		cout << pErrMsg;
-		exit(1);
+		cout << MSG_ERR_NOOUTPUT;
+		return false;
 	}
-	return vocabularyFileStream;
-}
 
-void SaveVocabulary(map<string, string> const &vocabulary)
-{
-	ostream &vocabularyFileStream = OpenVocabularyFile(m_pVocabularyFileName, ostream::out, MSG_ERR_NOOUTPUT);
 	string vocabularyFileLine;
 	for (map<string, string>::const_iterator it = vocabulary.begin(); it != vocabulary.end(); it++)
 	{
 		vocabularyFileLine = WORD_BOUND_LEFT + it->first + WORD_BOUND_RIGHT + " " + it->second;
 		vocabularyFileStream << vocabularyFileLine << endl;
 	}
-	cout << MSG_END_SAVEING;
+	cout << MSG_END_SAVING;
+
+	return true;
 }
 
 void AddVocabularyRecord(map<string, string> &vocabulary, string const &word, string const &translation)
@@ -58,12 +53,16 @@ string GetWord(string const &line)
 	return (startPos == string::npos) ? "" : (line.substr(startPos, len));
 }
 
-map<string, string> GetVocabularyMap(char const *pVocabularyFileName)
+bool GetVocabularyMap(char const *pVocabularyFileName, map<string, string> &vocabulary)
 {
-	m_pVocabularyFileName = pVocabularyFileName;
-	istream &vocabularyStream = OpenVocabularyFile(pVocabularyFileName, ifstream::in, MSG_ERR_NOINPUT);
+	ifstream vocabularyStream(pVocabularyFileName, ifstream::in);
+	if (!vocabularyStream.is_open())
+	{
+		cout << MSG_ERR_NOINPUT;
+		return false;
+	}
 	
-	map<string, string> vocabulary;
+	vocabulary.clear();
 	string line;
 	string word, translation;
 	while (getline(vocabularyStream, line))
@@ -73,6 +72,6 @@ map<string, string> GetVocabularyMap(char const *pVocabularyFileName)
 		AddVocabularyRecord(vocabulary, word, translation);
 	}
 
-	return vocabulary;
+	return true;
 }
 

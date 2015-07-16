@@ -12,6 +12,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <float.h>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

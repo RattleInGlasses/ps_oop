@@ -15,13 +15,41 @@
 
 #define READ_BUFFER_SIZE 255
 
+struct Matrix3x3
+{
+	double items[3][3];
+};
+
+struct Matrix2x2
+{
+	double items[2][2];
+};
+
 enum MatrixFileError
 {
 	ERR_OK,
+	ERR_OPENING_FILE_ERROR,
 	ERR_SMALL_FILE,
-	ERR_BIG_FILE,
 	ERR_NOT_A_VALID_MATRIX
 };
+
+bool OpenInputFile(char *pFileName, FILE *&pFile)
+{
+	pFile = fopen(pFileName, "r");
+	if (!pFile)
+	{
+		return false;
+	}
+	return true;
+}
+
+void CloseFile(FILE *pFile)
+{
+	if (pFile)
+	{
+		fclose(pFile);
+	}
+}
 
 bool StrIsEmpty(char* pStr)
 {
@@ -37,7 +65,7 @@ bool StrIsEmpty(char* pStr)
 	return true;
 }
 
-MatrixFileError GetMatrixFromFile(FILE* pMatrixFile, double matrix[3][3])
+MatrixFileError ReadMatrixFromFile(FILE* pMatrixFile, Matrix3x3 &matrix)
 {
 	char buff[READ_BUFFER_SIZE];
 	char* pLine;
@@ -56,7 +84,7 @@ MatrixFileError GetMatrixFromFile(FILE* pMatrixFile, double matrix[3][3])
 			{
 				return ERR_SMALL_FILE;
 			}
-			matrix[i][j] = strtod(pLine, &pEndPos);
+			matrix.items[i][j] = strtod(pLine, &pEndPos);
 			pLine = pEndPos;
 		}
 		if (!StrIsEmpty(pEndPos))
@@ -68,19 +96,34 @@ MatrixFileError GetMatrixFromFile(FILE* pMatrixFile, double matrix[3][3])
 	return ERR_OK;
 }
 
-double Determinant(double const matrix[2][2])
+MatrixFileError GetMatrixFromFile(char* pMatrixFileName, Matrix3x3 &matrix)
 {
-	return (matrix[0][0] * matrix[1][1]) - (matrix[1][0] * matrix[0][1]);
+	FILE *pMatrixFile;
+	if (!OpenInputFile(pMatrixFileName, pMatrixFile))
+	{
+		return ERR_OPENING_FILE_ERROR;
+	}
+	MatrixFileError err = ReadMatrixFromFile(pMatrixFile, matrix);
+	CloseFile(pMatrixFile);
+
+	return err;
 }
 
-double Determinant(double const m[3][3])
+double Determinant(Matrix2x2 const matrix)
 {
-	return (m[0][0] * m[1][1] * m[2][2]) - (m[0][0] * m[1][2] * m[2][1]) - (m[0][1] * m[1][0] * m[2][2])
-		+ (m[0][1] * m[1][2] * m[2][0]) + (m[0][2] * m[1][0] * m[2][1]) - (m[0][2] * m[1][1] * m[2][0]);
+	return (matrix.items[0][0] * matrix.items[1][1]) - (matrix.items[1][0] * matrix.items[0][1]);
 }
 
-void GetMinor(double const matrix[3][3], int i, int j, double minor[2][2])
+double Determinant(Matrix3x3 const m)
 {
+	return (m.items[0][0] * m.items[1][1] * m.items[2][2]) - (m.items[0][0] * m.items[1][2] * m.items[2][1])
+		- (m.items[0][1] * m.items[1][0] * m.items[2][2]) + (m.items[0][1] * m.items[1][2] * m.items[2][0])
+		+ (m.items[0][2] * m.items[1][0] * m.items[2][1]) - (m.items[0][2] * m.items[1][1] * m.items[2][0]);
+}
+
+Matrix2x2 GetMinor(Matrix3x3 const matrix, int i, int j)
+{
+	Matrix2x2 minor;
 	int minori = 0;
 	int minorj = 0;
 	for (int matrixi = 0; matrixi < 3; matrixi++)
@@ -91,7 +134,7 @@ void GetMinor(double const matrix[3][3], int i, int j, double minor[2][2])
 			{
 				if (matrixj != j)
 				{
-					minor[minori][minorj] = matrix[matrixi][matrixj];
+					minor.items[minori][minorj] = matrix.items[matrixi][matrixj];
 					minorj++;
 				}
 			}
@@ -99,128 +142,129 @@ void GetMinor(double const matrix[3][3], int i, int j, double minor[2][2])
 			minori++;
 		}
 	}
+
+	return minor;
 }
 
-void GetMinorMatrix(double const matrix[3][3], double minorMatrix[3][3])
+Matrix3x3 GetMinorMatrix(Matrix3x3 const matrix)
 {
-	double minor[2][2];
+	Matrix3x3 minorMatrix;
+	Matrix2x2 minor;
 	for (int i = 0; i < 3; i++)
-	for (int j = 0; j < 3; j++)
 	{
-		GetMinor(matrix, j, i, minor);
-		minorMatrix[i][j] = pow(-1.0, i + j) * Determinant(minor);
+		for (int j = 0; j < 3; j++)
+		{
+			minor = GetMinor(matrix, j, i);
+			minorMatrix.items[i][j] = pow(-1.0, i + j) * Determinant(minor);
+		}
 	}
+
+	return minorMatrix;
 }
 
 // Multiply matrix by number
-void NumMultMatrix(double const inputMatrix[3][3], double number, double resultMatrix[3][3])
+Matrix3x3 MultMatrixByScalar(Matrix3x3 const inputMatrix, double number)
 {
+	Matrix3x3 resultMatrix;
 	for (int i = 0; i < 3; i++)
-	for (int j = 0; j < 3; j++)
 	{
-		resultMatrix[i][j] = number * inputMatrix[i][j];
+		for (int j = 0; j < 3; j++)
+		{
+			resultMatrix.items[i][j] = number * inputMatrix.items[i][j];
+		}
 	}
+
+	return resultMatrix;
 }
 
 //return true if matrix can't be inverted
-bool InvertMatrix(double const matrix[3][3], double invertedMatrix[3][3])
+bool InvertMatrix(Matrix3x3 const matrix, Matrix3x3 &invertedMatrix)
 {
 	double matrixDet = Determinant(matrix);
-	if (matrixDet == 0)
+	if (matrixDet < DBL_EPSILON)
 	{
-		return true;
+		return false;
 	}
 
-	double minorMatrix[3][3];
-	GetMinorMatrix(matrix, minorMatrix);
-	NumMultMatrix(minorMatrix, (1.0 / matrixDet), invertedMatrix);
+	Matrix3x3 minorMatrix = GetMinorMatrix(matrix);
+	invertedMatrix = MultMatrixByScalar(minorMatrix, (1.0 / matrixDet));
 
-	return false;
+	return true;
 }
 
-void PrintMatrix(double matrix[3][3])
+void PrintMatrix(Matrix3x3 const matrix)
 {
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			printf("%.3f ", (matrix[i][j] ? matrix[i][j] : 0)); //prevent output of negative zeroes
+			printf("%.3f ", (matrix.items[i][j] ? matrix.items[i][j] : 0)); //prevent output of negative zeroes
 		}
 		printf("\n");
 	}
 }
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		printf(MSG_DESCRIPTION);
-		exit(0);
+		return false;
 	}
 	if (argc > 2)
 	{
 		printf(MSG_ERR_TOO_MANY_PARMS);
 		printf(MSG_USAGE);
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
-void CheckMatrixFileError(MatrixFileError err)
+bool CheckMatrixFileError(MatrixFileError err)
 {
 	switch (err)
 	{
+		case ERR_OPENING_FILE_ERROR:
+			printf(MSG_ERR_OPENING);
+			return false;
+			break;
 		case ERR_SMALL_FILE:
 			printf(MSG_ERR_WRONG_FILE_CONTENT);
-			exit(1);
+			return false;
 			break;
 		case ERR_NOT_A_VALID_MATRIX:
 			printf(MSG_ERR_WRONG_FILE_CONTENT);
-			exit(1);
+			return false;
 			break;
 	}
-}
-
-FILE *OpenInputFile(char *pFileName)
-{
-	FILE *pFile = fopen(pFileName, "r");
-	if (!pFile)
-	{
-		printf(MSG_ERR_OPENING);
-		exit(1);
-	}
-
-	return pFile;
-}
-
-void CloseFile(FILE *pFile)
-{
-	if (pFile)
-	{
-		fclose(pFile);
-	}
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
-	CheckArgc(argc);
-
-	double matrix[3][3];
-	FILE *pMatrixFile = OpenInputFile(argv[1]);
-	MatrixFileError err = GetMatrixFromFile(pMatrixFile, matrix);
-	CheckMatrixFileError(err);
-
-	double invertedMatrix[3][3];
-	bool noResult = InvertMatrix(matrix, invertedMatrix);
-	if (noResult)
+	if (!CheckArgc(argc))
 	{
-		printf(MSG_NO_RESULT);
+		return 1;
+	}
+
+	Matrix3x3 matrix;
+	if (CheckMatrixFileError(GetMatrixFromFile(argv[1], matrix)))
+	{
+		Matrix3x3 invertedMatrix;
+		if (InvertMatrix(matrix, invertedMatrix))
+		{
+			PrintMatrix(invertedMatrix);
+		}
+		else
+		{
+			printf(MSG_NO_RESULT);
+		}
 	}
 	else
 	{
-		PrintMatrix(invertedMatrix);
+		return 1;
 	}
 
-	CloseFile(pMatrixFile);
 	return 0;
 }
 

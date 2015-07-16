@@ -1,7 +1,7 @@
 REM параметры
 REM запуск без параметров
 crypt.exe > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF NOT ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_noargs.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -80,12 +80,12 @@ REM ==================================================================
 REM шифрование и дешифрование
 REM пустой файл
 crypt.exe encrypt test\input_empty.txt test\encrypted_empty.txt 250 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_encryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 
 crypt.exe decrypt test\encrypted_empty.txt test\decrypted_empty.txt 250 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_decryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -95,12 +95,12 @@ IF ERRORLEVEL 1 GOTO err
 
 REM файл с одним символом
 crypt.exe encrypt test\input_1byte.txt test\encrypted_1byte.txt 163 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_encryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 
 crypt.exe decrypt test\encrypted_1byte.txt test\decrypted_1byte.txt 163 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_decryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 
@@ -110,12 +110,12 @@ IF ERRORLEVEL 1 GOTO err
 
 REM файл с несколькими символами
 crypt.exe encrypt test\input_manybytes.txt test\encrypted_manybytes.txt 27 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_encryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 
 crypt.exe decrypt test\encrypted_manybytes.txt test\decrypted_manybytes.txt 27 > test\output
-IF NOT ERRORLEVEL 0 GOTO err
+IF ERRORLEVEL 1 GOTO err
 FC /B test\output test\msg_decryptgoodend.txt
 IF ERRORLEVEL 1 GOTO err
 

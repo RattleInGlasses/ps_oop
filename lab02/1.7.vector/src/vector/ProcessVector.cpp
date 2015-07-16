@@ -7,7 +7,7 @@ vector<double> ProcessVector(vector<double> const &vectorOfDouble)
 	vector<double> result = vectorOfDouble;
 
 	if (result.size() < 3)  // возвращаем вектор, не удовлетворяющий заднным
-	{                       // условиям в первозданном виде
+	{                       // условиям, в первозданном виде
 		return result;
 	}
 	

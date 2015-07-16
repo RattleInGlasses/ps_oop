@@ -9,8 +9,7 @@
 #define MSG_ERR_TOO_MANY_ARGUMENTS   "ERROR: too many arguments\n" MSG_USAGE
 #define MSG_ERR_NO_INPUT             "ERROR: can't open input file (not enough rights or file doesn't exists)\n"
 #define MSG_ERR_NO_OUTPUT            "ERROR: can't open output file\n"
-#define MSG_ERR_BIG_STRING           "can't work with strings of such big size"
-
+#define MSG_GOOD_EXIT                "File %s created from file %s\n"
 
 #define COPY_BUFFER_LENGTH 100;
 
@@ -49,48 +48,9 @@ void MoveBuffer(FILE *pInput, char *pBuff, int buffSize)
 	}
 }
 
-//return 0 if str1 == str2
-//return 1 if str1 != str2
-int StrCompare(char *pStr1, char *pStr2)
+void ByteReplace(FILE *pInput, char *const pSearchStr, char *const pReplaceStr, FILE *const pOutput)
 {
-	int i = 0;
-	while ((pStr1[i] != '\0') && (pStr2[i] != '\0'))
-	{
-		if (pStr1[i] != pStr2[i])
-		{
-			return 1;
-		}
-		i++;
-	}
-	if (pStr1[i] != pStr2[i]) // len1 != len2
-	{
-		return 1;
-	}
-	return 0;
-}
-
-//return lenght of string or -1 if the length is too big to store it in int
-signed int StrLen(char* str)
-{
-	int i = 0;
-	while (str[i] != 0)
-	{
-		if (i++ == UINT_MAX)
-		{
-			return -1;
-		}
-	}
-	return i;
-}
-
-bool ByteReplace(FILE *pInput, char *const pSearchStr, char *const pReplaceStr, FILE *const pOutput)
-{
-	signed int buffSize = StrLen(pSearchStr) + 1;
-	if (buffSize == 0)
-	{
-		//error
-		return true;
-	}
+	size_t buffSize = strlen(pSearchStr) + 1;
 	if (buffSize == 1)
 	{
 		//just copy without replace
@@ -100,9 +60,9 @@ bool ByteReplace(FILE *pInput, char *const pSearchStr, char *const pReplaceStr, 
 	pStrBuff[0] = 0;
 
 	FillBuffer(pInput, pStrBuff, buffSize);
-	while (StrLen(pStrBuff) == (buffSize - 1))
+	while (strlen(pStrBuff) == (buffSize - 1))
 	{
-		if (StrCompare(pStrBuff, pSearchStr) == 0)
+		if (strcmp(pStrBuff, pSearchStr) == 0)
 		{
 			fputs(pReplaceStr, pOutput);
 			FillBuffer(pInput, pStrBuff, buffSize);
@@ -116,73 +76,70 @@ bool ByteReplace(FILE *pInput, char *const pSearchStr, char *const pReplaceStr, 
 	fputs(pStrBuff, pOutput);
 
 	free(pStrBuff);
-	return false;
 }
 
-void CheckArgc(int argc)
+bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
 		printf(MSG_DESCRIPTION);
-		exit(0);
+		return false;
 	}
 	if (argc < 3)
 	{
 		printf(MSG_ERR_NOT_ENOUGH_ARGUMENTS);
-		exit(1);
+		return false;
 	}
 	if (argc > 5)
 	{
 		printf(MSG_ERR_TOO_MANY_ARGUMENTS);
-		exit(1);
+		return false;
 	}
+	return true;
 }
 
-FILE *OpenFile(char *pFileName, char *pMode, char *pErrMsg)
+bool OpenFile(char *pFileName, char *pMode, char *pErrMsg, FILE **ppFile)
 {
-	FILE *pFile = fopen(pFileName, pMode);
-	if (!pFile)
+	*ppFile = fopen(pFileName, pMode);
+	if (!*ppFile)
 	{
 		printf(pErrMsg);
-		exit(1);
+		return false;
 	}
-
-	return pFile;
+	return true;
 }
 
 void CloseFile(FILE *pFile)
 {
 	if (pFile)
+	{
 		fclose(pFile);
+	}
 }
 
 int main(int argc, char* argv[])
 {
-	CheckArgc(argc);
-
-	char *pInputFileName = argv[1];
-	char *pOutputFileName = argv[2];
-	char *pSearchStr = (argc < 4) ? "" : argv[3];
-	char *pReplaceStr = (argc < 5) ? "" : argv[4];
-
-	//открытие файлов	
-	FILE *pInputFile = OpenFile(pInputFileName, "rb", MSG_ERR_NO_INPUT);
-	FILE *pOutputFile = OpenFile(pOutputFileName, "wb", MSG_ERR_NO_OUTPUT);
-
-	//замена строки
-	bool err = ByteReplace(pInputFile, pSearchStr, pReplaceStr, pOutputFile);
-	if (err)
+	if (!CheckArgc(argc))
 	{
-		printf(MSG_ERR_BIG_STRING);
+		return 1;
+	}
+	
+	FILE *pInputFile;
+	FILE *pOutputFile;
+	if (!OpenFile(argv[1], "rb", MSG_ERR_NO_INPUT, &pInputFile)
+		|| (!OpenFile(argv[2], "wb", MSG_ERR_NO_OUTPUT, &pOutputFile)))
+	{
 		return 1;
 	}
 
-	//закрытие файлов
+	char *pSearchStr = (argc < 4) ? "" : argv[3];
+	char *pReplaceStr = (argc < 5) ? "" : argv[4];
+	ByteReplace(pInputFile, pSearchStr, pReplaceStr, pOutputFile);
+
 	CloseFile(pInputFile);
 	CloseFile(pOutputFile);
-
-	//сообщение о завершении работы программы
-	printf("File %s created from file %s\n", pOutputFileName, pInputFileName);
+	
+	printf(MSG_GOOD_EXIT, argv[2], argv[1]);
 
 	return 0;
 }

@@ -65,7 +65,7 @@ vector<double> ReadInputVector()
 
 int main()
 {
-	TestProcessVector();
+	//TestProcessVector();
 	
 	cout << "The program reads array, adds to it's every element sum of it's 3 minimal elements, output result in ascending order.\n";
 	cout << "================================================================================\n";

@@ -1,0 +1,8 @@
+Enter word to translate or "..." for exit
+> кот, кошка
+Enter word to translate or "..." for exit
+> кот, кошка
+Enter word to translate or "..." for exit
+> кот, кошка
+Enter word to translate or "..." for exit
+> The program is closing

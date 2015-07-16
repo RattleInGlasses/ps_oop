@@ -1,0 +1,4 @@
+Enter word to translate or "..." for exit
+> глобальный, всеобщий
+Enter word to translate or "..." for exit
+> The program is closing
