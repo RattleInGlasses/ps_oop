@@ -11,6 +11,7 @@
 #include <tchar.h>
 #include <assert.h>
 #include <iostream>
+#include <string>
 #include <set>
 #include <algorithm>
 #include <iterator>

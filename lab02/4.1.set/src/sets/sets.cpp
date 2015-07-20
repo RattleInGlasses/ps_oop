@@ -88,7 +88,7 @@ set<int> CrossSet(set<int> const &set1, set<int> const &set2)
 	return intersection;
 }
 
-void PrintSet(set<int> &const printableSet)
+void PrintSet(set<int> const & printableSet)
 {
 	for (set<int>::iterator it = printableSet.begin(); it != printableSet.end(); it++)
 	{
