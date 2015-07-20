@@ -7,23 +7,24 @@
 
 using namespace std;
 
-void PrintVector(double elem)
-{
-	cout << elem;
-	cout << " ";
-}
+vector<double> ReadInputVector();
+bool IsStreamEoln(istream &sin);
+void SkipSpaces(istream &sin);
+void PrintVector(double elem);
 
-void SkipSpaces(istream &sin)
+int main()
 {
-	while ((sin.peek() == ' ') || (sin.peek() == '\t'))
-	{
-		sin.ignore();
-	}
-}
+	//TestProcessVector();
 
-bool IsStreamEoln(istream &sin)
-{
-	return sin.peek() == '\n';
+	cout << "The program reads array, adds to it's every element sum of it's 3 minimal elements, output result in ascending order.\n";
+	cout << "================================================================================\n";
+
+	vector<double> vectorOfDouble = ProcessVector(ReadInputVector());
+
+	for_each(vectorOfDouble.begin(), vectorOfDouble.end(), PrintVector);
+	cout << '\n';
+
+	return 0;
 }
 
 vector<double> ReadInputVector()
@@ -31,7 +32,7 @@ vector<double> ReadInputVector()
 	cout << "Enter a sequence of real numbers.\n";
 	cout << "The amount of numbers must be no less than 3.\n";
 	cout << "The delimiter between numbers must be one or more spaces.\n";
-	
+
 	double curNum;
 	int count = 0;
 	vector<double> vectorOfDouble;
@@ -63,19 +64,22 @@ vector<double> ReadInputVector()
 	return vectorOfDouble;
 }
 
-int main()
+bool IsStreamEoln(istream &sin)
 {
-	//TestProcessVector();
-	
-	cout << "The program reads array, adds to it's every element sum of it's 3 minimal elements, output result in ascending order.\n";
-	cout << "================================================================================\n";
+	return sin.peek() == '\n';
+}
 
-	vector<double> vectorOfDouble = ReadInputVector();
-	vectorOfDouble = ProcessVector(vectorOfDouble);
-	
-	for_each(vectorOfDouble.begin(), vectorOfDouble.end(), PrintVector);
-	cout << '\n';
+void SkipSpaces(istream &sin)
+{
+	while ((sin.peek() == ' ') || (sin.peek() == '\t'))
+	{
+		sin.ignore();
+	}
+}
 
-	return 0;
+void PrintVector(double elem)
+{
+	cout << elem;
+	cout << " ";
 }
 

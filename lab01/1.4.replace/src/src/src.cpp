@@ -3,15 +3,15 @@
 
 #include "stdafx.h"
 
-#define MSG_USAGE                    "Usage: replace.exe <input file> <output file> [<search string>] [<replace string>]\n"
-#define MSG_DESCRIPTION              "Program replaces all entries of a substring in a text file by another substring\n" MSG_USAGE
-#define MSG_ERR_NOT_ENOUGH_ARGUMENTS "ERROR: not enough arguments\n" MSG_USAGE
-#define MSG_ERR_TOO_MANY_ARGUMENTS   "ERROR: too many arguments\n" MSG_USAGE
-#define MSG_ERR_NO_INPUT             "ERROR: can't open input file (not enough rights or file doesn't exists)\n"
-#define MSG_ERR_NO_OUTPUT            "ERROR: can't open output file\n"
-#define MSG_GOOD_EXIT                "File %s created from file %s\n"
+const std::string  MSG_USAGE =                    "Usage: replace.exe <input file> <output file> [<search string>] [<replace string>]\n";
+const std::string  MSG_DESCRIPTION =              "Program replaces all entries of a substring in a text file by another substring\n" + MSG_USAGE;
+const std::string  MSG_ERR_NOT_ENOUGH_ARGUMENTS = "ERROR: not enough arguments\n" + MSG_USAGE;
+const std::string  MSG_ERR_TOO_MANY_ARGUMENTS =   "ERROR: too many arguments\n" + MSG_USAGE;
+const std::string  MSG_ERR_NO_INPUT =             "ERROR: can't open input file (not enough rights or file doesn't exists)\n";
+const std::string  MSG_ERR_NO_OUTPUT =            "ERROR: can't open output file\n";
+const std::string  MSG_GOOD_EXIT =                "File %s created from file %s\n";
 
-#define COPY_BUFFER_LENGTH 100;
+const int COPY_BUFFER_LENGTH = 100;
 
 // writes file content into buffer-string
 void FillBuffer(FILE *pInput, char *pBuff, int buffSize)
@@ -82,23 +82,23 @@ bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
-		printf(MSG_DESCRIPTION);
+		printf(MSG_DESCRIPTION.c_str());
 		return false;
 	}
 	if (argc < 3)
 	{
-		printf(MSG_ERR_NOT_ENOUGH_ARGUMENTS);
+		printf(MSG_ERR_NOT_ENOUGH_ARGUMENTS.c_str());
 		return false;
 	}
 	if (argc > 5)
 	{
-		printf(MSG_ERR_TOO_MANY_ARGUMENTS);
+		printf(MSG_ERR_TOO_MANY_ARGUMENTS.c_str());
 		return false;
 	}
 	return true;
 }
 
-bool OpenFile(char *pFileName, char *pMode, char *pErrMsg, FILE **ppFile)
+bool OpenFile(char const *pFileName, char const *pMode, char const *pErrMsg, FILE **ppFile)
 {
 	*ppFile = fopen(pFileName, pMode);
 	if (!*ppFile)
@@ -126,9 +126,10 @@ int main(int argc, char* argv[])
 	
 	FILE *pInputFile;
 	FILE *pOutputFile;
-	if (!OpenFile(argv[1], "rb", MSG_ERR_NO_INPUT, &pInputFile)
-		|| (!OpenFile(argv[2], "wb", MSG_ERR_NO_OUTPUT, &pOutputFile)))
+	if (!OpenFile(argv[1], "rb", MSG_ERR_NO_INPUT.c_str(), &pInputFile)
+		|| (!OpenFile(argv[2], "wb", MSG_ERR_NO_OUTPUT.c_str(), &pOutputFile)))
 	{
+		CloseFile(pInputFile);
 		return 1;
 	}
 
@@ -139,7 +140,7 @@ int main(int argc, char* argv[])
 	CloseFile(pInputFile);
 	CloseFile(pOutputFile);
 	
-	printf(MSG_GOOD_EXIT, argv[2], argv[1]);
+	printf(MSG_GOOD_EXIT.c_str(), argv[2], argv[1]);
 
 	return 0;
 }

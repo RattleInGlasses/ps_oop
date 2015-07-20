@@ -5,7 +5,7 @@ using namespace std;
 string ReadWord(istream &input)
 {
 	string word;
-	locale loc;
+	locale loc(".866");
 	int ch = input.get();
 	while (isspace(ch, loc) && !input.eof())
 	{
@@ -20,11 +20,11 @@ string ReadWord(istream &input)
 	return word;
 }
 
-string ToLowerCase(string &const str)
+string ToLowerCase(string const &str)
 {
 	string result;
 	locale rusLoc(".866");
-	for (string::iterator it = str.begin(); it != str.end(); it++)
+	for (string::const_iterator it = str.begin(); it != str.end(); it++)
 	{
 		result += tolower(*it, rusLoc);
 	}
@@ -48,12 +48,12 @@ void AddWord(string word, map<string, int> &words)
 	}
 }
 
-void PrintWord(pair<string, int> const word)
+void PrintWord(pair<string, int> const &word)
 {
 	cout << word.first << ' ' << word.second << '\n';
 }
 
-void PrintWords(map<string, int> &const words)
+void PrintWords(map<string, int> const &words)
 {
 	for_each(words.begin(), words.end(), &PrintWord);
 }
@@ -86,11 +86,9 @@ int main()
 	//TestAddWord();
 	
 	map<string, int> words;
-	string word;
 	while (!cin.eof())
 	{
-		word = ReadWord(cin);
-		AddWord(word, words);
+		AddWord(ReadWord(cin), words);
 	}
 	PrintWords(words);
 	

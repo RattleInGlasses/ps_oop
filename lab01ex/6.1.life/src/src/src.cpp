@@ -4,24 +4,24 @@
 #include "stdafx.h"
 
 
-#define CELL_WALL  '*'
-#define CELL_ALIVE '#'
-#define CELL_DEAD  ' '
+const char CELL_WALL  = '*';
+const char CELL_ALIVE = '#';
+const char CELL_DEAD  = ' ';
 
-#define MSG_USAGE                       "USAGE: life <input file> [<output file>]\n"
-#define MSG_DESCRIPTION                 "The program calculates next generation of cells based on input file\nand prints the result out into a file or the standart output.\n" MSG_USAGE
-#define MSG_ERR_TOO_MANY_ARGS           "The program needs just 1 or 2 arguments\n" MSG_USAGE
-#define MSG_ERR_NO_INPUT                "Error opening input file.\nMake sure you have enough rights and the file really exists.\n"
-#define MSG_ERR_NO_OUTPUT               "Error opening output file.\nMake sure you have enough rights.\n"
-#define MSG_ERR_BAD_INPUT_FILE          "The given file doesn't contain a valid life field.\n"
-#define MSG_ERR_ZERO_FIELD_WIDTH        MSG_ERR_BAD_INPUT_FILE "Zero field width\n"
-#define MSG_ERR_ZERO_FIELD_HEIGHT       MSG_ERR_BAD_INPUT_FILE "Zero field height\n"
-#define MSG_ERR_TOO_BIG_FIELD_WIDTH     MSG_ERR_BAD_INPUT_FILE "Width is too big, it must be no more than 256\n"
-#define MSG_ERR_TOO_BIG_FIELD_HEIGHT    MSG_ERR_BAD_INPUT_FILE "Height is too big, it must be no more than 256\n"
-#define MSG_ERR_FIELD_HAS_NO_WIDTH      MSG_ERR_BAD_INPUT_FILE "Filed has no valid bounds\n"
-#define MSG_ERR_FIELD_HAS_NO_BOTTOM     MSG_ERR_BAD_INPUT_FILE "Field has no valid bottom\n"
-#define MSG_ERR_FIELD_INVALID_SYMBOL    MSG_ERR_BAD_INPUT_FILE "Invalid symbol on a field "
-#define MSG_GOOD_END                    "\nThe next generation of life has been successfully calculated\n"
+std::string MSG_USAGE =                       "USAGE: life <input file> [<output file>]\n";
+std::string MSG_DESCRIPTION =                 "The program calculates next generation of cells based on input file\nand prints the result out into a file or the standart output.\n" + MSG_USAGE;
+std::string MSG_ERR_TOO_MANY_ARGS =           "The program needs just 1 or 2 arguments\n" + MSG_USAGE;
+std::string MSG_ERR_NO_INPUT =                "Error opening input file.\nMake sure you have enough rights and the file really exists.\n";
+std::string MSG_ERR_NO_OUTPUT =               "Error opening output file.\nMake sure you have enough rights.\n";
+std::string MSG_ERR_BAD_INPUT_FILE =          "The given file doesn't contain a valid life field.\n";
+std::string MSG_ERR_ZERO_FIELD_WIDTH =        MSG_ERR_BAD_INPUT_FILE + "Zero field width\n";
+std::string MSG_ERR_ZERO_FIELD_HEIGHT =       MSG_ERR_BAD_INPUT_FILE + "Zero field height\n";
+std::string MSG_ERR_TOO_BIG_FIELD_WIDTH =     MSG_ERR_BAD_INPUT_FILE + "Width is too big, it must be no more than 256\n";
+std::string MSG_ERR_TOO_BIG_FIELD_HEIGHT =    MSG_ERR_BAD_INPUT_FILE + "Height is too big, it must be no more than 256\n";
+std::string MSG_ERR_FIELD_HAS_NO_WIDTH =      MSG_ERR_BAD_INPUT_FILE + "Filed has no valid bounds\n";
+std::string MSG_ERR_FIELD_HAS_NO_BOTTOM =     MSG_ERR_BAD_INPUT_FILE + "Field has no valid bottom\n";
+std::string MSG_ERR_FIELD_INVALID_SYMBOL =    MSG_ERR_BAD_INPUT_FILE + "Invalid symbol on a field ";
+std::string MSG_GOOD_END =                    "\nThe next generation of life has been successfully calculated\n";
 
 enum CellState
 {
@@ -72,50 +72,57 @@ bool IsValidCell(int x, int y, int fieldWidth, int fieldHeight)
 	return (y >= 0) && (x >= 0) && (y < fieldHeight) && (x < fieldWidth);
 }
 
-int GetNeighboursCount(CellsField &const field, int x, int y)
+int GetNeighboursCount(CellsField const &field, int x, int y)
 {
 	int count = 0;
-	for (int i = y - 1; i <= y + 1; i++)
-		for (int j = x - 1; j <= x + 1; j++)
+	for (int curY = y - 1; curY <= y + 1; curY++)
+	{
+		for (int curX = x - 1; curX <= x + 1; curX++)
 		{
-			if (IsValidCell(j, i, field.width, field.height)
-				&& !((i == y) && (j == x))
-				&& (field.cells[i][j] == ALIVE))
+			if (IsValidCell(curX, curY, field.width, field.height)  // the cell must be valid (not a wall)
+				&& !((curY == y) && (curX == x))                    // do not count analyzed cell
+				&& (field.cells[curY][curX] == ALIVE))              // the cell must be alive
 			{
 				count++;
 			}
 		}
+	}
 
 	return count;
 }
 
-CellsField CalcNextGenField(CellsField &const curGenField)
+CellState CalcNextGenCellState(int x, int y, CellsField const &curGenField)
+{
+	CellState state = curGenField.cells[y][x];
+	int neighboursCount = GetNeighboursCount(curGenField, x, y);
+	if (state == DEAD)
+	{
+		if (neighboursCount == 3)
+		{
+			state = ALIVE;
+		}
+	}
+	else // state == ALIVE
+	{
+		if ((neighboursCount < 2) || (neighboursCount > 3))
+		{
+			state = DEAD;
+		}
+	}
+
+	return state;
+}
+
+CellsField CalcNextGenField(CellsField const &curGenField)
 {
 	CellsField nextGenField = CreateField(curGenField.width, curGenField.height);
 	CellState state;
 	int neighboursCount;
-	for (int i = 0; i < curGenField.height; i++)
+	for (int y = 0; y < curGenField.height; y++)
 	{
-		for (int j = 0; j < curGenField.width; j++)
+		for (int x = 0; x < curGenField.width; x++)
 		{
-			state = curGenField.cells[i][j];
-			neighboursCount = GetNeighboursCount(curGenField, j, i);
-			if (state == DEAD)
-			{
-				if (neighboursCount == 3)
-				{
-					state = ALIVE;
-				}
-			}
-			else // state == ALIVE
-			{
-				if ((neighboursCount < 2) || (neighboursCount > 3))
-				{
-					state = DEAD;
-				}
-			}
-
-			nextGenField.cells[i][j] = state;
+			nextGenField.cells[y][x] = CalcNextGenCellState(x, y, curGenField);
 		}
 	}
 
@@ -124,32 +131,36 @@ CellsField CalcNextGenField(CellsField &const curGenField)
 
 // field output
 
-bool PrintField(char *pOutFileName, CellsField &const field)
+void PrintCell(FILE *pOutFile, int x, int y, CellsField const &field)
 {
-	FILE *pOutFile = (pOutFileName != NULL) ? fopen(pOutFileName, "w") : stdout;
+	if (!IsValidCell(x, y, field.width, field.height))
+	{
+		fputc(CELL_WALL, pOutFile);
+	}
+	else if (field.cells[y][x] == ALIVE)
+	{
+		fputc(CELL_ALIVE, pOutFile);
+	}
+	else
+	{
+		fputc(CELL_DEAD, pOutFile);
+	}
+}
+
+bool PrintField(char *pOutFileName, CellsField const &field)
+{
+	FILE *pOutFile = (pOutFileName != nullptr) ? fopen(pOutFileName, "w") : stdout;
 	if (!pOutFile)
 	{
-		printf(MSG_ERR_NO_OUTPUT);
+		printf(MSG_ERR_NO_OUTPUT.c_str());
 		return false;
 	}
 	
-	for (int i = -1; i <= field.height; i++)
+	for (int y = -1; y <= field.height; y++)
 	{
-		for (int j = -1; j <= field.width; j++)
+		for (int x = -1; x <= field.width; x++)
 		{
-			if (!IsValidCell(j, i, field.width, field.height))
-			{
-				fputc(CELL_WALL, pOutFile);
-			}
-			else if (field.cells[i][j] == ALIVE)
-			{
-
-				fputc(CELL_ALIVE, pOutFile);
-			}
-			else
-			{
-				fputc(CELL_DEAD, pOutFile);
-			}
+			PrintCell(pOutFile, x, y, field);
 		}
 		fputc('\n', pOutFile);
 	}
@@ -163,6 +174,60 @@ bool PrintField(char *pOutFileName, CellsField &const field)
 }
 
 // field init
+	// get width
+
+bool CheckWallWidth(int wallWidth)
+{
+	if ((wallWidth - 2) < 0)
+	{
+		printf(MSG_ERR_FIELD_HAS_NO_WIDTH.c_str());
+		return false;
+	}
+	if ((wallWidth - 2) == 0)
+	{
+		printf(MSG_ERR_ZERO_FIELD_WIDTH.c_str());
+		return false;
+	}
+	return true;
+}
+
+// scans first line of the file to get width of the upper field wall
+int GetUpperWallWidth(FILE *pFieldFile)
+{
+	int ch = fgetc(pFieldFile);
+	int wallWidth = 0;
+	while (ch == CELL_WALL)
+	{
+		wallWidth++;
+		ch = fgetc(pFieldFile);
+	}
+	rewind(pFieldFile);
+
+	return wallWidth;
+}
+
+boost::optional<int> GetFieldWidth(FILE *pFieldFile)
+{
+	int upperWallWidth = GetUpperWallWidth(pFieldFile);
+	if (!CheckWallWidth(upperWallWidth))
+	{
+		return boost::none;
+	}
+
+	return upperWallWidth - 2;
+}
+
+	// get height
+
+bool CheckLeftWallHeight(int wallHeight)
+{
+	if ((wallHeight - 2) == 0)
+	{
+		printf(MSG_ERR_ZERO_FIELD_HEIGHT.c_str());
+		return false;
+	}
+	return true;
+}
 
 void SkipToNewLine(FILE *pFile)
 {
@@ -173,28 +238,13 @@ void SkipToNewLine(FILE *pFile)
 	}
 }
 
-// scans first line of the file to get width of the field
-int GetFieldWidth(FILE *pFieldFile)
-{
-	int ch = fgetc(pFieldFile);
-	int count = 0;
-	while (ch == CELL_WALL)
-	{
-		count++;
-		ch = fgetc(pFieldFile);
-	}
-
-	rewind(pFieldFile);
-	return count - 2;
-}
-
-// scans first and second chars of lines to get height of the field
-// returns -1 in case of error
-int GetFieldHeight(FILE *pFieldFile)
+// scans first and second chars of lines to get height of the left field wall
+boost::optional<int> GetLeftWallHeight(FILE *pFieldFile)
 {
 	int ch;
-	int count = 0;
-	while (true)
+	int count = 1;
+	bool endOfField = false;
+	while (!endOfField)
 	{
 		SkipToNewLine(pFieldFile);
 		// check first symbol of the line
@@ -205,39 +255,60 @@ int GetFieldHeight(FILE *pFieldFile)
 		}
 		else
 		{
-			return -1;
+			printf(MSG_ERR_FIELD_HAS_NO_BOTTOM.c_str());
+			return boost::none;
 		}
 		// check second symbol of the line
 		ch = fgetc(pFieldFile);
 		if (ch == CELL_WALL)
 		{
-			// End of field
-			break;
+			endOfField = true;
 		}
 		ungetc(ch, pFieldFile);
 	}
-
 	rewind(pFieldFile);
-	return count - 1;
+
+	return count;
 }
 
-bool CheckFieldDimension(int fieldDim, int min, int max, char *pLessMinErrMsg, char *pMoreMaxErrMsg, char *pErrDimMsg)
+boost::optional<int> GetFieldHeight(FILE *pFieldFile)
 {
-	if (fieldDim < 0)
+	boost::optional<int> leftWallHeight;
+	if ((leftWallHeight = GetLeftWallHeight(pFieldFile))
+		&& (CheckLeftWallHeight(*leftWallHeight)))
 	{
-		printf(pErrDimMsg);
+		return (*leftWallHeight - 2);
+	}
+
+	return boost::none;
+}
+
+bool CheckFieldDimension(int dimension, char const *pErrMsg)
+{
+	if (dimension > 256)
+	{
+		printf(pErrMsg);
 		return false;
 	}
-	if (fieldDim < min)
+	return true;
+}
+
+bool SetCellState(CellState &cell, char cellFileSymbol)
+{
+	if (cellFileSymbol == CELL_DEAD)
 	{
-		printf(pLessMinErrMsg);
+		cell = DEAD;
+	}
+	else if (cellFileSymbol == CELL_ALIVE)
+	{
+		cell = ALIVE;
+	}
+	else
+	{
+		printf(MSG_ERR_FIELD_INVALID_SYMBOL.c_str());
 		return false;
 	}
-	if (fieldDim > max)
-	{
-		printf(pMoreMaxErrMsg);
-		return false;
-	}
+
 	return true;
 }
 
@@ -249,21 +320,11 @@ bool FillField(CellsField &field, FILE *pFieldFile)
 		SkipToNewLine(pFieldFile);
 		int ch = fgetc(pFieldFile);
 
-		//start with second symbol
+		//start from second symbol
 		for (int j = 0; j < field.width; j++)
 		{
-			ch = fgetc(pFieldFile);
-			if (ch == CELL_DEAD)
+			if (!SetCellState(field.cells[i][j], fgetc(pFieldFile)))
 			{
-				field.cells[i][j] = DEAD;
-			}
-			else if (ch == CELL_ALIVE)
-			{
-				field.cells[i][j] = ALIVE;
-			}
-			else
-			{
-				printf(MSG_ERR_FIELD_INVALID_SYMBOL);
 				printf("at line %d column %d\n", (i + 1), (j + 1));
 				return false;
 			}
@@ -277,25 +338,21 @@ bool ReadField(char *pFieldFileName, CellsField &field)
 	FILE *pFieldFile = fopen(pFieldFileName, "r");
 	if (pFieldFile)
 	{
-		int width = GetFieldWidth(pFieldFile);
-		if (CheckFieldDimension(width, 1, 256, MSG_ERR_ZERO_FIELD_WIDTH, MSG_ERR_TOO_BIG_FIELD_WIDTH, MSG_ERR_FIELD_HAS_NO_WIDTH))
+		boost::optional<int> width, height;
+		if ((width = GetFieldWidth(pFieldFile))
+			&& (CheckFieldDimension(*width, MSG_ERR_TOO_BIG_FIELD_WIDTH.c_str()))
+			&& (height = GetFieldHeight(pFieldFile))
+			&& (CheckFieldDimension(*height, MSG_ERR_TOO_BIG_FIELD_HEIGHT.c_str())))
 		{
-			int height = GetFieldHeight(pFieldFile);
-			if (CheckFieldDimension(height, 1, 256, MSG_ERR_ZERO_FIELD_HEIGHT, MSG_ERR_TOO_BIG_FIELD_HEIGHT, MSG_ERR_FIELD_HAS_NO_BOTTOM))
+			field = CreateField(*width, *height);
+			if (FillField(field, pFieldFile))
 			{
-				field = CreateField(width, height);
-				if (FillField(field, pFieldFile))
-				{
-					fclose(pFieldFile);
-				}
-				else
-				{
-					fclose(pFieldFile);
-					return false;
-				}
+				fclose(pFieldFile);
 			}
 			else
 			{
+				DestroyField(field);
+				fclose(pFieldFile);
 				return false;
 			}
 		}
@@ -306,7 +363,7 @@ bool ReadField(char *pFieldFileName, CellsField &field)
 	}
 	else
 	{
-		printf(MSG_ERR_NO_INPUT);
+		printf(MSG_ERR_NO_INPUT.c_str());
 		return false;
 	}
 	
@@ -319,12 +376,12 @@ bool CheckArgc(int argc)
 {
 	if (argc < 2)
 	{
-		printf(MSG_DESCRIPTION);
+		printf(MSG_DESCRIPTION.c_str());
 		return false;
 	}
 	if (argc > 3)
 	{
-		printf(MSG_ERR_TOO_MANY_ARGS);
+		printf(MSG_ERR_TOO_MANY_ARGS.c_str());
 		return false;
 	}
 	return true;
@@ -342,24 +399,23 @@ int main(int argc, char* argv[])
 	{
 		// calc and print
 		CellsField nextGenField = CalcNextGenField(field);
-		char *pOutFileName = (argc == 3) ? argv[2] : NULL;
-		if (PrintField(pOutFileName, nextGenField))
+		if (PrintField(((argc == 3) ? argv[2] : nullptr), nextGenField))
 		{
+			DestroyField(field);
 			DestroyField(nextGenField);
-			printf(MSG_GOOD_END);
+			printf(MSG_GOOD_END.c_str());
 		}
 		else
 		{
+			DestroyField(field);
 			DestroyField(nextGenField);
 			return 1;
 		}
 	}
 	else
 	{
-		DestroyField(field);
 		return 1;
 	}
-	DestroyField(field);
 
 	return 0;
 }

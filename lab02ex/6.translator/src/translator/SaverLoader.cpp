@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-#define WORD_BOUND_RIGHT ']'
-#define WORD_BOUND_LEFT  '['
-
-#define MSG_ERR_NOINPUT  "Can't open vocabulary file.\nMake sure you have enough rights and the file really exists.\n"
-#define MSG_ERR_NOOUTPUT "Error saving vocabulary file.\nMake sure you have enough rights.\n"
-#define MSG_END_SAVING  "Changes in vocabulary have been saved\n"
-
 using namespace std;
+
+char const WORD_BOUND_RIGHT = ']';
+char const WORD_BOUND_LEFT =  '[';
+
+string const MSG_ERR_NOINPUT =  "Can't open vocabulary file.\nMake sure you have enough rights and the file really exists.\n";
+string const MSG_ERR_NOOUTPUT = "Error saving vocabulary file.\nMake sure you have enough rights.\n";
+string const MSG_END_SAVING =   "Changes in vocabulary have been saved\n";
 
 bool SaveVocabulary(map<string, string> const &vocabulary, char *pVocabularyFileName)
 {
@@ -53,16 +53,16 @@ string GetWord(string const &line)
 	return (startPos == string::npos) ? "" : (line.substr(startPos, len));
 }
 
-bool GetVocabularyMap(char const *pVocabularyFileName, map<string, string> &vocabulary)
+boost::optional<map<string, string>> GetVocabularyMap(char const *pVocabularyFileName)
 {
 	ifstream vocabularyStream(pVocabularyFileName, ifstream::in);
 	if (!vocabularyStream.is_open())
 	{
 		cout << MSG_ERR_NOINPUT;
-		return false;
+		return boost::none;
 	}
 	
-	vocabulary.clear();
+	map<string, string> vocabulary;
 	string line;
 	string word, translation;
 	while (getline(vocabularyStream, line))
@@ -72,6 +72,6 @@ bool GetVocabularyMap(char const *pVocabularyFileName, map<string, string> &voca
 		AddVocabularyRecord(vocabulary, word, translation);
 	}
 
-	return true;
+	return vocabulary;
 }
 

@@ -1,9 +1,40 @@
 #include "stdafx.h"
 
-#define MASK_SYMBOL_OPENED_FOR_CHAGES ' '
-#define MASK_SYMBOL_CLOSED_FOR_CHAGES 'X'
+char const MASK_SYMBOL_OPENED_FOR_CHAGES = ' ';
+char const MASK_SYMBOL_CLOSED_FOR_CHAGES = 'X';
 
 using namespace std;
+
+string StrReplaceByChars(string const &baseStr, char replaceChar, size_t replaceCharCount, size_t pos, size_t len)
+{
+	string result = baseStr;
+	result.erase(pos, len);
+	result.insert(pos, replaceCharCount, replaceChar);
+
+	return result;
+}
+
+string StrReplace(string const &baseStr, string const &replaceStr, size_t pos, size_t len)
+{
+	string result = baseStr;
+	result.erase(pos, len);
+	result.insert(pos, replaceStr);
+	
+	return result;
+}
+
+boost::optional<size_t> GetFirstClosedSymbolPosition(string const &mask, size_t startPos, size_t len)
+{
+	size_t result = mask.substr(startPos, len).find(MASK_SYMBOL_CLOSED_FOR_CHAGES);
+	if (result == string::npos)
+	{
+		return boost::none;
+	}
+	else
+	{
+		return result;
+	}
+}
 
 // the function uses mask to decide whether it needs to replace findings or not
 // the mask is a string with a length == length of str and with a content like "  XX  X "
@@ -13,24 +44,20 @@ void Replace(string &str, string const &searchStr, string const &replaceStr, str
 	size_t pos = str.find(searchStr, searchFrom);
 	while (pos != string::npos)
 	{
-		string checkingRange = mask.substr(pos, searchStr.length());                 // check found substring,
-		if (checkingRange.find(MASK_SYMBOL_CLOSED_FOR_CHAGES) == string::npos)       // using mask
+		if (auto firstClosedSymbolPosition = GetFirstClosedSymbolPosition(mask, pos, searchStr.length()))                   // check found substring, using mask                                               
 		{
-			str.erase(pos, searchStr.length());                                      // replace found substring
-			str.insert(pos, replaceStr);                                             // 
-
-			mask.erase(pos, searchStr.length());                                     // make changes in mask
-			mask.insert(pos, replaceStr.length(), MASK_SYMBOL_CLOSED_FOR_CHAGES);    // (mark changed chars)
-			
-			searchFrom = pos + replaceStr.length();
+			// if we have found a char that is not meant to be changed then search again starting from a char next to the founded
+			searchFrom = *firstClosedSymbolPosition + 1;
 		}
 		else
 		{
-			searchFrom = pos + 1;
+			str = StrReplace(str, replaceStr, pos, searchStr.length());                                                     // replace found substring
+			mask = StrReplaceByChars(mask, MASK_SYMBOL_CLOSED_FOR_CHAGES, replaceStr.length(), pos, searchStr.length());    // make changes in mask (mark symbols as changed)
+
+			searchFrom = pos + replaceStr.length();
 		}
 		pos = str.find(searchStr, searchFrom);
 	} 
-
 }
 
 // the function returns true if key1 should go before key2 (key1Index < key2Index)
@@ -41,6 +68,13 @@ bool KeyCompare(string key1, string key2)
 		return true;
 	}
 	return false;
+}
+
+void SwapKeys(int keyIndex1, int keyIndex2, vector<string> &keys)
+{
+	string tmp = keys[keyIndex1];
+	keys.erase(keys.begin() + keyIndex1, keys.begin() + keyIndex1 + 1);
+	keys.insert(keys.begin() + keyIndex2, tmp);
 }
 
 void SortKeys(vector<string> &keys)
@@ -56,9 +90,7 @@ void SortKeys(vector<string> &keys)
 			{
 				if (KeyCompare(keys[j], keys[i]))
 				{
-					string tmp = keys[i];
-					keys.erase(keys.begin() + i, keys.begin() + i + 1);
-					keys.insert(keys.begin() + j, tmp);
+					SwapKeys(i, j, keys);
 					swapCount++;
 				}
 			}
@@ -88,8 +120,7 @@ string ExpandTemplate(string const& tpl, map<string, string> const& params)
 	
 	for (vector<string>::const_iterator it = keys.begin(); it != keys.end(); it++)
 	{
-		string replaceStr = params.find(*it)->second;
-		Replace(result, *it, replaceStr, mask);
+		Replace(result, *it, (params.find(*it)->second), mask);
 	}
 
 	return result;

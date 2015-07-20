@@ -3,26 +3,23 @@
 
 #include "stdafx.h"
 
+const std::string MSG_USAGE =                     "USAGE: crypt <encrypt | decrypt> <input file> <output file> <key>\n";
+const std::string MSG_KEY_DESCRIPTION =           "The key must be an integer number no less than 0 and no more than 255.\n";
+const std::string MSG_NO_ARGS =                   "The program encrypts or decrypts given file using given key.\n" + MSG_KEY_DESCRIPTION + MSG_USAGE;
+const std::string MSG_ERR_NOT_ENOUGH_ARGS =       "The program needs at least 4 arguments.\n" + MSG_USAGE;
+const std::string MSG_ERR_TOO_MANY_ARGS =         "The program needs only 4 arguments.\n" + MSG_USAGE;
+const std::string MSG_ERR_CANT_OPEN_INPUT_FILE =  "Error opening input file.\nMake sure you have enough rights and the file really exists.\n";
+const std::string MSG_ERR_CANT_OPEN_OUTPUT_FILE = "Error opening output file.\nMake sure you have enough rights.\n";
+const std::string MSG_ERR_WRONG_ACTION_ARGUMENT = "The first argument must be \"encrypt\" or \"decrypt\"\n";
+const std::string MSG_ERR_KEY_NOT_INTEGER =       "The key needs to be an integer number\n";
+const std::string MSG_ERR_KEY_LESS_THAN_0 =       "The key must be no less than 0\n";
+const std::string MSG_ERR_KEY_MORE_THAN_255 =     "The key must be no more than 255\n";
+const std::string MSG_CRYPT_DONE =                "The file successfully crypted\n";
 
-#define	MSG_USAGE                     "USAGE: crypt <encrypt | decrypt> <input file> <output file> <key>\n"
-#define MSG_KEY_DESCRIPTION           "The key must be an integer number no less than 0 and no more than 255.\n"
-#define MSG_NO_ARGS                   "The program encrypts or decrypts given file using given key.\n" MSG_KEY_DESCRIPTION MSG_USAGE
-#define MSG_ERR_NOT_ENOUGH_ARGS       "The program needs at least 4 arguments.\n" MSG_USAGE
-#define MSG_ERR_TOO_MANY_ARGS         "The program needs only 4 arguments.\n" MSG_USAGE
-#define MSG_ERR_CANT_OPEN_INPUT_FILE  "Error opening input file.\nMake sure you have enough rights and the file really exists.\n"
-#define MSG_ERR_CANT_OPEN_OUTPUT_FILE "Error opening output file.\nMake sure you have enough rights.\n"
-#define MSG_ERR_WRONG_ACTION_ARGUMENT "The first argument must be \"encrypt\" or \"decrypt\"\n"
-#define MSG_ERR_KEY_NOT_INTEGER       "The key needs to be an integer number\n"
-#define MSG_ERR_KEY_LESS_THAN_0       "The key must be no less than 0\n"
-#define MSG_ERR_KEY_MORE_THAN_255     "The key must be no more than 255\n"
-#define MSG_ENCRYPTION_DONE           "The file successfully encrypted\n"
-#define MSG_DECRTYPTION_DONE          "The file successfully decrypted\n"
+const int ENCRYPT_TABLE[] = { 5, 6, 0, 1, 2, 7, 3, 4 };
+const int DECRYPT_TABLE[] = { 2, 3, 4, 6, 7, 0, 1, 5 };
 
-enum Task
-{
-	ENCRYPT,
-	DECRYPT
-};
+typedef std::function<uint8_t(uint8_t byteToCrypt, uint8_t key)> CryptByteFunc;
 
 enum ErrReadByte
 {
@@ -34,75 +31,54 @@ enum ErrReadByte
 
 // main functions
 
-void PutBit(unsigned char &dest, char pos, unsigned char bit)
+void SetBit(uint8_t &dest, uint8_t pos, uint8_t bit)
 {
+	dest &= ~(1 << pos);  // set bit in the position to 0
 	bit <<= pos;
-	dest += bit;
+	dest |= bit;
 }
 
-unsigned char GetBit(unsigned char byte, char pos)
+unsigned char GetBit(uint8_t byte, uint8_t pos)
 {
 	byte >>= pos;
 	return byte & 1;
 }
 
-unsigned char EncryptByte(unsigned char byte, unsigned char key)
+uint8_t ShuffleByte(uint8_t byteToShuffle, int const shuffleTable[])
 {
-	byte ^= key;
-	unsigned char result = 0;
-	PutBit(result, 2, GetBit(byte, 0));
-	PutBit(result, 3, GetBit(byte, 1));
-	PutBit(result, 4, GetBit(byte, 2));
-	PutBit(result, 6, GetBit(byte, 3));
-	PutBit(result, 7, GetBit(byte, 4));
-	PutBit(result, 0, GetBit(byte, 5));
-	PutBit(result, 1, GetBit(byte, 6));
-	PutBit(result, 5, GetBit(byte, 7));
-
+	uint8_t result;
+	for (int i = 0; i < 8; i++)
+	{
+		SetBit(result, shuffleTable[i], GetBit(byteToShuffle, i));
+	}
 	return result;
 }
 
-unsigned char DecryptByte(unsigned char byte, unsigned char key)
+uint8_t EncryptByte(uint8_t byteToCrypt, uint8_t key)
 {
-	unsigned char result = 0;
-	PutBit(result, 5, GetBit(byte, 0));
-	PutBit(result, 6, GetBit(byte, 1));
-	PutBit(result, 0, GetBit(byte, 2));
-	PutBit(result, 1, GetBit(byte, 3));
-	PutBit(result, 2, GetBit(byte, 4));
-	PutBit(result, 7, GetBit(byte, 5));
-	PutBit(result, 3, GetBit(byte, 6));
-	PutBit(result, 4, GetBit(byte, 7));
-	result ^= key;
-
-	return result;
+	byteToCrypt ^= key;
+	return ShuffleByte(byteToCrypt, ENCRYPT_TABLE);
 }
 
-void EncryptFile(FILE *pInFile, FILE *pEncryptedFile, unsigned char key)
+uint8_t DecryptByte(uint8_t byteToCrypt, uint8_t key)
 {
-	int byte = fgetc(pInFile);
-	unsigned char encryptedByte;
-	while (byte != EOF)
+	uint8_t result = ShuffleByte(byteToCrypt, DECRYPT_TABLE);
+	return result ^ key;
+}
+
+void CryptFile(FILE *pInFile, FILE *pOutFile, uint8_t key, CryptByteFunc fCryptByte)
+{
+	int inputByte = fgetc(pInFile);
+	uint8_t cryptedByte;
+	while (inputByte != EOF)
 	{
-		encryptedByte = EncryptByte(byte, key);
-		fputc(encryptedByte, pEncryptedFile);
-		byte = fgetc(pInFile);
+		cryptedByte = fCryptByte(inputByte, key);
+		fputc(cryptedByte, pOutFile);
+		inputByte = fgetc(pInFile);
 	}
 }
 
-void DecryptFile(FILE *pEncryptedFile, FILE *pDecryptedFile, unsigned char key)
-{
-	int encryptedByte = fgetc(pEncryptedFile);
-	int decryptedByte;
-	while (encryptedByte != EOF)
-	{
-		decryptedByte = DecryptByte(encryptedByte, key);
-		fputc(decryptedByte, pDecryptedFile);
-		encryptedByte = fgetc(pEncryptedFile);
-	}
-}
-
-bool OpenFile(char *pFileName, char *pMode, char *pErrMsg, FILE *&pFile)
+bool OpenFile(char const *pFileName, char const *pMode, char const *pErrMsg, FILE *&pFile)
 {
 	pFile = fopen(pFileName, pMode);
 	if (!pFile)
@@ -121,67 +97,50 @@ void CloseFile(FILE *pFile)
 	}
 }
 
-bool PerformAction(Task task, char *pInFileName, char *pOutFileName, unsigned char key)
+bool PerformAction(char *pInFileName, char *pOutFileName, uint8_t key, CryptByteFunc fCryptByte)
 {
 	FILE *pInFile;
 	FILE *pOutFile;
-	if ((OpenFile(pInFileName, "rb", MSG_ERR_CANT_OPEN_INPUT_FILE, pInFile))
-		&& (OpenFile(pOutFileName, "wb", MSG_ERR_CANT_OPEN_OUTPUT_FILE, pOutFile)))
+	if ((OpenFile(pInFileName, "rb", MSG_ERR_CANT_OPEN_INPUT_FILE.c_str(), pInFile))
+		&& (OpenFile(pOutFileName, "wb", MSG_ERR_CANT_OPEN_OUTPUT_FILE.c_str(), pOutFile)))
 	{
-		if (task == ENCRYPT)
-		{
-			EncryptFile(pInFile, pOutFile, key);
-		}
-		else if (task == DECRYPT)
-		{
-			DecryptFile(pInFile, pOutFile, key);
-		}
+		CryptFile(pInFile, pOutFile, key, fCryptByte);
 	}
 	else
 	{
+		CloseFile(pInFile);
 		return false;
 	}
+
+	CloseFile(pInFile);
+	CloseFile(pOutFile);
 	
 	return true;
 }
 
-// print end message function
-
-void PrintGoodEndMsg(Task task)
-{
-	if (task == ENCRYPT)
-	{
-		printf(MSG_ENCRYPTION_DONE);
-	}
-	if (task == DECRYPT)
-	{
-		printf(MSG_DECRTYPTION_DONE);
-	}
-}
-
 // convert args to variables funcitons
 
-bool IsEmptyStr(char* str)
+bool StrHasSignificantChars(char* str)
 {
 	int i = 0;
 	while (str[i] != '\0')
 	{
 		if ((str[i] != ' ') && ((str[i] != '\t')))
 		{
-			return false;
+			return true;
 		}
 		i++;
 	}
 
-	return true;
+	return false;
 }
 
-ErrReadByte StrToByte(char *const pStr, unsigned char &byte)
+ErrReadByte StrToByte(char *const pStr, uint8_t &byte)
 {
 	char* pEndP;
 	int number = strtol(pStr, &pEndP, 10);
 
-	if ((!IsEmptyStr(pEndP)) || (IsEmptyStr(pStr)))
+	if ((StrHasSignificantChars(pEndP)) || (!StrHasSignificantChars(pStr)))
 	{
 		return BYTE_NOT_INTEGER;
 	}
@@ -199,42 +158,39 @@ ErrReadByte StrToByte(char *const pStr, unsigned char &byte)
 	return BYTE_OK;
 }
 
-bool GetKey(char *pKeyStr, unsigned char &key)
+boost::optional<uint8_t> GetKey(char *pKeyStr)
 {
+	uint8_t key;
 	switch (StrToByte(pKeyStr, key))
 	{
 		case BYTE_NOT_INTEGER:
-			printf(MSG_ERR_KEY_NOT_INTEGER);
-			return false;
+			printf(MSG_ERR_KEY_NOT_INTEGER.c_str());
+			return boost::none;
 			break;
 		case BYTE_LESS_THAN_0:
-			printf(MSG_ERR_KEY_LESS_THAN_0);
-			return false;
+			printf(MSG_ERR_KEY_LESS_THAN_0.c_str());
+			return boost::none;
 			break;
 		case BYTE_MORE_THAN_255:
-			printf(MSG_ERR_KEY_MORE_THAN_255);
-			return false;
+			printf(MSG_ERR_KEY_MORE_THAN_255.c_str());
+			return boost::none;
 			break;
 	}
-	return true;
+	return key;
 }
 
-bool StrToProgramTask(char *const pTaskStr, Task &task)
+boost::optional<CryptByteFunc> GetCryptByteFunction(char *const pTaskStr)
 {
 	if (strcmp(pTaskStr, "encrypt") == 0)
 	{
-		task = ENCRYPT;
+		return EncryptByte;
 	}
 	else if (strcmp(pTaskStr, "decrypt") == 0)
 	{
-		task = DECRYPT;
-	}
-	else
-	{
-		return false;
+		return DecryptByte;
 	}
 
-	return true;
+	return boost::none;
 }
 
 // check arguments function
@@ -243,17 +199,17 @@ bool CheckArgumentsCount(int argc)
 {
 	if (argc < 2)
 	{
-		printf(MSG_NO_ARGS);
+		printf(MSG_NO_ARGS.c_str());
 		return false;
 	}
 	if (argc < 5)
 	{
-		printf(MSG_ERR_NOT_ENOUGH_ARGS);
+		printf(MSG_ERR_NOT_ENOUGH_ARGS.c_str());
 		return false;
 	}
 	if (argc > 5)
 	{
-		printf(MSG_ERR_TOO_MANY_ARGS);
+		printf(MSG_ERR_TOO_MANY_ARGS.c_str());
 		return false;
 	}
 	return true;
@@ -266,15 +222,13 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Task task;
-	if (StrToProgramTask(argv[1], task))
+	if (boost::optional<CryptByteFunc> fCryptByte = GetCryptByteFunction(argv[1]))
 	{
-		unsigned char key;
-		if (GetKey(argv[4], key))
+		if (boost::optional<uint8_t> key = GetKey(argv[4]))
 		{
-			if (PerformAction(task, argv[2], argv[3], key))
+			if (PerformAction(argv[2], argv[3], *key, *fCryptByte))
 			{
-				PrintGoodEndMsg(task);
+				printf(MSG_CRYPT_DONE.c_str());
 			}
 			else
 			{
@@ -288,7 +242,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		printf(MSG_ERR_WRONG_ACTION_ARGUMENT);
+		printf(MSG_ERR_WRONG_ACTION_ARGUMENT.c_str());
 		return 1;
 	}
 

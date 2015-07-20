@@ -14,6 +14,7 @@
 #include <set>
 #include <algorithm>
 #include <iterator>
+#include <boost\optional.hpp>
 
 
 

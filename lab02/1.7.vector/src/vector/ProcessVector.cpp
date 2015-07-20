@@ -2,6 +2,9 @@
 
 using namespace std;
 
+double GetSum3Min(vector<double> const &vectorOfDouble);
+vector<double> AddConstantToVector(vector<double> const &vectorOfDouble, double number);
+
 vector<double> ProcessVector(vector<double> const &vectorOfDouble)
 {
 	vector<double> result = vectorOfDouble;
@@ -10,20 +13,30 @@ vector<double> ProcessVector(vector<double> const &vectorOfDouble)
 	{                       // условиям, в первозданном виде
 		return result;
 	}
-	
-	sort(result.begin(), result.end());
 
+	sort(result.begin(), result.end());
+	return AddConstantToVector(result, GetSum3Min(result));
+}
+
+// get sum of 3 minimal elements of a sorted vector.
+double GetSum3Min(vector<double> const &vectorOfDouble)
+{
 	double sum3min = 0;
 	for (int i = 0; i < 3; i++)
 	{
-		sum3min += result[i];
+		sum3min += vectorOfDouble[i];
 	}
+	return sum3min;
+}
 
-	int len = (int)result.size();
+// adds a number to every element of a vector
+vector<double> AddConstantToVector(vector<double> const &vectorOfDouble, double number)
+{
+	vector<double> result;
+	int len = (int)vectorOfDouble.size();
 	for (int i = 0; i < len; i++)
 	{
-		result[i] += sum3min;
+		result.push_back(vectorOfDouble[i] + number);
 	}
-
 	return result;
 }

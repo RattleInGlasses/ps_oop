@@ -3,16 +3,16 @@
 
 #include "stdafx.h"
 
-#define MSG_USAGE          "USAGE: sets <number>\n"
-#define MSG_DESCRIPTION_1  "The program prints set of integer numbers from 1 to N that are satisfy following conditions:\n"
-#define MSG_DESCRIPTION_2  "1. reminder after division of the number by sum of its digits is zero;\n"
-#define MSG_DESCRIPTION_3  "2. sum of number's digits is even.\n"
-#define MSG_DESCRIPTION    MSG_DESCRIPTION_1 MSG_DESCRIPTION_2 MSG_DESCRIPTION_3 MSG_USAGE
-#define MSG_TOO_MANY_ARGS  "The program needs only one argument.\n" MSG_USAGE
-#define MSG_NOT_INTEGER    "The argument must be integer number.\n"
-#define MSG_LESS_1         "The number must be positive\n";
-
 using namespace std;
+
+string const MSG_USAGE =          "USAGE: sets <number>\n";
+string const MSG_DESCRIPTION_1 =  "The program prints set of integer numbers from 1 to N that are satisfy following conditions:\n";
+string const MSG_DESCRIPTION_2 =  "1. reminder after division of the number by sum of its digits is zero;\n";
+string const MSG_DESCRIPTION_3 =  "2. sum of number's digits is even.\n";
+string const MSG_DESCRIPTION =    MSG_DESCRIPTION_1 + MSG_DESCRIPTION_2 + MSG_DESCRIPTION_3 + MSG_USAGE;
+string const MSG_TOO_MANY_ARGS =  "The program needs only one argument.\n" + MSG_USAGE;
+string const MSG_NOT_INTEGER =    "The argument must be integer number.\n";
+string const MSG_LESS_1 =         "The number must be positive\n";
 
 bool CheckArgc(int argc)
 {
@@ -29,16 +29,16 @@ bool CheckArgc(int argc)
 	return true;
 }
 
-bool StrToInt(char *const pStr, int &num)
+boost::optional<int> StrToInt(char *const pStr)
 {
 	char *pEndPoint;
-	num = strtol(pStr, &pEndPoint, 10);
+	int num = strtol(pStr, &pEndPoint, 10);
 	if ((*pStr == '\0') || (*pEndPoint != '\0'))
 	{
 		cout << MSG_NOT_INTEGER;
-		return false;
+		return boost::none;
 	}
-	return true;
+	return num;
 }
 
 int DigitsSum(int num)
@@ -81,7 +81,7 @@ set<int> CreateSet2(int N)
 	return set2;
 }
 
-set<int> CrossSet(set<int> &const set1, set<int> &const set2)
+set<int> CrossSet(set<int> const &set1, set<int> const &set2)
 {
 	set<int> intersection;
 	set_intersection(set1.begin(), set1.end(), set2.begin(), set2.end(), inserter(intersection, intersection.begin()));
@@ -134,20 +134,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	int n;
-	if (StrToInt(argv[1], n))
+	if (auto n = StrToInt(argv[1]))
 	{
-		if (n < 1)
+		if (*n < 1)
 		{
 			cout << MSG_LESS_1;
 			return 1;
 		}
 
-		set<int> set1 = CreateSet1(n);
-		set<int> set2 = CreateSet2(n);
-		set<int> intersection = CrossSet(set1, set2);
-
-		PrintSet(intersection);
+		PrintSet(CrossSet(CreateSet1(*n), CreateSet2(*n)));
 	}
 	else
 	{

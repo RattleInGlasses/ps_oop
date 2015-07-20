@@ -15,6 +15,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <boost/optional.hpp>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

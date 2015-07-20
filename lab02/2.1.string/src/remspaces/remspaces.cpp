@@ -26,7 +26,7 @@ string RemoveExtraSpaces(string const &arg)
 		{
 			state = NEW_LINE;
 			result += '\n';
-			ch = arg[i++];
+			continue;
 		}
 		if (ch == '\0')
 		{
@@ -88,7 +88,7 @@ void TestRemoveExtraSpaces()
 
 int main()
 {
-	//TestRemoveExtraSpaces();
+	TestRemoveExtraSpaces();
 
 	SendFormattedInputToOutput(cin, cout);
 	

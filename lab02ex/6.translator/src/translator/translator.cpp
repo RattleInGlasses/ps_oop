@@ -5,11 +5,11 @@
 #include "SaverLoader.h"
 #include "UserDialog.h"
 
-#define MSG_USAGE              "USAGE: translator.exe <vocabulary file>\n"
-#define MSG_DESCRIPTION        "The program is a translator. To use it you need a vocabulary.\n" MSG_USAGE
-#define MSG_ERR_TOO_MANY_ARGS  "The program needs only one argument\n" MSG_USAGE
-
 using namespace std;
+
+string const MSG_USAGE =              "USAGE: translator.exe <vocabulary file>\n";
+string const MSG_DESCRIPTION =        "The program is a translator. To use it you need a vocabulary.\n" + MSG_USAGE;
+string const MSG_ERR_TOO_MANY_ARGS =  "The program needs only one argument\n" + MSG_USAGE;
 
 bool CheckArgc(int argc)
 {
@@ -33,14 +33,13 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	
-	map<string, string> vocabulary;
-	if (GetVocabularyMap(argv[1], vocabulary))
+	if (auto vocabulary = GetVocabularyMap(argv[1]))
 	{
 		bool saveVocabularyRequest;
-		UserDialogCicle(vocabulary, saveVocabularyRequest);
+		UserDialogCicle(*vocabulary, saveVocabularyRequest);
 		if (saveVocabularyRequest)
 		{
-			if (!SaveVocabulary(vocabulary, argv[1]))
+			if (!SaveVocabulary(*vocabulary, argv[1]))
 			{
 				return 1;
 			}

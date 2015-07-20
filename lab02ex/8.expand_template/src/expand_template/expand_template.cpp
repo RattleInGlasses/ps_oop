@@ -4,23 +4,23 @@
 #include "stdafx.h"
 #include "template.h"
 
-#define MSG_USAGE                      "USAGE: expand_template.exe <input file> <output file> [<param> <value> [<param> <value> ...]]\n"
-#define MSG_DESCRIPTION_1              "The program replaces substrings of a file by other strings\n"
-#define MSG_DESCRIPTION_2              "(<param> is beeing replaced by <value>) and stores the result in specified file\n"
-#define MSG_DESCRIPTION                MSG_DESCRIPTION_1 MSG_DESCRIPTION_2 MSG_USAGE
-#define MSG_ERR_NOT_ENOUGH_ARGUMENTS   "The program needs at least 2 argumnets. You need to specify output file.\n" MSG_USAGE
-#define MSG_ERR_PARAM_WITHOUT_VALUE    "Every param needs an associated value.\n"
-#define MSG_ERR_NO_INPUT               "Error opening input file.\nMake sure you have enough rights and the file really exists.\n"
-#define MSG_ERR_NO_OUTPUT              "Error opening output file.\nMake sure you have enough rights.\n"
-
 using namespace std;
+
+string const MSG_USAGE =                      "USAGE: expand_template.exe <input file> <output file> [<param> <value> [<param> <value> ...]]\n";
+string const MSG_DESCRIPTION_1 =              "The program replaces substrings of a file by other strings\n";
+string const MSG_DESCRIPTION_2 =              "(<param> is beeing replaced by <value>) and stores the result in specified file\n";
+string const MSG_DESCRIPTION =                MSG_DESCRIPTION_1 + MSG_DESCRIPTION_2 + MSG_USAGE;
+string const MSG_ERR_NOT_ENOUGH_ARGUMENTS =   "The program needs at least 2 argumnets. You need to specify output file.\n" + MSG_USAGE;
+string const MSG_ERR_PARAM_WITHOUT_VALUE =    "Every param needs an associated value.\n";
+string const MSG_ERR_NO_INPUT =               "Error opening input file.\nMake sure you have enough rights and the file really exists.\n";
+string const MSG_ERR_NO_OUTPUT =              "Error opening output file.\nMake sure you have enough rights.\n";
 
 void PrintEndMessage(char *inFileName, char *outFileName)
 {
 	cout << "File " << outFileName << " successfully created from file " << inFileName << endl;
 }
 
-bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, string> params)
+bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, string> const &params)
 {
 	ifstream inFileStream(pInFileName, ifstream::in);
 	if (!inFileStream.is_open())

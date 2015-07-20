@@ -1,18 +1,17 @@
 #include "stdafx.h"
 #include "RemoveExtraSpaces.h"
 
-#define USER_COMMAND_WORK_END     "..."
-#define USER_COMMAND_DO_NOT_SAVE  ""
-#define USER_COMMAND_MARK         "> "
-#define UNALLOWED_SYMBOLS         "[]"
-
-#define MSG_COMMAND_PROMPT        "Enter word to translate or \"...\" for exit\n"
-#define MSG_SAVE_PROMPT           "To save changes in dictionary file enter Y or y\n";
-#define MSG_WILL_NOT_SAVE         "Changes will not be saved\n"
-#define MSG_ERR_UNALLOWED_SYMBOLS "The word must not contain symbol \"[\" or \"]\"\n"
-
-
 using namespace std;
+
+string const USER_COMMAND_WORK_END =     "...";
+string const USER_COMMAND_DO_NOT_SAVE =  "";
+string const USER_COMMAND_MARK =         "> ";
+string const UNALLOWED_SYMBOLS =         "[]";
+
+string const MSG_COMMAND_PROMPT =        "Enter word to translate or \"...\" for exit\n";
+string const MSG_SAVE_PROMPT =           "To save changes in dictionary file enter Y or y\n";
+string const MSG_WILL_NOT_SAVE =         "Changes will not be saved\n";
+string const MSG_ERR_UNALLOWED_SYMBOLS = "The word must not contain symbol \"[\" or \"]\"\n";
 
 bool AskAboutSaving()
 {
@@ -30,10 +29,9 @@ bool AskAboutSaving()
 
 bool HasForbiddenSymbols(string str)
 {
-	string unallowedSymbols = UNALLOWED_SYMBOLS;
-	for (size_t i = 0; i < unallowedSymbols.length(); i++)
+	for (size_t i = 0; i < UNALLOWED_SYMBOLS.length(); i++)
 	{
-		if (str.find(unallowedSymbols[i]) != string::npos)
+		if (str.find(UNALLOWED_SYMBOLS[i]) != string::npos)
 		{
 			return true;
 		}
@@ -57,7 +55,9 @@ string GetCommand(string const &userRequest)
 	return ToLowerCase(RemoveExtraSpaces(userRequest));
 }
 
-void AddNewWord(string const &word, map<string, string> &vocabulary, bool &newWordAdded)
+// return true if the word was added
+// return false if the word was ignored
+bool AddNewWord(string const &word, map<string, string> &vocabulary)
 {
 	cout << "There is no word \"" << word << "\". Enter translation to save or empty string to skip\n";
 	cout << USER_COMMAND_MARK;
@@ -68,12 +68,12 @@ void AddNewWord(string const &word, map<string, string> &vocabulary, bool &newWo
 	{
 		vocabulary[word] = userCommand;
 		cout << "The word \"" << word << "\" has been added to the vocabulary with a translation \"" << userCommand << "\"\n";
-		newWordAdded = true;
+		return true;
 	}
 	else
 	{
 		cout << "The word \"" << word << "\" hasn't been added\n";
-		newWordAdded = false;
+		return false;
 	}
 }
 
@@ -111,8 +111,7 @@ void UserDialogCicle(map<string, string> &vocabulary, bool &saveChanges)
 			}
 			else if (userCommand != "")
 			{
-				bool newWordAdded = false;
-				AddNewWord(userCommand, vocabulary, newWordAdded);
+				bool newWordAdded =	AddNewWord(userCommand, vocabulary);
 				if (!vocabularyChanged)
 				{
 					vocabularyChanged = newWordAdded;

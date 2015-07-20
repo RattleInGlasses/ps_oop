@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 #include <locale>
-
+#include <boost\optional.hpp>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
