@@ -5,7 +5,7 @@
 
 enum ReadState
 {
-	NEW_LINE,
+	BEGINING,
 	WORD,
 	SPACE,
 	END
@@ -13,28 +13,25 @@ enum ReadState
 
 using namespace std;
 
+/*
 string RemoveExtraSpaces(string const &arg)
 {
-	ReadState state = NEW_LINE;
-	int i = 0;
+	ReadState state = BEGINING;
+	size_t i = 0;
 	unsigned char ch;
-	string result = "";
+	string result;
+	result.reserve(arg.length());
 	while (state != END)
 	{
-		ch = arg[i++];
-		if (ch == '\n')
-		{
-			state = NEW_LINE;
-			result += '\n';
-			continue;
-		}
-		if (ch == '\0')
+		if (i == arg.length())
 		{
 			state = END;
+			continue;
 		}
+		ch = arg[i++];
 		switch (state)
 		{
-			case NEW_LINE:
+			case BEGINING:
 				if (ch != ' ')
 				{
 					result += ch;
@@ -64,12 +61,39 @@ string RemoveExtraSpaces(string const &arg)
 
 	return result;
 }
+*/
+
+string RemoveExtraSpaces(string const &arg)
+{
+	string result;
+	result.reserve(arg.length());
+	string word;
+	istringstream inputStream(arg);
+	while (inputStream >> word)
+	{
+		result += word;
+		result += " ";
+	}
+	if (result.length() > 0)
+	{
+		result.erase(result.length() - 1);
+	}
+
+	return result;
+}
 
 void SendFormattedInputToOutput(istream &input, ostream &output)
 {
 	string line;
-	getline(input, line, '\x1A');
-	output << RemoveExtraSpaces(line);
+	while (getline(input, line))
+	{
+		output << RemoveExtraSpaces(line);
+		input.unget();
+		if (input.get() == '\n')
+		{
+			output << endl;
+		}
+	}
 }
 
 void TestRemoveExtraSpaces()
@@ -77,13 +101,11 @@ void TestRemoveExtraSpaces()
 	assert(RemoveExtraSpaces("") == "");
 	assert(RemoveExtraSpaces(" ") == "");
 	assert(RemoveExtraSpaces("    ") == "");
-	assert(RemoveExtraSpaces("\n") == "\n");
 	assert(RemoveExtraSpaces("a") == "a");
 	assert(RemoveExtraSpaces("abcde") == "abcde");
 	assert(RemoveExtraSpaces("  abc") == "abc");
 	assert(RemoveExtraSpaces("abc  ") == "abc");
 	assert(RemoveExtraSpaces(" a  b   c  ") == "a b c");
-	assert(RemoveExtraSpaces("abc\n  ab ") == "abc\nab");
 }
 
 int main()

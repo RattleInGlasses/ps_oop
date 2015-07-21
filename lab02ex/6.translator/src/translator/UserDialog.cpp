@@ -39,11 +39,11 @@ bool HasForbiddenSymbols(string str)
 	return false;
 }
 
-string ToLowerCase(string &const str)
+string ToLowerCase(string const &str)
 {
 	string result;
 	locale rusLoc(".866");
-	for (string::iterator it = str.begin(); it != str.end(); it++)
+	for (string::const_iterator it = str.begin(); it != str.end(); it++)
 	{
 		result += tolower(*it, rusLoc);
 	}

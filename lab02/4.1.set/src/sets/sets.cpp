@@ -35,7 +35,6 @@ boost::optional<int> StrToInt(char *const pStr)
 	int num = strtol(pStr, &pEndPoint, 10);
 	if ((*pStr == '\0') || (*pEndPoint != '\0'))
 	{
-		cout << MSG_NOT_INTEGER;
 		return boost::none;
 	}
 	return num;
@@ -56,7 +55,7 @@ int DigitsSum(int num)
 set<int> CreateSet1(int N)
 {
 	set<int> set1;
-	for (int i = 1; i <= N; i++)
+	for (int i = 1; i <= N; ++i)
 	{
 		if (i % DigitsSum(i) == 0)
 		{
@@ -70,7 +69,7 @@ set<int> CreateSet1(int N)
 set<int> CreateSet2(int N)
 {
 	set<int> set2;
-	for (int i = 1; i <= N; i++)
+	for (int i = 1; i <= N; ++i)
 	{
 		if (DigitsSum(i) % 2 == 0)
 		{
@@ -98,31 +97,36 @@ void PrintSet(set<int> const & printableSet)
 			cout << ", ";
 		}
 	}
-	cout << '\n';
+	cout << endl;
+}
+
+bool SetsAreEqual(set<int> s1, set<int> s2)
+{
+	return s1 == s2;
 }
 
 void TestCrossSet()
 {
 	set<int> set1, set2, intersection, rightResult;
 
+	// set1 = set2 = {}
 	intersection = CrossSet(set1, set2);
-	assert(intersection == rightResult);
+	assert(SetsAreEqual(intersection, {}));
 
 	set1 = { 1, 2, 3 };
 	// set2 = {};
 	intersection = CrossSet(set1, set2);
-	assert(intersection == rightResult);
+	assert(SetsAreEqual(intersection, {}));
 
 	set1 = { 1, 2, 3 };
 	set2 = { 4, 5 };
 	intersection = CrossSet(set1, set2);
-	assert(intersection == rightResult);
+	assert(SetsAreEqual(intersection, {}));
 
 	set1 = { 1, 2, 3, 4 };
 	set2 = { 4, 5 };
-	rightResult = { 4 };
 	intersection = CrossSet(set1, set2);
-	assert(intersection == rightResult);
+	assert(SetsAreEqual(intersection, { 4 }));
 }
 
 int main(int argc, char* argv[])
@@ -146,6 +150,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
+		cout << MSG_NOT_INTEGER;
 		return 1;
 	}
 

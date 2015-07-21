@@ -10,7 +10,6 @@ using namespace std;
 vector<double> ReadInputVector();
 bool IsStreamEoln(istream &sin);
 void SkipSpaces(istream &sin);
-void PrintVector(double elem);
 
 int main()
 {
@@ -19,9 +18,10 @@ int main()
 	cout << "The program reads array, adds to it's every element sum of it's 3 minimal elements, output result in ascending order.\n";
 	cout << "================================================================================\n";
 
-	vector<double> vectorOfDouble = ProcessVector(ReadInputVector());
+	vector<double> vectorOfDouble = ReadInputVector();
+	ProcessVector(vectorOfDouble);
 
-	for_each(vectorOfDouble.begin(), vectorOfDouble.end(), PrintVector);
+	copy(vectorOfDouble.begin(), vectorOfDouble.end(), ostream_iterator<double>(cout, " "));
 	cout << '\n';
 
 	return 0;
@@ -34,17 +34,16 @@ vector<double> ReadInputVector()
 	cout << "The delimiter between numbers must be one or more spaces.\n";
 
 	double curNum;
-	int count = 0;
+	size_t count = 0;
 	vector<double> vectorOfDouble;
 	bool endOfInput = false;
 	while (!endOfInput)
 	{
-		if (IsStreamEoln(cin) && (count >= 3))
+		if (IsStreamEoln(cin))
 		{
 			endOfInput = true;
 		}
-		else if ((IsStreamEoln(cin) && (count < 3))
-			|| (!(cin >> curNum)))
+		else if (!(cin >> curNum))
 		{
 			cout << "You need to enter a sequence of real numbers. Try again.\n";
 			cin.clear();
@@ -75,11 +74,5 @@ void SkipSpaces(istream &sin)
 	{
 		sin.ignore();
 	}
-}
-
-void PrintVector(double elem)
-{
-	cout << elem;
-	cout << " ";
 }
 

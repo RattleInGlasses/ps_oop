@@ -2,7 +2,7 @@
 
 enum ReadState
 {
-	NEW_LINE,
+	BEGINING,
 	WORD,
 	SPACE,
 	END
@@ -12,26 +12,22 @@ using namespace std;
 
 string RemoveExtraSpaces(string const &arg)
 {
-	ReadState state = NEW_LINE;
-	int i = 0;
+	ReadState state = BEGINING;
+	size_t i = 0;
 	unsigned char ch;
-	string result = "";
+	string result;
+	result.reserve(arg.length());
 	while (state != END)
 	{
-		ch = arg[i++];
-		if (ch == '\n')
-		{
-			state = NEW_LINE;
-			result += '\n';
-			continue;
-		}
-		if (ch == '\0')
+		if (i == arg.length())
 		{
 			state = END;
+			continue;
 		}
+		ch = arg[i++];
 		switch (state)
 		{
-		case NEW_LINE:
+		case BEGINING:
 			if (ch != ' ')
 			{
 				result += ch;
