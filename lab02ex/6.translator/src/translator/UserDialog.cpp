@@ -82,7 +82,7 @@ bool WordExists(string const &word, map<string, string> const &vocabulary)
 	return (vocabulary.find(word) != vocabulary.end());
 }
 
-void UserDialogCicle(map<string, string> &vocabulary, bool &saveChanges)
+void UserDialogLoop(map<string, string> &vocabulary, bool &saveChanges)
 {
 	bool vocabularyChanged = false;
 	bool exitCommand = false;

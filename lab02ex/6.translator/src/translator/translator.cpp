@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	if (auto vocabulary = GetVocabularyMap(argv[1]))
 	{
 		bool saveVocabularyRequest;
-		UserDialogCicle(*vocabulary, saveVocabularyRequest);
+		UserDialogLoop(*vocabulary, saveVocabularyRequest);
 		if (saveVocabularyRequest)
 		{
 			if (!SaveVocabulary(*vocabulary, argv[1]))

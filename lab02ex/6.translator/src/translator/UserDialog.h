@@ -1,3 +1,3 @@
 #pragma once
 
-void UserDialogCicle(std::map<std::string, std::string> &vocabulary, bool &saveChanges);
+void UserDialogLoop(std::map<std::string, std::string> &vocabulary, bool &saveChanges);
