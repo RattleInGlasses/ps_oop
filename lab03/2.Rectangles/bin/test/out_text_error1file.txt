@@ -1,0 +1,33 @@
+Bad or unknown command skipped (file "test\input_error.txt" line 3)
+Bad or unknown command skipped (file "test\input_error.txt" line 4)
+Bad or unknown command skipped (file "test\input_error.txt" line 5)
+Bad or unknown command skipped (file "test\input_error.txt" line 6)
+Bad or unknown command skipped (file "test\input_error.txt" line 7)
+Bad or unknown command skipped (file "test\input_error.txt" line 9)
+Bad or unknown command skipped (file "test\input_error.txt" line 10)
+Bad or unknown command skipped (file "test\input_error.txt" line 11)
+Bad or unknown command skipped (file "test\input_error.txt" line 12)
+Bad or unknown command skipped (file "test\input_error.txt" line 14)
+Bad or unknown command skipped (file "test\input_error.txt" line 15)
+Bad or unknown command skipped (file "test\input_error.txt" line 16)
+Bad or unknown command skipped (file "test\input_error.txt" line 17)
+Bad or unknown command skipped (file "test\input_error.txt" line 19)
+Bad or unknown command skipped (file "test\input_error.txt" line 20)
+Bad or unknown command skipped (file "test\input_error.txt" line 21)
+Bad or unknown command skipped (file "test\input_error.txt" line 22)
+Bad or unknown command skipped (file "test\input_error.txt" line 23)
+Bad or unknown command skipped (file "test\input_error.txt" line 24)
+Bad or unknown command skipped (file "test\input_error.txt" line 25)
+Rectangle 1:
+	Left top: (0; 0)
+	Size: 0*0
+	RightBottom: (0; 0)
+	Area: 0
+	Perimeter: 0
+Rectangle 2:
+	Left top: (0; 0)
+	Size: 0*0
+	RightBottom: (0; 0)
+	Area: 0
+	Perimeter: 0
+No intersection

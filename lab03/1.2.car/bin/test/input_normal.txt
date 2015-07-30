@@ -1,0 +1,42 @@
+driver.exe
+notacommand
+info
+setspeed 0
+setgear 0
+engineoff
+EngineOn
+EngineOff
+info
+EngineOn
+SetGear 0
+SetGear -1
+SetSpeed 10
+SetGear 1
+SetGear 0
+SetGear 1
+SetSpeed 0
+SetGear 1
+SetSpeed 1
+info
+SetGear -1
+SetSpeed 20
+SetSpeed 200
+SetGear 2
+SetGear 100
+SetSpeed 30
+SetGear 3
+Info
+SetSpeed 60
+SetGear 5
+SetSpeed 151
+SetSpeed 49
+SetSpeed 50
+SetSpeed 150
+EngineOff
+SetGear 0
+EngineOff
+info
+SetSpeed 0
+EngineOff
+Info
+exit

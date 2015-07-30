@@ -1,0 +1,2 @@
+The program reads 2 rectangles from given files, prints their stats and writes them into the given out file or into standard output
+USAGE: rectangles <file 1> <file 2> <out file>

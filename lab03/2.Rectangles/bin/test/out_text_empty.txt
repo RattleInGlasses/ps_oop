@@ -1,0 +1,13 @@
+Rectangle 1:
+	Left top: (0; 0)
+	Size: 0*0
+	RightBottom: (0; 0)
+	Area: 0
+	Perimeter: 0
+Rectangle 2:
+	Left top: (0; 0)
+	Size: 0*0
+	RightBottom: (0; 0)
+	Area: 0
+	Perimeter: 0
+No intersection

@@ -1,0 +1,163 @@
+The program allows you to control a virtual car
+-----------------------------------------------
+Allowed commands :
+Info             - shows the car's stats
+EngineOn         - start the car's engine
+EngineOff        - stop the car's engine
+SetGear <gear>   - try to set a gear
+SetSpeed <speed> - try to set a speed
+Exit             - exit the program
+-----------------------------------------------
+
+Enter your command:
+> Uknown command "driver.exe"
+
+Enter your command:
+> Uknown command "notacommand"
+
+Enter your command:
+> Engine is stopped
+Speed is 0
+Gear is 0
+The car is not moving
+
+Enter your command:
+> The car's gear is neutral so the speed can only decrease
+The car is stopped and the speed can't be changed until another gear is selected
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The engine is already stopped
+
+Enter your command:
+> The engine has been started
+
+Enter your command:
+> The engine has been stopped
+
+Enter your command:
+> Engine is stopped
+Speed is 0
+Gear is 0
+The car is not moving
+
+Enter your command:
+> The engine has been started
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The new gear requires the car's direction change
+In order to do it the car is needed to be stopped
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The new gear requires the car's direction change
+In order to do it the car is needed to be stopped
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> Engine is turned on
+Speed is 1
+Gear is 1
+The car is moving forward
+
+Enter your command:
+> The new gear requires the car's direction change
+In order to do it the car is needed to be stopped
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> Can't set such speed at current gear.
+You can set any speed in range [0; 30]
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The requesting gear can't be set at current speed
+Now you can set gears:
+0 1 2 
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> Engine is turned on
+Speed is 30
+Gear is 3
+The car is moving forward
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> Can't set such speed at current gear.
+You can set any speed in range [50; 150]
+
+Enter your command:
+> Can't set such speed at current gear.
+You can set any speed in range [50; 150]
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The gear is not neutral. The car requires neutral gear to stop the engine
+
+Enter your command:
+> The car's gear has been setted successfully
+
+Enter your command:
+> The car is still moving. You need to stop the car before turning the engine off
+
+Enter your command:
+> Engine is turned on
+Speed is 150
+Gear is 0
+The car is moving forward
+
+Enter your command:
+> The car's speed has been setted successfully
+
+Enter your command:
+> The engine has been stopped
+
+Enter your command:
+> Engine is stopped
+Speed is 0
+Gear is 0
+The car is not moving
+
+Enter your command:
+> 

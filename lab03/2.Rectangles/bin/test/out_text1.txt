@@ -1,0 +1,18 @@
+Rectangle 1:
+	Left top: (5; 2)
+	Size: 9*5
+	RightBottom: (14; 7)
+	Area: 45
+	Perimeter: 28
+Rectangle 2:
+	Left top: (11; 5)
+	Size: 14*4
+	RightBottom: (25; 9)
+	Area: 56
+	Perimeter: 36
+Intersection rectangle:
+	Left top: (11; 5)
+	Size: 3*2
+	RightBottom: (14; 7)
+	Area: 6
+	Perimeter: 10

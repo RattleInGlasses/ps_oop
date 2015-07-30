@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver", "driver\driver.vcxproj", "{E16A6D95-DF34-4475-9E99-84C8C8A16CEA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driverTests", "driverTests\driverTests.vcxproj", "{0CA00360-30CA-4FC7-A79C-F136E1B48AFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E16A6D95-DF34-4475-9E99-84C8C8A16CEA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E16A6D95-DF34-4475-9E99-84C8C8A16CEA}.Debug|Win32.Build.0 = Debug|Win32
+		{E16A6D95-DF34-4475-9E99-84C8C8A16CEA}.Release|Win32.ActiveCfg = Release|Win32
+		{E16A6D95-DF34-4475-9E99-84C8C8A16CEA}.Release|Win32.Build.0 = Release|Win32
+		{0CA00360-30CA-4FC7-A79C-F136E1B48AFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0CA00360-30CA-4FC7-A79C-F136E1B48AFC}.Debug|Win32.Build.0 = Debug|Win32
+		{0CA00360-30CA-4FC7-A79C-F136E1B48AFC}.Release|Win32.ActiveCfg = Release|Win32
+		{0CA00360-30CA-4FC7-A79C-F136E1B48AFC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

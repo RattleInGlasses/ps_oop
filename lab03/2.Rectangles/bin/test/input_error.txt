@@ -1,0 +1,26 @@
+
+
+move 1 1a
+move a 1
+move 1 1 a
+move - 1 1
+evom 1 1
+
+scale 1 1a
+scale a 1
+scale 1 1 a
+scale - 1 1
+
+rectangle 1 a 1 1
+rectangle a 1 1 1 1
+rectangle 1 1 1 1 1     a
+rectangle 1
+
+move 1
+scale 1
+rectangle
+move
+scale
+rectangle 1 1
+rectangle 1 1 1
+
