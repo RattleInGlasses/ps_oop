@@ -22,6 +22,7 @@ void PrintEndMessage(char *inFileName, char *outFileName)
 
 bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, string> const &params)
 {
+	
 	ifstream inFileStream(pInFileName, ifstream::in);
 	if (!inFileStream.is_open())
 	{
@@ -38,6 +39,16 @@ bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, str
 	string line;
 	while (getline(inFileStream, line))
 	{
+		/*
+		chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+		
+		ExpandTemplate(line, params);
+
+		chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+		chrono::duration<double> time = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+		cout << time.count() << " sec\n";
+		*/
+		
 		outFileStream << ExpandTemplate(line, params);
 		inFileStream.unget();
 		if (inFileStream.get() == '\n')
@@ -45,7 +56,7 @@ bool StreamExpandTemplate(char *pInFileName, char *pOutFileName, map<string, str
 			outFileStream << endl;
 		}
 	}
-
+	
 	return true;
 }
 

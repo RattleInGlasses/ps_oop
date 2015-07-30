@@ -45,31 +45,31 @@ string GetTranslation(string const &line)
 
 string GetWord(string const &line)
 {
-	size_t leftBoundPos = line.find(WORD_BOUND_LEFT);
-	size_t startPos = (leftBoundPos == string::npos) ? string::npos : (leftBoundPos + 1);
-	size_t endPos = line.find(WORD_BOUND_RIGHT);
-	size_t len = endPos - startPos;
-
-	return (startPos == string::npos) ? "" : (line.substr(startPos, len));
+	regex wordReg("^\\[([[:print:]]+)\\]");
+	smatch searchResult;
+	if (regex_search(line, searchResult, wordReg))
+	{
+		string found = searchResult.str();
+		return found.substr(1, found.length() - 2);
+	}
+	return "";
 }
 
 boost::optional<map<string, string>> GetVocabularyMap(char const *pVocabularyFileName)
 {
-	ifstream vocabularyStream(pVocabularyFileName, ifstream::in);
-	if (!vocabularyStream.is_open())
-	{
-		cout << MSG_ERR_NOINPUT;
-		return boost::none;
-	}
-	
 	map<string, string> vocabulary;
-	string line;
-	string word, translation;
-	while (getline(vocabularyStream, line))
+	
+	ifstream vocabularyStream(pVocabularyFileName, ifstream::in);
+	if (vocabularyStream.is_open())
 	{
-		word = GetWord(line);
-		translation = GetTranslation(line);
-		AddVocabularyRecord(vocabulary, word, translation);
+		string line;
+		string word, translation;
+		while (getline(vocabularyStream, line))
+		{
+			word = GetWord(line);
+			translation = GetTranslation(line);
+			AddVocabularyRecord(vocabulary, word, translation);
+		}
 	}
 
 	return vocabulary;

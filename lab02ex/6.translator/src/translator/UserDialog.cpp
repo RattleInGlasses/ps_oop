@@ -82,7 +82,8 @@ bool WordExists(string const &word, map<string, string> const &vocabulary)
 	return (vocabulary.find(word) != vocabulary.end());
 }
 
-void UserDialogLoop(map<string, string> &vocabulary, bool &saveChanges)
+// returns true if vocabulary has been changed and user desided to save it
+bool UserDialogLoop(map<string, string> &vocabulary)
 {
 	bool vocabularyChanged = false;
 	bool exitCommand = false;
@@ -120,9 +121,9 @@ void UserDialogLoop(map<string, string> &vocabulary, bool &saveChanges)
 		}
 	}
 
-	saveChanges = false;
 	if (vocabularyChanged)
 	{
-		saveChanges = AskAboutSaving();
+		return AskAboutSaving();
 	}
+	return false;
 }

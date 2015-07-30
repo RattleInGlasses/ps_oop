@@ -14,6 +14,7 @@
 #include <string>
 #include <map>
 #include <locale>
+#include <regex>
 #include <boost\optional.hpp>
 
 
