@@ -222,9 +222,9 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (boost::optional<CryptByteFunc> fCryptByte = GetCryptByteFunction(argv[1]))
+	if (auto fCryptByte = GetCryptByteFunction(argv[1]))
 	{
-		if (boost::optional<uint8_t> key = GetKey(argv[4]))
+		if (auto key = GetKey(argv[4]))
 		{
 			if (PerformAction(argv[2], argv[3], *key, *fCryptByte))
 			{
