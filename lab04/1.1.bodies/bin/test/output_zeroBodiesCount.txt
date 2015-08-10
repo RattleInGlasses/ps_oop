@@ -1,0 +1,16 @@
+Create bodies
+Available commands:
+"sphere"   - Create sphere
+"para"     - Create parallelepiped
+"cone"     - Create cone
+"cylinder" - Create cylinder
+"compound" - Create compound
+"end"      - End input
+choose next body
+> Ending read bodies
+
+Body with max mass:
+nothing to show
+
+Body with the least in water weight:
+nothing to show

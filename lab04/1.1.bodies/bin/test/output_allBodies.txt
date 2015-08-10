@@ -1,0 +1,98 @@
+Create bodies
+Available commands:
+"sphere"   - Create sphere
+"para"     - Create parallelepiped
+"cone"     - Create cone
+"cylinder" - Create cylinder
+"compound" - Create compound
+"end"      - End input
+choose next body
+> Adding a sphere
+Enter sphere's properties
+Radius  = Density = choose next body
+> Adding a parallelepiped
+Enter parallelepiped's properties
+Depth   = Height  = Width   = Density = choose next body
+> Adding a cone
+Enter cone's properties
+Height  = Radius  = Density = choose next body
+> Adding a cylinder
+Height  = Radius  = Density = choose next body
+> Adding a compound body
+=== Start read compound ===
+choose next body
+> Adding a sphere
+Enter sphere's properties
+Radius  = Density = choose next body
+> Adding a parallelepiped
+Enter parallelepiped's properties
+Depth   = Height  = Width   = Density = choose next body
+> Adding a cone
+Enter cone's properties
+Height  = Radius  = Density = choose next body
+> Adding a cylinder
+Height  = Radius  = Density = choose next body
+> Ending read bodies
+===  End read compound  ===
+choose next body
+> Ending read bodies
+
+Body with max mass:
+Compound:
+	Sphere:
+		Radius  = 1.000000
+		Mass    = 41.887902
+		Volume  = 4.188790
+		Density = 10.000000
+	Parallelepiped:
+		Width   = 1.000000
+		Height  = 1.000000
+		Depth   = 1.000000
+		Mass    = 10.000000
+		Volume  = 1.000000
+		Density = 10.000000
+	Cone:
+		Radius  = 1.000000
+		Height  = 1.000000
+		Mass    = 10.471976
+		Volume  = 1.047198
+		Density = 10.000000
+	Cylinder:
+		Radius  = 1.000000
+		Height  = 1.000000
+		Mass    = 31.415927
+		Volume  = 3.141593
+		Density = 10.000000
+	Aggregate Mass   = 93.775804
+	Aggregate Volume = 9.377580
+	Average Density  = 10.000000
+
+Body with the least in water weight:
+Compound:
+	Sphere:
+		Radius  = 1.000000
+		Mass    = 41.887902
+		Volume  = 4.188790
+		Density = 10.000000
+	Parallelepiped:
+		Width   = 1.000000
+		Height  = 1.000000
+		Depth   = 1.000000
+		Mass    = 10.000000
+		Volume  = 1.000000
+		Density = 10.000000
+	Cone:
+		Radius  = 1.000000
+		Height  = 1.000000
+		Mass    = 10.471976
+		Volume  = 1.047198
+		Density = 10.000000
+	Cylinder:
+		Radius  = 1.000000
+		Height  = 1.000000
+		Mass    = 31.415927
+		Volume  = 3.141593
+		Density = 10.000000
+	Aggregate Mass   = 93.775804
+	Aggregate Volume = 9.377580
+	Average Density  = 10.000000

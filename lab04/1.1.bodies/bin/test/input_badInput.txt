@@ -1,0 +1,8 @@
+6
+word
+sphere
+word
+a1
+0
+0
+end

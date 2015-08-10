@@ -1,0 +1,8 @@
+sphere
+2
+2
+cone
+3
+3
+3
+end

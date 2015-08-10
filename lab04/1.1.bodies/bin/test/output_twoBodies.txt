@@ -1,0 +1,31 @@
+Create bodies
+Available commands:
+"sphere"   - Create sphere
+"para"     - Create parallelepiped
+"cone"     - Create cone
+"cylinder" - Create cylinder
+"compound" - Create compound
+"end"      - End input
+choose next body
+> Adding a sphere
+Enter sphere's properties
+Radius  = Density = choose next body
+> Adding a cone
+Enter cone's properties
+Height  = Radius  = Density = choose next body
+> Ending read bodies
+
+Body with max mass:
+Cone:
+	Radius  = 3.000000
+	Height  = 3.000000
+	Mass    = 84.823002
+	Volume  = 28.274334
+	Density = 3.000000
+
+Body with the least in water weight:
+Sphere:
+	Radius  = 2.000000
+	Mass    = 67.020643
+	Volume  = 33.510322
+	Density = 2.000000

@@ -110,7 +110,7 @@ void SetCarSpeed(CCar &car, int speed)
 {
 	if (car.SetSpeed(speed))
 	{
-		cout << "The car's speed has been setted successfully\n\n";
+		cout << "The car's speed has been set successfully\n\n";
 	}
 	else if (car.GetSpeed() < 0)
 	{

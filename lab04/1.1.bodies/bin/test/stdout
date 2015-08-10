@@ -1,0 +1,34 @@
+Create bodies
+Available commands:
+"sphere"   - Create sphere
+"para"     - Create parallelepiped
+"cone"     - Create cone
+"cylinder" - Create cylinder
+"compound" - Create compound
+"end"      - End input
+choose next body
+> Adding a parallelepiped
+Enter parallelepiped's properties
+Depth   = Height  = Width   = Density = choose next body
+> Adding a parallelepiped
+Enter parallelepiped's properties
+Depth   = Height  = Width   = Density = choose next body
+> Ending read bodies
+
+Body with max mass:
+Parallelepiped:
+	Width   = 1.000000
+	Height  = 3.000000
+	Depth   = 2000.000000
+	Mass    = 6000.000000
+	Volume  = 6000.000000
+	Density = 1.000000
+
+Body with the least in water weight:
+Parallelepiped:
+	Width   = 1.000000
+	Height  = 3.000000
+	Depth   = 2000.000000
+	Mass    = 6000.000000
+	Volume  = 6000.000000
+	Density = 1.000000
