@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "..\student\Student.h"
-#include <string>
-#include <stdexcept>
-#include <functional>
 
 using namespace std;
 
@@ -37,7 +34,7 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 			checkStudentProperties(st2, "name", "surname", "", 21);
 
 			CStudent st3("this is a name too %!?", "surname", "  ", 21);
-			checkStudentProperties(st2, "name", "surname", "", 21);
+			checkStudentProperties(st3, "this is a name too %!?", "surname", "", 21);
 		}
 
 		BOOST_AUTO_TEST_CASE(with_non_empty_patronymic)
