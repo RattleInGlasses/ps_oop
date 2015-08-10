@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <string>
+#include <boost/format.hpp>
 #include "Parallelepiped.h"
 
 using namespace std;
@@ -18,9 +18,25 @@ double CParallelepiped::GetVolume() const
 	return m_depth * m_height * m_width;
 }
 
-
 string CParallelepiped::ToString() const
 {
+	/*
+	return (boost::format(
+R"(Parallelepiped:
+	Width   = %1%
+	Height  = %2%
+	Depth   = %3%
+	Mass    = %4%
+	Volume  = %5%
+	Density = %6%)") 
+		% m_width 
+		% m_height 
+		% m_depth 
+		% GetMass() 
+		% GetVolume() 
+		% GetDensity()
+		).str();
+	*/
 	string bodyType = "Parallelepiped:\n";
 	string width;
 	(width   += "\tWidth   = ") += to_string(m_width) += "\n";

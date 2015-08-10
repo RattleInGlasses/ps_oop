@@ -6,8 +6,10 @@
 #include <algorithm>
 #include "Compound.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/range/numeric.hpp>
 
 using namespace std;
+using boost::accumulate;
 
 // public functions
 
@@ -33,11 +35,16 @@ double CCompound::GetDensity() const
 
 double CCompound::GetMass() const
 {
+	return accumulate(m_bodies, 0.0, [](double sum, shared_ptr<CBody> const &body)
+	{
+		return sum + body->GetMass();
+	});
+	/*
 	return accumulate(m_bodies.begin(), m_bodies.end(), 0.0,
 	[](double sum, shared_ptr<CBody> const &body)
 	{ 
 		return sum + body->GetMass();
-	});
+	});*/
 }
 
 

@@ -1,5 +1,4 @@
 #pragma once
-#include "stdafx.h"
 #include "SolidBody.h"
 class CCylinder :
 	public CSolidBody

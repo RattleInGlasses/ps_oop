@@ -67,7 +67,6 @@ BodyPointer ChooseBody
 	return BodyPointer();
 }
 
-
 void PrintLeastInWaterWeightBody(BodyVector const &bodies, ostream &output)
 {
 	output << "Body with the least in water weight:" << endl;
