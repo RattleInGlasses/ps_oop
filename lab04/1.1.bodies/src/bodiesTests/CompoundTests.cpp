@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_SUITE(CCompound_object)
 	BOOST_AUTO_TEST_SUITE_END()
 
 
-	BOOST_FIXTURE_TEST_SUITE(have_valid_description, createdCompound)
+	BOOST_FIXTURE_TEST_SUITE(has_valid_description, createdCompound)
 	
 		BOOST_AUTO_TEST_CASE(with_a_solid_body)
 		{
