@@ -1,0 +1,7 @@
+Enter info about sportsmen
+One more sportsman record? (y/n) 
+The tallest sportsman:
+There is no sportsmen
+
+The heaviest sportsman:
+There is no sportsmen

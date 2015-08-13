@@ -1,0 +1,17 @@
+Enter info about sportsmen
+One more sportsman record? (y/n) One more sportsman record? (y/n) One more sportsman record? (y/n) name: surname: patronymic: height: mass: One more sportsman record? (y/n) 
+The tallest sportsman:
+surname:    surname
+name:       name
+patronymic: patronymic
+height:     0
+mass:       0
+
+
+The heaviest sportsman:
+surname:    surname
+name:       name
+patronymic: patronymic
+height:     0
+mass:       0
+
