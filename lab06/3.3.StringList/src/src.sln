@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringList", "StringList\StringList.vcxproj", "{319AF744-B505-4A62-BA74-1F1E8EED86FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StringListTests", "StringListTests\StringListTests.vcxproj", "{C3DAD649-E88C-49B1-A5ED-3A2F473F7DAD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{319AF744-B505-4A62-BA74-1F1E8EED86FF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{319AF744-B505-4A62-BA74-1F1E8EED86FF}.Debug|Win32.Build.0 = Debug|Win32
+		{319AF744-B505-4A62-BA74-1F1E8EED86FF}.Release|Win32.ActiveCfg = Release|Win32
+		{319AF744-B505-4A62-BA74-1F1E8EED86FF}.Release|Win32.Build.0 = Release|Win32
+		{C3DAD649-E88C-49B1-A5ED-3A2F473F7DAD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C3DAD649-E88C-49B1-A5ED-3A2F473F7DAD}.Debug|Win32.Build.0 = Debug|Win32
+		{C3DAD649-E88C-49B1-A5ED-3A2F473F7DAD}.Release|Win32.ActiveCfg = Release|Win32
+		{C3DAD649-E88C-49B1-A5ED-3A2F473F7DAD}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

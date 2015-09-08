@@ -9,14 +9,14 @@
 
 #include <stdio.h>
 #include <tchar.h>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
+#include <cassert>
 #include <string>
-#include <vector>
-#include <algorithm>
-#include <iterator>
-#include <initializer_list>
+
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
+
+#define BOOST_TEST_INCLUDED
+#pragma warning (disable: 4702)
+#include <boost/test/unit_test.hpp>
+#include <boost/algorithm/string/replace.hpp>

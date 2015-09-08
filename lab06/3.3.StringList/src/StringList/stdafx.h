@@ -9,14 +9,6 @@
 
 #include <stdio.h>
 #include <tchar.h>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <iterator>
-#include <initializer_list>
-
+#include <cassert>
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
