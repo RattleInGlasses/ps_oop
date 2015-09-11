@@ -9,13 +9,13 @@
 
 #include <stdio.h>
 #include <tchar.h>
-#include <string.h>
-#include <cassert>
 #include <string>
-#include <memory>
-#include <algorithm>
+#include <vector>
 #include <exception>
+#include <memory>
 #include <iostream>
+#include <initializer_list>
+
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

@@ -40,7 +40,7 @@ public:
 		iterator const operator --(int);
 		std::string& operator *();
 	private:
-		std::shared_ptr<StrLstElem> m_pData;
+		ElementPointer m_pData;
 
 		friend void CStrLst::Insert(std::string const &, iterator &);
 		friend void CStrLst::Delete(iterator &);

@@ -114,6 +114,10 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 			str2 = str3;
 			BOOST_CHECK_EQUAL(str3.GetLength(), str2.GetLength());
 			BOOST_CHECK_EQUAL(str3.GetStringData(), str2.GetStringData());
+
+			str2 = str2;
+			BOOST_CHECK_EQUAL(str3.GetLength(), str2.GetLength());
+			BOOST_CHECK_EQUAL(str3.GetStringData(), str2.GetStringData());
 		}
 
 		BOOST_AUTO_TEST_CASE(assignement_by_move)
@@ -210,6 +214,58 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 			BOOST_CHECK_EQUAL(output.str(), "s");
 			output << str3;
 			BOOST_CHECK_EQUAL(output.str(), "sdata");
+		}
+	BOOST_AUTO_TEST_SUITE_END()
+
+
+	BOOST_FIXTURE_TEST_SUITE(have_iterators_that_can, CreatedStrings)
+		BOOST_AUTO_TEST_CASE(compare)
+		{
+			BOOST_CHECK(str1.begin() == str1.end());
+			BOOST_CHECK(str2.begin() != str2.end());
+		}
+
+		BOOST_AUTO_TEST_CASE(move_forward)
+		{
+			BOOST_CHECK(str2.begin()++ == --str2.end());
+			BOOST_CHECK(++str2.begin() == str2.end());
+			BOOST_CHECK((str2.begin() + 1) == str2.end());
+			BOOST_CHECK((1 + str2.begin()) == str2.end());
+		}
+
+		BOOST_AUTO_TEST_CASE(move_backwards)
+		{
+			BOOST_CHECK_EQUAL(*--str2.end(), 's');
+			BOOST_CHECK_EQUAL(*(str2.end() - 1), 's');
+			BOOST_CHECK_EQUAL(*((str3.begin() + 1)--), 'a');
+		}
+
+		BOOST_AUTO_TEST_CASE(find_difference)
+		{
+			BOOST_CHECK_EQUAL(str1.end() - str1.begin(), 0);
+			BOOST_CHECK_EQUAL(str2.end() - str2.begin(), 1);
+		}
+
+		BOOST_AUTO_TEST_CASE(access_to_a_symbol)
+		{
+			BOOST_CHECK_EQUAL(*str2.begin(), 's');
+			BOOST_CHECK_EQUAL(str3.begin()[1], 'a');
+		}
+
+		void forDemo(CMyString const & myStr)
+		{
+			string stlStr;
+			for (auto ch : myStr)
+			{
+				stlStr += ch;
+			}
+			BOOST_CHECK_EQUAL(myStr.GetStringData(), stlStr.c_str());
+		}
+		BOOST_AUTO_TEST_CASE(be_used_in_a_range_based_for_loop)
+		{
+			forDemo(str1);
+			forDemo(str2);
+			forDemo(str3);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 
