@@ -253,7 +253,7 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 			BOOST_CHECK_EQUAL(str3.begin()[1], 'a');
 		}
 
-		void forDemo(CMyString const & myStr)
+		void TestRangeBasedForWithString(CMyString const & myStr)
 		{
 			string stlStr;
 			for (auto ch : myStr)
@@ -264,8 +264,8 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 		}
 		BOOST_AUTO_TEST_CASE(be_used_in_a_range_based_for_loop)
 		{
-			forDemo(str1);
-			forDemo(str2);
+			TestRangeBasedForWithString(str1);
+			TestRangeBasedForWithString(str2);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 

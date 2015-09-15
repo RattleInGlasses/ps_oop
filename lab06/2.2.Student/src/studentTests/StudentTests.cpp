@@ -5,7 +5,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_SUITE(CStudent_)
 	
-	void checkStudentProperties(CStudent const &st, string const& name, string const& surname, string const& patronymic, int age)
+	void CheckStudentProperties(CStudent const &st, string const& name, string const& surname, string const& patronymic, int age)
 	{
 		BOOST_CHECK_EQUAL(st.GetAge(), age);
 		BOOST_CHECK_EQUAL(st.GetName(), name);
@@ -28,19 +28,19 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 		BOOST_AUTO_TEST_CASE(with_empty_patronymic)
 		{
 			CStudent st("name", "surname", "", 21);
-			checkStudentProperties(st, "name", "surname", "", 21);
+			CheckStudentProperties(st, "name", "surname", "", 21);
 
 			CStudent st2("name", "surname", "  ", 21);
-			checkStudentProperties(st2, "name", "surname", "", 21);
+			CheckStudentProperties(st2, "name", "surname", "", 21);
 
 			CStudent st3("this is a name too %!?", "surname", "  ", 21);
-			checkStudentProperties(st3, "this is a name too %!?", "surname", "", 21);
+			CheckStudentProperties(st3, "this is a name too %!?", "surname", "", 21);
 		}
 
 		BOOST_AUTO_TEST_CASE(with_non_empty_patronymic)
 		{
 			CStudent st("name", "surname", "patronymic", 21);
-			checkStudentProperties(st, "name", "surname", "patronymic", 21);
+			CheckStudentProperties(st, "name", "surname", "patronymic", 21);
 		}
 		
 		BOOST_AUTO_TEST_CASE(with_age_in_range_from_14_to_60)
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 			for (int age = 14; age <= 60; ++age)
 			{
 				CStudent st("name", "surname", "patronymic", age);
-				checkStudentProperties(st, "name", "surname", "patronymic", age);
+				CheckStudentProperties(st, "name", "surname", "patronymic", age);
 			}
 		}
 	BOOST_AUTO_TEST_SUITE_END()
@@ -144,16 +144,16 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 		BOOST_AUTO_TEST_CASE(with_empty_patronymic)
 		{
 			student.Rename("anotherName", "anotherSurname", "");
-			checkStudentProperties(student, "anotherName", "anotherSurname", "", 21);
+			CheckStudentProperties(student, "anotherName", "anotherSurname", "", 21);
 
 			student.Rename("anotherName", "anotherSurname", "   ");
-			checkStudentProperties(student, "anotherName", "anotherSurname", "", 21);
+			CheckStudentProperties(student, "anotherName", "anotherSurname", "", 21);
 		}
 
 		BOOST_AUTO_TEST_CASE(with_non_empty_patronymic)
 		{
 			student.Rename("anotherName", "anotherSurname", "anotherPatronymic");
-			checkStudentProperties(student, "anotherName", "anotherSurname", "anotherPatronymic", 21);
+			CheckStudentProperties(student, "anotherName", "anotherSurname", "anotherPatronymic", 21);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 				BOOST_REQUIRE_THROW(student.Rename("n", "", ""), invalid_argument);
 				BOOST_REQUIRE_THROW(student.Rename("", "s", ""), invalid_argument);
 
-				checkStudentProperties(student, "name", "surname", "patronymic", 21);
+				CheckStudentProperties(student, "name", "surname", "patronymic", 21);
 			}
 
 			BOOST_FIXTURE_TEST_CASE(when_throws_bad_alloc, studentAndBigString)
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_SUITE(CStudent_)
 				BOOST_REQUIRE_THROW(student.Rename("n", bigstr, ""), bad_alloc);
 				BOOST_REQUIRE_THROW(student.Rename("n", "s", bigstr), bad_alloc);
 
-				checkStudentProperties(student, "name", "surname", "patronymic", 21);
+				CheckStudentProperties(student, "name", "surname", "patronymic", 21);
 			}
 		BOOST_AUTO_TEST_SUITE_END()
 

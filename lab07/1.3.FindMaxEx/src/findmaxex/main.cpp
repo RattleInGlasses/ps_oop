@@ -46,12 +46,12 @@ bool FindMaxEx(std::vector<T> const &arr, T &maxValue, Less const &less)
 		return false;
 	}
 
-	T const *pMaxValue = &arr.at(0);
-	for (auto it = arr.begin(); it != arr.end(); ++it)
+	auto pMaxValue = arr.begin();
+	for (auto it = pMaxValue; it != arr.end(); ++it)
 	{
 		if (less(*pMaxValue, *it))
 		{
-			pMaxValue = &*it;
+			pMaxValue = it;
 		}
 	}
 

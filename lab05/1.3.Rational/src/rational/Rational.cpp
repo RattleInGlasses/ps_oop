@@ -56,12 +56,10 @@ double CRational::ToDouble() const
 
 std::pair<int, CRational> CRational::ToCompoundFraction() const
 {
-	std::pair<int, CRational> result;
+	auto integerPart = m_numerator / m_denominator;
+	auto fractionalPart = *this - integerPart;
 
-	result.first = m_numerator / m_denominator;
-	result.second = *this - result.first;
-
-	return result;
+	return {integerPart, fractionalPart};
 }
 
 
@@ -198,8 +196,8 @@ std::istream& operator >> (std::istream &input, CRational &rational)
 	
 	int numerator, denominator;
 	if ((input >> numerator)
-	&& (input.get() == '/')
-	&& (input >> denominator))
+		&& (input.get() == '/')
+		&& (input >> denominator))
 	{
 		rational = { numerator, denominator };
 	}

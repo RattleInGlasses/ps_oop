@@ -82,7 +82,10 @@ BOOST_AUTO_TEST_SUITE(CRational_)
 			BOOST_AUTO_TEST_CASE(after_creation)
 			{
 				CheckEquality(CRational(25, 50), { 1, 2 });
-			}
+				CheckEquality(CRational(-25, 50), { -1, 2 });
+				CheckEquality(CRational(25, -50), { -1, 2 });
+				CheckEquality(CRational(-25, -50), { 1, 2 });
+	}
 
 			BOOST_AUTO_TEST_CASE(after_addition)
 			{
