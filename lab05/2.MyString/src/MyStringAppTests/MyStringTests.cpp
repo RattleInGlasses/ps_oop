@@ -223,6 +223,7 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 		{
 			BOOST_CHECK(str1.begin() == str1.end());
 			BOOST_CHECK(str2.begin() != str2.end());
+			BOOST_CHECK(str3.begin() != str3.end());
 		}
 
 		BOOST_AUTO_TEST_CASE(move_forward)
@@ -265,7 +266,44 @@ BOOST_AUTO_TEST_SUITE(MyString_)
 		{
 			forDemo(str1);
 			forDemo(str2);
-			forDemo(str3);
+		}
+	BOOST_AUTO_TEST_SUITE_END()
+
+	
+	BOOST_FIXTURE_TEST_SUITE(have_reverse_iterators_that_can, CreatedStrings)
+		BOOST_AUTO_TEST_CASE(compare)
+		{
+			BOOST_CHECK(str1.rbegin() == str1.rend());
+			BOOST_CHECK(str2.rbegin() != str2.rend());
+			BOOST_CHECK(str3.rbegin() != str3.rend());
+		}
+
+		BOOST_AUTO_TEST_CASE(move_forward)
+		{
+			BOOST_CHECK(str2.rbegin()++ == --str2.rend());
+			BOOST_CHECK(++str2.rbegin() == str2.rend());
+			BOOST_CHECK((str2.rbegin() + 1) == str2.rend());
+			BOOST_CHECK((1 + str2.rbegin()) == str2.rend());
+		}
+
+		BOOST_AUTO_TEST_CASE(move_backwards)
+		{
+			BOOST_CHECK_EQUAL(*--str2.rend(), 's');
+			BOOST_CHECK_EQUAL(*(str2.rend() - 1), 's');
+			BOOST_CHECK_EQUAL(*((str3.rbegin() + 1)--), 't');
+		}
+
+		BOOST_AUTO_TEST_CASE(find_difference)
+		{
+			BOOST_CHECK_EQUAL(str1.rend() - str1.rbegin(), 0);
+			BOOST_CHECK_EQUAL(str2.rend() - str2.rbegin(), 1);
+			BOOST_CHECK_EQUAL(str3.rend() - str3.rbegin(), 4);
+		}
+
+		BOOST_AUTO_TEST_CASE(access_to_a_symbol)
+		{
+			BOOST_CHECK_EQUAL(*str2.rbegin(), 's');
+			BOOST_CHECK_EQUAL(str3.rbegin()[1], 't');
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 

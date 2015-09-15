@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Заголовочные файлы\Creature">
+      <UniqueIdentifier>{dfd6b43c-92c0-4d15-902d-e3d67bbd175e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\CreautreCreator">
+      <UniqueIdentifier>{7e6acb99-11f3-493e-92b9-f98e2e9e2685}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,32 +27,32 @@
     <ClInclude Include="targetver.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="GenderedNamedCreature.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Dog.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Cat.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Human.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="StandardGenderDeterminer.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="StandardCreatureCreator.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="PetCreator.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanCreator.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Family.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
+      <Filter>Заголовочные файлы\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="Dog.h">
+      <Filter>Заголовочные файлы\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="Human.h">
+      <Filter>Заголовочные файлы\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="GenderedNamedCreature.h">
+      <Filter>Заголовочные файлы\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanCreator.h">
+      <Filter>Заголовочные файлы\CreautreCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardCreatureCreator.h">
+      <Filter>Заголовочные файлы\CreautreCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="PetCreator.h">
+      <Filter>Заголовочные файлы\CreautreCreator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
