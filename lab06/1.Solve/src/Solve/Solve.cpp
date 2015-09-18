@@ -247,7 +247,7 @@ namespace solve
 
 		if (roots.numRoots == 0)
 		{
-			throw domain_error("There is no real roots.");
+			throw domain_error("There are no real roots.");
 		}
 		return roots;
 	}

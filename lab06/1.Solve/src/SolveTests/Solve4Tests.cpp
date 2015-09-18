@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(Solve4_works_correctly_when)
 	{
 		for (int i = 0; i < rootsContainer.numRoots; ++i)
 		{
-			BOOST_CHECK_SMALL(QuadricFunctionPointValue(a, b, c, d, e, rootsContainer.roots[i]), 0.0001);
+			BOOST_CHECK_SMALL(QuadricFunctionPointValue(a, b, c, d, e, rootsContainer.roots[i]), 1e-10);
 		}
 	}
 

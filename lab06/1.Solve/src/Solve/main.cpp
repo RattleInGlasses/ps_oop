@@ -11,23 +11,18 @@ using namespace solve;
 bool ReadAnswer(istream &input)
 {
 	string answerString;
-	bool gotAnswer = false;
-	bool result;
-	while (!gotAnswer)
+	for (;;)
 	{
 		input >> answerString;
 		if ((answerString == "Y") || (answerString == "y"))
 		{
-			gotAnswer = true;
-			result = true;
+			return true;
 		}
 		if ((answerString == "N") || (answerString == "n"))
 		{
-			gotAnswer = true;
-			result = false;
+			return false;
 		}
 	}
-	return result;
 }
 
 void PrintRoots(ostream &ost, EquationRoot4 const &rootContainer)
@@ -60,7 +55,7 @@ double ReadDouble(istream &input)
 	double result;
 	string line;
 	istringstream inputString;
-	while (true)
+	for (;;)
 	{
 		input >> line;
 		inputString.clear();

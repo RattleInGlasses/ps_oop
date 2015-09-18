@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(Solve3_works_correctly_when)
 	{
 		for (int i = 0; i < rootsContainer.numRoots; ++i)
 		{
-			BOOST_CHECK_SMALL(CubicFunctionPointValue(a, b, c, d, rootsContainer.roots[i]), 0.0001);
+			BOOST_CHECK_SMALL(CubicFunctionPointValue(a, b, c, d, rootsContainer.roots[i]), 1e-10);
 		}
 	}
 
