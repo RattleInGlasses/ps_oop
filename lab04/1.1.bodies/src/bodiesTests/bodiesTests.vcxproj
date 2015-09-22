@@ -92,10 +92,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\bodies\Body.cpp" />
     <ClCompile Include="..\bodies\Compound.cpp" />
     <ClCompile Include="..\bodies\Cone.cpp" />
     <ClCompile Include="..\bodies\Cylinder.cpp" />
     <ClCompile Include="..\bodies\Parallelepiped.cpp" />
+    <ClCompile Include="..\bodies\SolidBody.cpp" />
     <ClCompile Include="..\bodies\Sphere.cpp" />
     <ClCompile Include="CompoundTests.cpp" />
     <ClCompile Include="ConeTests.cpp" />

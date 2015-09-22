@@ -5,22 +5,10 @@
 #include <iostream>
 #include <utility>
 
+using namespace std;
+using namespace MyMath;
 
 // public methods
-
-CRational::CRational() :
-	m_numerator(0),
-	m_denominator(1)
-{
-}
-
-
-CRational::CRational(int value) :
-	m_numerator(value),
-	m_denominator(1)
-{
-}
-
 
 CRational::CRational(int numerator, int denominator) :
 	m_numerator(numerator),
@@ -54,12 +42,12 @@ double CRational::ToDouble() const
 }
 
 
-std::pair<int, CRational> CRational::ToCompoundFraction() const
+CompoundFraction CRational::ToCompoundFraction() const
 {
 	auto integerPart = m_numerator / m_denominator;
 	auto fractionalPart = *this - integerPart;
 
-	return {integerPart, fractionalPart};
+	return { integerPart, fractionalPart };
 }
 
 
@@ -159,7 +147,7 @@ bool operator !=(CRational const &num1, CRational const &num2)
 
 bool operator <(CRational num1, CRational num2)
 {
-	ToCommonDenominator(num1, num2);
+	CRational::ToCommonDenominator(num1, num2);
 	
 	return num1.GetNumerator() < num2.GetNumerator();
 }
@@ -183,16 +171,16 @@ bool operator >=(CRational const &num1, CRational const &num2)
 }
 
 
-std::ostream& operator << (std::ostream &output, CRational const &rational)
+ostream& operator << (ostream &output, CRational const &rational)
 {
 	output << rational.GetNumerator() << '/' << rational.GetDenominator();
 	return output;
 }
 
 
-std::istream& operator >> (std::istream &input, CRational &rational)
+istream& operator >> (istream &input, CRational &rational)
 {
-	std::streamoff startPos = input.tellg();
+	streamoff startPos = input.tellg();
 	
 	int numerator, denominator;
 	if ((input >> numerator)
@@ -204,14 +192,14 @@ std::istream& operator >> (std::istream &input, CRational &rational)
 	else
 	{
 		input.seekg(startPos);
-		input.setstate(input.rdstate() | std::istream::failbit);
+		input.setstate(input.rdstate() | istream::failbit);
 	}
 
 	return input;
 }
 
 
-std::ostream& operator << (std::ostream &output, std::pair<int, CRational>	const &compound)
+ostream& operator << (ostream &output, CompoundFraction	const &compound)
 {
 	if (compound.first < 0)
 	{
@@ -219,6 +207,18 @@ std::ostream& operator << (std::ostream &output, std::pair<int, CRational>	const
 	}
 	output << '(' << abs(compound.first) << ' ' << abs(compound.second.GetNumerator()) << '/' << compound.second.GetDenominator() << ')';
 	return output;
+}
+
+
+// static methods
+
+
+void CRational::ToCommonDenominator(CRational &num1, CRational &num2)
+{
+	int newDenominator = LeastCommonMultiple(num1.m_denominator, num2.m_denominator);
+	num1.m_numerator *= newDenominator / num1.m_denominator;
+	num2.m_numerator *= newDenominator / num2.m_denominator;
+	num1.m_denominator = num2.m_denominator = newDenominator;
 }
 
 
@@ -240,16 +240,7 @@ void CRational::Normalize()
 		m_denominator *= -1;
 	}
 
-	int gcd = CMyMath::GreatesCommonDivisor(m_numerator, m_denominator);
+	int gcd = GreatesCommonDivisor(m_numerator, m_denominator);
 	m_denominator /= gcd;
 	m_numerator   /= gcd;
-}
-
-
-void ToCommonDenominator(CRational &num1, CRational &num2)
-{
-	int newDenominator = CMyMath::LeastCommonMultiple(num1.m_denominator, num2.m_denominator);
-	num1.m_numerator *= newDenominator / num1.m_denominator;
-	num2.m_numerator *= newDenominator / num2.m_denominator;
-	num1.m_denominator = num2.m_denominator = newDenominator;
 }

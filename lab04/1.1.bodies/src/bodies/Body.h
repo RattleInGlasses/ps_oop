@@ -10,17 +10,9 @@ public:
 	virtual double GetVolume()const = 0;
 	virtual std::string ToString()const = 0;
 
-	bool HasParent()const { return m_pParent != nullptr; }
-	CBody *GetParent()const { return m_pParent; }
-	bool SetParent(CBody *pParent)
-	{
-		if (!HasParent())
-		{
-			m_pParent = pParent;
-			return true;
-		}
-		return false;
-	}
+	bool HasParent()const;
+	CBody *GetParent()const;
+	bool SetParent(CBody *pParent);
 private:
 	 CBody *m_pParent = nullptr;
 };

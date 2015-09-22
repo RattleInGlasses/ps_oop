@@ -97,8 +97,8 @@ template <
 Creature CFamily<Creature, CreatureCreator, GenderDeterminer>::MakeChild(CreatureCreator const &creatureCreator)
 {
 	GenderDeterminer genderDeterminer;
-	CGenderedNamedCreature::Gender gender1 = genderDeterminer(GetSpouse1());
-	CGenderedNamedCreature::Gender gender2 = genderDeterminer(GetSpouse2());
+	Gender gender1 = genderDeterminer(GetSpouse1());
+	Gender gender2 = genderDeterminer(GetSpouse2());
 	if (gender1 == gender2)
 	{
 		throw std::logic_error("can't create a child in a same-sex family");

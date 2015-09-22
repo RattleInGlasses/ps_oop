@@ -6,11 +6,11 @@ class CCompound :
 	public CBody
 {
 public:
-	bool AddBody(std::shared_ptr<CBody> pNewBody);
-	double GetVolume()const;
-	double GetMass()const;
-	double GetDensity()const;
-	std::string ToString()const;
+	bool AddBody(std::shared_ptr<CBody> const &pNewBody);
+	double GetVolume()const override;
+	double GetMass()const override;
+	double GetDensity()const override;
+	std::string ToString()const override;
 private:
 	bool IsParentOrTheSame(CBody const *pPossibleChild, CBody const *pPossibleAncestor) const;
 	std::string GetTabbedAggregateDescription(std::vector<std::shared_ptr<CBody>> const &bodies) const;

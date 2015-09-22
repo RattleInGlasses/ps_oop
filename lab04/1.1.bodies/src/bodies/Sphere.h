@@ -6,8 +6,8 @@ class CSphere :
 {
 public:
 	CSphere(double density, double radius);
-	double GetVolume()const;
-	std::string ToString()const;
+	double GetVolume()const override;
+	std::string ToString()const override;
 private:
 	double m_radius;
 };

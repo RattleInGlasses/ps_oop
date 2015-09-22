@@ -52,12 +52,16 @@ BOOST_AUTO_TEST_SUITE(CCompound_object)
 	BOOST_FIXTURE_TEST_SUITE(can_add, createdCompound)
 		BOOST_AUTO_TEST_CASE(solid_body)
 		{
-			BOOST_CHECK(compound.AddBody(make_shared<CCone>(0, 0, 0)));
+			auto cone = make_shared<CCone>(0, 0, 0);
+			BOOST_CHECK(compound.AddBody(cone));
+			BOOST_CHECK_EQUAL(cone->GetParent(), &compound);			
 		}
 
 		BOOST_AUTO_TEST_CASE(compound_body)
 		{
-			BOOST_CHECK(compound.AddBody(make_shared<CCompound>()));
+			auto comp = make_shared<CCompound>();
+			BOOST_CHECK(compound.AddBody(comp));
+			BOOST_CHECK_EQUAL(comp->GetParent(), &compound);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -142,6 +146,15 @@ BOOST_AUTO_TEST_SUITE(CCompound_object)
 			BOOST_CHECK(compound.AddBody(pBody));
 			BOOST_CHECK(!pContainer->AddBody(pBody));
 			BOOST_CHECK_CLOSE(compound.GetVolume(), 1000, 0.1);
+		}
+
+		BOOST_AUTO_TEST_CASE(if_the_body_has_alredy_been_added_into_another_object)
+		{
+			auto pBody = make_shared<CParallelepiped>(0, 10, 10, 10);
+			auto pAnotherCompound = make_shared<CCompound>();
+			pAnotherCompound->AddBody(pBody);
+			BOOST_CHECK(!compound.AddBody(pBody));
+			BOOST_CHECK_SMALL(compound.GetVolume(), 1e-16);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 

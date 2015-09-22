@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <exception>
 #include <iostream>
+#include <iterator>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

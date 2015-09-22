@@ -9,27 +9,30 @@ public:
 	CMySet(std::initializer_list<T>);
 
 	size_t GetSize()const;
-	void Add(T const &value);
+	size_t Insert(T const &value);
 
 	bool IsEmpty()const;
 	bool Contains(T const &value)const;
 	bool ContainsSubset(CMySet<T> const &subSet)const;
 	bool operator ==(CMySet<T> const &set2)const;
-	T operator [](size_t index)const;
+	T const &operator [](size_t index)const;
 
 	void Unite(CMySet<T> const &set2);
 	void Intersect(CMySet<T> const &set2);
 	void Difference(CMySet<T> const &set2);
 	void SymmetricDyfference(CMySet<T> set2);
-public:
+private:
 	std::vector<T> m_data;
 };
 
 
 template <typename T>
-CMySet<T>::CMySet(std::initializer_list<T> il) :
-m_data(il)
+CMySet<T>::CMySet(std::initializer_list<T> il)
 {
+	for (auto elem : il)
+	{
+		Insert(elem);
+	}
 }
 
 
@@ -41,12 +44,13 @@ size_t CMySet<T>::GetSize() const
 
 
 template <typename T>
-void CMySet<T>::Add(T const &value)
+size_t CMySet<T>::Insert(T const &value)
 {
 	if (!this->Contains(value))
 	{
 		m_data.push_back(value);
 	}
+	return m_data.size() - 1;
 }
 
 
@@ -98,11 +102,11 @@ bool CMySet<T>::operator ==(CMySet<T> const &set2) const
 
 
 template <typename T>
-T CMySet<T>::operator [](size_t index) const
+T const &CMySet<T>::operator [](size_t index) const
 {
 	if (index >= GetSize())
 	{
-		throw range_error("set index out of range");
+		throw range_error("set index is out of range");
 	}
 	return m_data[index];
 }

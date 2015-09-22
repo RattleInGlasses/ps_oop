@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
+#include <boost/range/numeric.hpp>
 
 
 #define BOOST_TEST_INCLUDED

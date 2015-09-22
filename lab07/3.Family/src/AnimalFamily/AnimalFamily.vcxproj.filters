@@ -33,12 +33,6 @@
     <ClInclude Include="Family.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Cat.h">
-      <Filter>Заголовочные файлы\Creature</Filter>
-    </ClInclude>
-    <ClInclude Include="Dog.h">
-      <Filter>Заголовочные файлы\Creature</Filter>
-    </ClInclude>
     <ClInclude Include="Human.h">
       <Filter>Заголовочные файлы\Creature</Filter>
     </ClInclude>
@@ -53,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="PetCreator.h">
       <Filter>Заголовочные файлы\CreautreCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="Pet.h">
+      <Filter>Заголовочные файлы\Creature</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

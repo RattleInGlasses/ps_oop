@@ -1,19 +1,12 @@
 #include "stdafx.h"
-#include <memory>
-#include <string>
-#include <vector>
-#include <numeric>
-#include <algorithm>
 #include "Compound.h"
-#include <boost/algorithm/string.hpp>
-#include <boost/range/numeric.hpp>
 
 using namespace std;
 using boost::accumulate;
 
 // public functions
 
-bool CCompound::AddBody(shared_ptr<CBody> pNewBody)
+bool CCompound::AddBody(shared_ptr<CBody> const &pNewBody)
 {
 	if ((pNewBody->HasParent())
 	|| (IsParentOrTheSame(this, pNewBody.get())))
@@ -35,26 +28,21 @@ double CCompound::GetDensity() const
 
 double CCompound::GetMass() const
 {
-	return accumulate(m_bodies, 0.0, [](double sum, shared_ptr<CBody> const &body)
-	{
-		return sum + body->GetMass();
-	});
-	/*
-	return accumulate(m_bodies.begin(), m_bodies.end(), 0.0,
-	[](double sum, shared_ptr<CBody> const &body)
-	{ 
-		return sum + body->GetMass();
-	});*/
+	return accumulate(m_bodies, 0.0,
+		[](double sum, shared_ptr<CBody> const &body)
+		{
+			return sum + body->GetMass();
+		});
 }
 
 
 double CCompound::GetVolume() const
 {
-	return accumulate(m_bodies.begin(), m_bodies.end(), 0.0,
-	[](double sum, shared_ptr<CBody> const &body)
-	{
-		return sum + body->GetVolume();
-	});
+	return accumulate(m_bodies, 0.0,
+		[](double sum, shared_ptr<CBody> const &body)
+		{
+			return sum + body->GetVolume();
+		});
 }
 
 

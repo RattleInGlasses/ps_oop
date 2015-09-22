@@ -20,6 +20,10 @@ BOOST_AUTO_TEST_SUITE(CMySet_)
 		BOOST_CHECK(set1.Contains('a'));
 		BOOST_CHECK(set1.Contains('b'));
 		BOOST_CHECK(set1.Contains('c'));
+
+		CMySet<char> set2 = {'a', 'a', 'a'};
+		BOOST_CHECK_EQUAL(set2.GetSize(), 1);
+		BOOST_CHECK(set2.Contains('a'));
 	}
 
 
@@ -37,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(CMySet_)
 	void CheckAddElement(CMySet<int> &set, int el)
 	{
 		BOOST_REQUIRE(!set.Contains(el));
-		set.Add(el);
+		set.Insert(el);
 		BOOST_CHECK(set.Contains(el));
 	}
 	BOOST_FIXTURE_TEST_CASE(can_add_an_element, CreatedIntSet)
@@ -67,15 +71,15 @@ BOOST_AUTO_TEST_SUITE(CMySet_)
 		intSet = {};
 		BOOST_CHECK(intSet.IsEmpty());
 
-		intSet.Add(12);
+		intSet.Insert(12);
 		BOOST_CHECK(!intSet.IsEmpty());
 	}
 
 
 	BOOST_FIXTURE_TEST_CASE(can_check_element, CreatedIntSet)
 	{
-		intSet.Add(12);
-		intSet.Add(24);
+		intSet.Insert(12);
+		intSet.Insert(24);
 
 		BOOST_CHECK(intSet.Contains(12));
 		BOOST_CHECK(intSet.Contains(24));

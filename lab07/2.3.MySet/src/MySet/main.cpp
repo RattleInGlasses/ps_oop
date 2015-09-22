@@ -39,28 +39,23 @@ void PrintResult(StudentsSet const &set1, StudentsSet const &set2, StudentsSet c
 }
 
 
-void Randomize()
-{
-	srand(time(nullptr));
-}
-
-
 int IntRandom(int min, int max)
 {
-	return rand() % (max + 1) + min;
+	mt19937 generator(static_cast<unsigned>(chrono::system_clock::now().time_since_epoch().count()));
+	uniform_int_distribution<int> distribution(min, max);
+	return distribution(generator);
 }
 
 
 CMySet<int> RandomIntSet(int min, int max, size_t n)
 {
 	CMySet<int> result;
-	Randomize();
 	while (n > 0)
 	{
 		int rndInt = IntRandom(min, max);
 		if (!result.Contains(rndInt))
 		{
-			result.Add(rndInt);
+			result.Insert(rndInt);
 			--n;
 		}
 	}
@@ -72,15 +67,15 @@ CMySet<int> RandomIntSet(int min, int max, size_t n)
 StudentsSet MakeStudentsSubsetByIndexes(StudentsSet const &students, CMySet<int> indexes)
 {
 	StudentsSet result;
-	for (int i = 0; i < indexes.GetSize(); ++i)
+	for (size_t i = 0; i < indexes.GetSize(); ++i)
 	{
-		result.Add(students[indexes[i]]);
+		result.Insert(students[indexes[i]]);
 	}
 	return result;
 }
 
 
-StudentsSet GetNStudents(StudentsSet students, int n)
+StudentsSet GetNStudents(StudentsSet students, size_t n)
 {
 	n = (n > students.GetSize()) ? students.GetSize() : n;
 	return MakeStudentsSubsetByIndexes(students, RandomIntSet(0, (students.GetSize() - 1), n));

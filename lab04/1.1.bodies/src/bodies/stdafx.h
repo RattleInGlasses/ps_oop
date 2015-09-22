@@ -20,8 +20,11 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
+#include <map>
+#include <functional>
 #include <boost\algorithm\string.hpp>
 #include <boost\optional\optional.hpp>
+#include <boost\range\numeric.hpp>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

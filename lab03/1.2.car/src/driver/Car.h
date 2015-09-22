@@ -19,7 +19,6 @@ public:
 
 public:
 	CCar();
-	~CCar();
 	bool TurnOnEngine();
 	bool TurnOffEngine();
 	bool EngineIsTurnedOn() const;
@@ -34,7 +33,7 @@ private:
 	bool SpeedIsInRange(int speed, int gear) const;
 
 public:
-	std::map<int, CCar::Range> const static SPEED_RANGE;
+	static std::map<int, Range> const SPEED_RANGE;
 
 private:
 	bool m_engineIsTurnedOn;

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <iterator>
 class CStrLst
 {
 public:
@@ -8,16 +9,28 @@ public:
 	~CStrLst();
 
 	struct iterator;
-	iterator begin() const;
-	iterator end() const;
-	void Insert(std::string const &, iterator &);
-	void Delete(iterator &pos);
+	struct const_iterator;
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+	iterator begin();
+	const_iterator begin() const;
+	reverse_iterator rbegin();
+	const_reverse_iterator rbegin() const;
+	iterator end();
+	const_iterator end() const;
+	reverse_iterator rend();
+	const_reverse_iterator rend() const;
+	void Insert(std::string const &, iterator const &);
+	void Delete(iterator const &pos);
 
 private:
 	struct StrLstElem;
 	typedef std::shared_ptr<StrLstElem> ElementPointer;
+	typedef std::shared_ptr<const StrLstElem> ConstElementPointer;
 	struct StrLstElem
 	{
+		StrLstElem() {};
+		StrLstElem(std::string const &initData, ElementPointer const &initNext, ElementPointer const &initPrev);
 		std::string data;
 		ElementPointer next;
 		ElementPointer prev;
@@ -26,8 +39,10 @@ private:
 	ElementPointer m_pEnd;
 	ElementPointer m_pBegin;
 
+	static ElementPointer MakeNewElement();
+	static ElementPointer MakeNewElement(std::string const &initData, CStrLst::ElementPointer const &initNext, CStrLst::ElementPointer const &initPrev);
 public:
-	struct iterator
+	struct iterator : std::iterator<std::bidirectional_iterator_tag, StrLstElem>
 	{
 	public:
 		iterator() {};
@@ -42,8 +57,21 @@ public:
 	private:
 		ElementPointer m_pData;
 
-		friend void CStrLst::Insert(std::string const &, iterator &);
-		friend void CStrLst::Delete(iterator &);
-		friend CStrLst::~CStrLst();
+		friend class CStrLst;
+	};
+	struct const_iterator : std::iterator<std::bidirectional_iterator_tag, StrLstElem>
+	{
+	public:
+		const_iterator() {};
+		const_iterator(ConstElementPointer const &);
+		bool operator ==(const_iterator const &) const;
+		bool operator !=(const_iterator const &) const;
+		const_iterator& operator ++();
+		const_iterator const operator ++(int);
+		const_iterator& operator --();
+		const_iterator const operator --(int);
+		std::string const& operator *();
+	private:
+		ConstElementPointer m_pData;
 	};
 };

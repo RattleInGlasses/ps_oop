@@ -5,8 +5,8 @@ class CParallelepiped :
 {
 public:
 	CParallelepiped(double density, double width, double height, double depth);
-	double GetVolume()const;
-	std::string ToString()const;
+	double GetVolume()const override;
+	std::string ToString()const override;
 private:
 	double m_width;
 	double m_height;

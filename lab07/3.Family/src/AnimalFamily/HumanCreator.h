@@ -4,7 +4,7 @@ template <typename Human>
 class CHumanCreator final
 {
 public:
-	CHumanCreator(std::string const &name, CGenderedNamedCreature::Gender const &gender, unsigned birthCertificate) :
+	CHumanCreator(std::string const &name, Gender const &gender, unsigned birthCertificate) :
 		m_name(name),
 		m_gender(gender),
 		m_birthCertificate(birthCertificate)
@@ -17,7 +17,7 @@ public:
 	}
 private:
 	std::string m_name;
-	CGenderedNamedCreature::Gender m_gender;
+	Gender m_gender;
 	unsigned m_birthCertificate;
 };
 

@@ -1,15 +1,14 @@
 #pragma once
+enum class Gender
+{
+	MALE,
+	FEMALE
+};
 class CGenderedNamedCreature
 {
 public:
-	enum class Gender
-	{
-		MALE,
-		FEMALE
-	};
-public:
 	CGenderedNamedCreature(std::string const &name, Gender const &gender);
-	virtual ~CGenderedNamedCreature();
+	virtual ~CGenderedNamedCreature() {};
 	Gender GetGender()const;
 	std::string GetName()const;
 private:
@@ -23,11 +22,7 @@ m_gender(gender)
 {
 }
 
-CGenderedNamedCreature::~CGenderedNamedCreature()
-{
-}
-
-CGenderedNamedCreature::Gender CGenderedNamedCreature::GetGender() const
+Gender CGenderedNamedCreature::GetGender() const
 {
 	return m_gender;
 }

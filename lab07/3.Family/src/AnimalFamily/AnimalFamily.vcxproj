@@ -77,12 +77,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Cat.h" />
-    <ClInclude Include="Dog.h" />
     <ClInclude Include="Family.h" />
     <ClInclude Include="GenderedNamedCreature.h" />
     <ClInclude Include="Human.h" />
     <ClInclude Include="HumanCreator.h" />
+    <ClInclude Include="Pet.h" />
     <ClInclude Include="PetCreator.h" />
     <ClInclude Include="StandardCreatureCreator.h" />
     <ClInclude Include="StandardGenderDeterminer.h" />

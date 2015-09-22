@@ -1,11 +1,7 @@
 #pragma once
-class CMyMath
+namespace MyMath
 {
-public:
-	static int GreatesCommonDivisor(int num1, int num2);
-	static int LeastCommonMultiple(int num1, int num2);
-private:
-	CMyMath();
-	
-};
+	int GreatesCommonDivisor(int num1, int num2);
+	int LeastCommonMultiple(int num1, int num2);
+}
 

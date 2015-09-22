@@ -3,8 +3,6 @@
 
 using namespace std;
 
-#define MakeElementPointer std::make_shared<StrLstElem>
-
 
 // iterator functions
 
@@ -70,10 +68,75 @@ string& CStrLst::iterator::operator *()
 }
 
 
+// const_iterator functions
+
+CStrLst::const_iterator::const_iterator(ConstElementPointer const &pEl) :
+m_pData(pEl)
+{
+};
+
+
+bool CStrLst::const_iterator::operator ==(CStrLst::const_iterator const &it) const
+{
+	return m_pData == it.m_pData;
+}
+
+
+bool CStrLst::const_iterator::operator !=(const_iterator const & it) const
+{
+	return !(*this == it);
+}
+
+
+CStrLst::const_iterator& CStrLst::const_iterator::operator ++()
+{
+	assert(m_pData->next);
+	if (m_pData)
+	{
+		m_pData = m_pData->next;
+	}
+	return *this;
+}
+
+
+CStrLst::const_iterator const CStrLst::const_iterator::operator ++(int)
+{
+	const_iterator copy = *this;
+	++(*this);
+	return copy;
+}
+
+
+CStrLst::const_iterator& CStrLst::const_iterator::operator --()
+{
+	assert(m_pData->prev);
+	if (m_pData)
+	{
+		m_pData = m_pData->prev;
+	}
+	return *this;
+}
+
+
+CStrLst::const_iterator const CStrLst::const_iterator::operator --(int)
+{
+	const_iterator copy = *this;
+	--(*this);
+	return copy;
+}
+
+
+string const& CStrLst::const_iterator::operator *()
+{
+	return m_pData->data;
+}
+
+
+
 // CStrLst functions
 
 CStrLst::CStrLst() :
-	m_pEnd(MakeElementPointer()),
+	m_pEnd(MakeNewElement()),
 	m_pBegin(m_pEnd)
 {
 }
@@ -90,25 +153,58 @@ CStrLst::~CStrLst()
 }
 
 
-CStrLst::iterator CStrLst::begin() const
+CStrLst::iterator CStrLst::begin()
 {
 	return iterator(m_pBegin);
 }
 
 
-CStrLst::iterator CStrLst::end() const
+CStrLst::const_iterator CStrLst::begin() const
+{
+	return const_iterator(m_pBegin);
+}
+
+
+CStrLst::reverse_iterator CStrLst::rbegin()
+{
+	return reverse_iterator(end());
+}
+
+
+CStrLst::const_reverse_iterator CStrLst::rbegin() const
+{
+	return const_reverse_iterator(end());
+}
+
+
+CStrLst::iterator CStrLst::end()
 {
 	return iterator(m_pEnd);
 }
 
 
-void CStrLst::Insert(std::string const &data, iterator &pos)
+CStrLst::const_iterator CStrLst::end() const
 {
-	ElementPointer pNewEl = MakeElementPointer();
-	pNewEl->data = data;
+	return const_iterator(m_pEnd);
+}
 
-	pNewEl->prev = pos.m_pData->prev;
-	pNewEl->next = pos.m_pData;
+
+CStrLst::reverse_iterator CStrLst::rend()
+{
+	return reverse_iterator(begin());
+}
+
+
+CStrLst::const_reverse_iterator CStrLst::rend() const
+{
+	return const_reverse_iterator(begin());
+}
+
+
+
+void CStrLst::Insert(std::string const &data, iterator const &pos)
+{
+	ElementPointer pNewEl = MakeNewElement(data, pos.m_pData, pos.m_pData->prev);
 	pos.m_pData->prev = pNewEl;
 
 	if (pos == begin())
@@ -122,7 +218,7 @@ void CStrLst::Insert(std::string const &data, iterator &pos)
 }
 
 
-void CStrLst::Delete(CStrLst::iterator &pos)
+void CStrLst::Delete(CStrLst::iterator const &pos)
 {
 	if (pos != m_pEnd)
 	{
@@ -136,8 +232,29 @@ void CStrLst::Delete(CStrLst::iterator &pos)
 			pos.m_pData->prev->next = pos.m_pData->next;
 		}
 
-		pos = pos.m_pData->next;
+		//pos = pos.m_pData->next;
 	}
 }
 
-#undef MakeElementPointer
+
+CStrLst::ElementPointer CStrLst::MakeNewElement()
+{
+	return make_shared<StrLstElem>();
+}
+
+
+CStrLst::ElementPointer CStrLst::MakeNewElement(string const &initData, CStrLst::ElementPointer const &initNext, CStrLst::ElementPointer const &initPrev)
+{
+	return make_shared<StrLstElem>(initData, initNext, initPrev);
+}
+
+
+// StrLstElem functions
+
+CStrLst::StrLstElem::StrLstElem(string const &initData, ElementPointer const &initNext, ElementPointer const &initPrev) :
+data(initData),
+next(initNext),
+prev(initPrev)
+{
+}
+

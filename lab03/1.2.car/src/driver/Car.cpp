@@ -38,16 +38,11 @@ bool CCar::SpeedIsInRange(int speed, int gear) const
 // public functions
 
 
-CCar::CCar()
-{
-	m_engineIsTurnedOn = false;
-	m_speed = 0;
-	m_gear = 0;
-	m_direction = Direction::NOWHERE;
-}
-
-
-CCar::~CCar()
+CCar::CCar() :
+m_engineIsTurnedOn(false),
+m_speed(0),
+m_gear(0),
+m_direction(Direction::NOWHERE)
 {
 }
 

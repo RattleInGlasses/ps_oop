@@ -17,6 +17,8 @@
 #include <algorithm>
 #include <iterator>
 #include <initializer_list>
+#include <random>
+#include <chrono>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

@@ -5,12 +5,16 @@
 #include "Family.h"
 #include "PetCreator.h"
 #include "HumanCreator.h"
-#include "Cat.h"
-#include "Dog.h"
+#include "GenderedNamedCreature.h"
+#include "Pet.h"
 #include "Human.h"
 
 using namespace std;
-using Gender = CGenderedNamedCreature::Gender;
+
+struct TagCat {};
+struct TagDog {};
+typedef CPet<TagCat> CCat;
+typedef CPet<TagDog> CDog;
 
 template <typename Pet>
 void MakePetChild(CFamily<Pet, CPetCreator<Pet>> &petFamily, string const &name, Gender const &gender)

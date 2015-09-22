@@ -71,5 +71,11 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Файлы исходного кода\Bodies</Filter>
     </ClCompile>
+    <ClCompile Include="Body.cpp">
+      <Filter>Файлы исходного кода\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidBody.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

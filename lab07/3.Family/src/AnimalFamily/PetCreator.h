@@ -5,7 +5,7 @@ template <typename Pet>
 class CPetCreator final
 {
 public:
-	CPetCreator(std::string const &name, CGenderedNamedCreature::Gender const &gender) :
+	CPetCreator(std::string const &name, Gender const &gender) :
 		m_name(name),
 		m_gender(gender)
 	{
@@ -17,6 +17,6 @@ public:
 	}
 private:
 	std::string m_name;
-	CGenderedNamedCreature::Gender m_gender;
+	Gender m_gender;
 };
 

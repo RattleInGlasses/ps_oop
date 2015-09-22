@@ -1,10 +1,11 @@
 #pragma once
 #include <stdint.h>
 #include <crtdefs.h>
+#include <iterator>
 class CMyString
 {
 public:
-	class iterator
+	class iterator : public std::iterator<std::random_access_iterator_tag, char>
 	{
 	public:
 		iterator(CMyString *pString, char *pChar);
@@ -16,6 +17,9 @@ public:
 		iterator operator +(ptrdiff_t offset)const;
 		iterator operator -(ptrdiff_t offset)const;
 		ptrdiff_t operator -(iterator const &it2)const;
+		iterator &operator +=(ptrdiff_t offset);
+		iterator &operator -=(ptrdiff_t offset);
+		iterator &operator =(iterator const &it2);
 		char &operator *()const;
 		char &operator [](ptrdiff_t index)const;
 		bool operator ==(iterator const &it2)const;
@@ -24,7 +28,7 @@ public:
 		CMyString *const m_pString;
 		char *m_pChar;
 	};
-	class const_iterator
+	class const_iterator : public std::iterator<std::random_access_iterator_tag, char const>
 	{
 	public:
 		const_iterator(CMyString const *pString, char const *pChar);
@@ -36,6 +40,9 @@ public:
 		const_iterator operator +(ptrdiff_t offset)const;
 		const_iterator operator -(ptrdiff_t offset)const;
 		ptrdiff_t operator -(const_iterator const &it2)const;
+		const_iterator &operator +=(ptrdiff_t offset);
+		const_iterator &operator -=(ptrdiff_t offset);
+		const_iterator &operator =(const_iterator const &it2);
 		char const &operator *()const;
 		char const &operator [](ptrdiff_t index)const;
 		bool operator ==(const_iterator const &it2)const;
@@ -44,47 +51,8 @@ public:
 		CMyString const *const m_pString;
 		char const *m_pChar;
 	};
-	class reverse_iterator
-	{
-	public:
-		reverse_iterator(CMyString *pString, char *pChar);
-	public:
-		reverse_iterator &operator ++();
-		reverse_iterator operator ++(int);
-		reverse_iterator &operator --();
-		reverse_iterator operator --(int);
-		reverse_iterator operator +(ptrdiff_t offset)const;
-		reverse_iterator operator -(ptrdiff_t offset)const;
-		ptrdiff_t operator -(reverse_iterator const &it2)const;
-		char &operator *()const;
-		char &operator [](ptrdiff_t index)const;
-		bool operator ==(reverse_iterator const &it2)const;
-		bool operator !=(reverse_iterator const &it2)const;
-	private:
-		//CMyString *const m_pString;
-		CMyString *m_pString;
-		char *m_pChar;
-	};
-	class const_reverse_iterator
-	{
-	public:
-		const_reverse_iterator(CMyString const *pString, char const *pChar);
-	public:
-		const_reverse_iterator &operator ++();
-		const_reverse_iterator operator ++(int);
-		const_reverse_iterator &operator --();
-		const_reverse_iterator operator --(int);
-		const_reverse_iterator operator +(ptrdiff_t offset)const;
-		const_reverse_iterator operator -(ptrdiff_t offset)const;
-		ptrdiff_t operator -(const_reverse_iterator const &it2)const;
-		char const &operator *()const;
-		char const &operator [](ptrdiff_t index)const;
-		bool operator ==(const_reverse_iterator const &it2)const;
-		bool operator !=(const_reverse_iterator const &it2)const;
-	private:
-		CMyString const *m_pString;
-		char const *m_pChar;
-	};
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 public:
 	iterator begin();
 	const_iterator begin()const;
@@ -125,8 +93,6 @@ private:
 
 CMyString::iterator operator +(ptrdiff_t offset, CMyString::iterator const &it);
 CMyString::const_iterator operator +(ptrdiff_t offset, CMyString::const_iterator const &it);
-CMyString::reverse_iterator operator +(ptrdiff_t offset, CMyString::reverse_iterator const &it);
-CMyString::const_reverse_iterator operator +(ptrdiff_t offset, CMyString::const_reverse_iterator const &it);
 
 CMyString operator +(CMyString const &str1, CMyString const &str2);
 bool operator ==(CMyString const &str1, CMyString const &str2);
