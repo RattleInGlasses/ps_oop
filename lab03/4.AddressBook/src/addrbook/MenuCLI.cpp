@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MenuCLI.h"
 
-
 using namespace std;
 using boost::trim;
 
@@ -12,8 +11,10 @@ namespace
 		{
 			"MainMenu",
 			{
-				{ "1. Find subscriber records" },
-				{ "2. Add new subscriber record" },
+				{ "1. Show subscriber records" },
+				{ "2. Edit subscriber records"},
+				{ "3. Delete subscriber record" },
+				{ "4. Add new subscriber record" },
 				{ "Q. Exit the program" }
 			}
 		},
@@ -40,30 +41,40 @@ namespace
 			}
 		},
 		{
-			"ChooseSubscriber",
+			"ShowSubscriberRecords",
 			{
-				{ "<subscriber id>. Make choice" },
-				{ "A. Accept" },
+				{ "<id>. Show subscriber" },
 				{ "C. Cancel" }
 			}
 		},
 		{
-			"ChooseSubscriberAction",
+			"ShowSubscriberRecord",
 			{
-				{ "1. Edit subscriber" },
-				{ "2. Delete subscriber" },
-				{ "A. Accept" },
 				{ "C. Cancel" }
 			}
 		},
 		{
-			"EditSubscriber",
+			"EditSubscriberRecords",
+			{
+				{ "<id>. Edit subscriber" },
+				{ "C. Cancel" }
+			}
+		},
+		{
+			"EditSubscriberRecord",
 			{
 				{ "1. Edit name" },
 				{ "2. Edit address" },
 				{ "3. Edit phones" },
 				{ "4. Edit emails" },
 				{ "A. Accept" },
+				{ "C. Cancel" }
+			}
+		},
+		{
+			"DeleteSubscriberRecord",
+			{
+				{ "<id>. Delete subscriber" },
 				{ "C. Cancel" }
 			}
 		},
@@ -81,25 +92,17 @@ namespace
 		{
 			"EditPhones",
 			{
-				{ "1. Add phone" },
-				{ "2. Choose phone" },
+				{ "1. Update phones" },
+				{ "2. Delete phones" },
+				{ "3. Add phone" },
 				{ "A. Accept" },
 				{ "C. Cancel" }
 			}
 		},
 		{
-			"ChoosePhone",
+			"UpdatePhones",
 			{
-				{ "<phone id>. Make choice" },
-				{ "A. Accept" },
-				{ "C. Cancel" }
-			}
-		},
-		{
-			"ChoosePhoneAction",
-			{
-				{ "1. Edit phone" },
-				{ "2. Delete phone" },
+				{ "<phone id>. Update phone" },
 				{ "A. Accept" },
 				{ "C. Cancel" }
 			}
@@ -107,25 +110,17 @@ namespace
 		{
 			"EditEmails",
 			{
-				{ "1. Add email" },
-				{ "2. Choose email" },
+				{ "1. Update emails" },
+				{ "2. Delete emails" },
+				{ "3. Add email" },
 				{ "A. Accept" },
 				{ "C. Cancel" }
 			}
 		},
 		{
-			"ChooseEmail",
+			"UpdateEmails",
 			{
-				{ "<email id>. Make choice" },
-				{ "A. Accept" },
-				{ "C. Cancel" }
-			}
-		},
-		{
-			"ChooseEmailAction",
-			{
-				{ "1. Edit email" },
-				{ "2. Delete email" },
+				{ "<email id>. Update email" },
 				{ "A. Accept" },
 				{ "C. Cancel" }
 			}
@@ -185,30 +180,33 @@ namespace
 				{ "Please enter new email:" }
 			}
 		},
+		{
+			"DeletePhones",
+			{
+				{ "<phone id>. Delete phone" },
+				{ "A. Accept" },
+				{ "C. Cancel" }
+			}
+		},
+		{
+			"DeleteEmails",
+			{
+				{ "<email id>. Delete email" },
+				{ "A. Accept" },
+				{ "C. Cancel" }
+			}
+		}
 	};
 
 
-	void PrintPhone(ostream &ost, string const &phone)
-	{
-		ost << "Phone: " << phone << endl;
-	}
-
-
-	void PrintEmail(ostream &ost, string const &email)
-	{
-		ost << "Email: " << email << endl;
-	}
-	
-
-	void PrintSubscribersId(ostream &ost, CAddressBook::CSubscriberReferenceList const &subscribers)
+	void PrintSubscriberIds(ostream &ost, vector<size_t> const &subscriberIndexes, CAddressBook const &addressBook)
 	{
 		ost << "Subscribers:" << endl;
-		for (size_t i = 0; i < subscribers.size(); ++i)
+		for (size_t i = 0; i < subscriberIndexes.size(); ++i)
 		{
-			ost << i + 1 << ". " << subscribers[i].GetName().GetValue() << endl;
+			ost << i + 1 << ". " << string(addressBook[subscriberIndexes.at(i)].GetName()) << endl;
 		}
 	}
-
 
 	void PrintVectorDataId(ostream &ost, string const &prompt, vector<string> const &data)
 	{
@@ -222,39 +220,27 @@ namespace
 		}
 	}
 
-
+	
 	void PrintEmailIds(ostream &ost, vector<string> const &emails)
 	{
 		PrintVectorDataId(ost, "Emails:", emails);
 	}
+	
 
-
-	void PrintPhonesId(ostream &ost, vector<string> const &phones)
+	void PrintPhoneIds(ostream &ost, vector<string> const &phones)
 	{
 		PrintVectorDataId(ost, "Phones:", phones);
 	}
-
+	
 
 	void PrintAddress(ostream &ost, CPostAddress const &address)
 	{
-		ost << "Address: ";
-		if (address.GetCity() != "")
-		{
-			ost << address.GetCity() << " ";
-		}
-		if (address.GetStreet() != "")
-		{
-			ost << address.GetStreet() << " ";
-		}
-		if (address.GetHouse() != "")
-		{
-			ost << address.GetHouse() << " ";
-		}
-		if (address.GetApartment() != 0)
-		{
-			ost << address.GetApartment();
-		}
-		ost << endl;
+		ost << "Address: "
+			<< "\"" << address.GetCity() << "\","
+			<< "\"" << address.GetStreet() << "\","
+			<< "\"" << address.GetHouse() << "\","
+			<< "\"" << ((address.GetApartment() == 0) ? "" : to_string(address.GetApartment())) << "\""
+			<< endl;
 	}
 
 
@@ -297,6 +283,33 @@ namespace
 	}
 
 
+	void PrintSubscriberInfo(ostream &ost,
+		string const &name,
+		CPostAddress const &address,
+		std::vector<std::string> const phones,
+		std::vector<std::string> const emails)
+	{
+		PrintName(ost, name);
+		PrintAddress(ost, address);
+		PrintPhonesLine(ost, phones);
+		PrintEmailsLine(ost, emails);
+	}
+
+	void PrintSubscriberInfo(ostream &ost, CSubscriber const &subscriber)
+	{
+		PrintSubscriberInfo(ost,
+			subscriber.GetName(),
+			subscriber.GetAddress(),
+			subscriber.GetPhones(),
+			subscriber.GetEmails());
+	}
+
+	void ClearScreen()
+	{
+		system("cls");
+	}
+
+	
 	string ReadLine(istream &ist)
 	{
 		string line;
@@ -306,26 +319,22 @@ namespace
 		}
 		return line;
 	}
-
+	
 	template <typename T>
-	T ReadFromLine(string const &line)
+	boost::optional<T> ReadFromLine(string const &line)
 	{
 		T result;
 		istringstream lineStream(line);
-		lineStream >> result;
-		return result;
-	}
-
-	template <typename T>
-	T ReadFromStream(istream &ist)
-	{
-		T result;
-		ist >> result;
-		return result;
+		if (lineStream >> result)
+		{
+			return result;
+		}
+		return boost::none;
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 CMenuCLI::CMenuCLI(istream &ist, ostream &ost) :
 m_ist(ist),
@@ -352,19 +361,6 @@ string CMenuCLI::ReadUserCommand() const
 }
 
 
-void CMenuCLI::PrintSubscriberInfo(string const &name,
-	CPostAddress const &address,
-	std::vector<std::string> const phones,
-	std::vector<std::string> const emails) const
-{
-	PrintName(m_ost, name);
-	PrintAddress(m_ost, address);
-	PrintPhonesLine(m_ost, phones);
-	PrintEmailsLine(m_ost, emails);
-	m_ost << endl;
-}
-
-
 // menu relations functions
 
 void CMenuCLI::Start(CAddressBook &addressBook)
@@ -379,13 +375,22 @@ void CMenuCLI::MainMenu(CAddressBook &addressBook) const
 
 	for (;;)
 	{
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 		if (command == "1")
 		{
-			FindSubscribers(addressBook);
+			ShowSubscribers(addressBook);
 		}
 		else if (command == "2")
+		{
+			EditSubscribers(addressBook);
+		}
+		else if (command == "3")
+		{
+			DeleteSubscriber(addressBook);
+		}
+		else if (command == "4")
 		{
 			AddSubscriber(addressBook);
 		}
@@ -393,11 +398,209 @@ void CMenuCLI::MainMenu(CAddressBook &addressBook) const
 		{
 			return;
 		}
+		m_ost << endl;
 	}
 }
 
 
-void CMenuCLI::FindSubscribers(CAddressBook &addressBook) const
+void CMenuCLI::ShowSubscribers(CAddressBook const &addressBook) const
+{
+	if (auto subscriberIndexes = FindSubscribers(addressBook))
+	{
+		ShowSubscriberRecords(addressBook, *subscriberIndexes);
+	}
+}
+
+
+void CMenuCLI::ShowSubscriberRecords(CAddressBook const &addressBook, std::vector<size_t> const &subscriberIndexes) const
+{
+	string menuName = "ShowSubscriberRecords";
+
+	for (;;)
+	{
+		ClearScreen();
+		PrintSubscriberIds(m_ost, subscriberIndexes, addressBook);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto chooserRecord = ReadFromLine<unsigned>(command))
+		{
+			if (*chooserRecord - 1 < subscriberIndexes.size())
+			{
+				ShowSubscriberRecord(addressBook[subscriberIndexes.at(*chooserRecord - 1)]);
+			}
+		}
+
+		if (command == "c")
+		{
+			return;
+		}
+	}
+}
+
+
+void CMenuCLI::ShowSubscriberRecord(CSubscriber const &subscriber) const
+{
+	string menuName = "ShowSubscriberRecord";
+
+	for (;;)
+	{
+		ClearScreen();
+		PrintSubscriberInfo(m_ost, subscriber);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (command == "c")
+		{
+			return;
+		}
+	}
+}
+
+
+void CMenuCLI::EditSubscribers(CAddressBook &addressBook) const
+{
+	if (auto subscriberIndexes = FindSubscribers(addressBook))
+	{
+		EditSubscriberRecords(addressBook, *subscriberIndexes);
+	}
+}
+
+
+void CMenuCLI::EditSubscriberRecords(CAddressBook &addressBook, std::vector<size_t> const &subscriberIndexes) const
+{
+	string menuName = "EditSubscriberRecords";
+
+	for (;;)
+	{
+		ClearScreen();
+		PrintSubscriberIds(m_ost, subscriberIndexes, addressBook);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto chooserRecord = ReadFromLine<unsigned>(command))
+		{
+			if (*chooserRecord - 1 < subscriberIndexes.size())
+			{
+				EditSubscriberRecord(addressBook[subscriberIndexes.at(*chooserRecord - 1)]);
+			}
+		}
+
+		if (command == "c")
+		{
+			return;
+		}
+	}
+}
+
+
+bool CMenuCLI::EditSubscriberRecord(CSubscriber &subscriber) const
+{
+	string menuName = "EditSubscriberRecord";
+
+	string name = subscriber.GetName();
+	CPostAddress address = subscriber.GetAddress();
+	vector<string> phones = subscriber.GetPhones();
+	vector<string> emails = subscriber.GetEmails();
+	for (;;)
+	{
+		ClearScreen();
+		if (name == "")
+		{
+			m_ost << "The record can't be saved. The name must not be empty." << endl;
+		}
+		PrintSubscriberInfo(m_ost, name, address, phones, emails);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (command == "1")
+		{
+			UpdateName(name);
+		}
+		if (command == "2")
+		{
+			UpdateAddress(address);
+		}
+		if (command == "3")
+		{
+			EditPhones(phones);
+		}
+		if (command == "4")
+		{
+			EditEmails(emails);
+		}
+		if ((command == "a")
+			&& (name != ""))
+		{
+			subscriber.SetName(name);
+			subscriber.SetAddress(address);
+			subscriber.SetPhones(phones);
+			subscriber.SetEmails(emails);
+			return true;
+		}
+		if (command == "c")
+		{
+			return false;
+		}
+	}
+}
+
+
+void CMenuCLI::DeleteSubscriber(CAddressBook &addressBook) const
+{
+	if (auto subscriberIndexes = FindSubscribers(addressBook))
+	{
+		DeleteSubscriberRecord(addressBook, *subscriberIndexes);
+	}
+}
+
+
+void CMenuCLI::DeleteSubscriberRecord(CAddressBook &addressBook, std::vector<size_t> const &subscriberIndexes) const
+{
+	string menuName = "DeleteSubscriberRecord";
+
+	for (;;)
+	{
+		ClearScreen();
+		PrintSubscriberIds(m_ost, subscriberIndexes, addressBook);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto choosenRecord = ReadFromLine<unsigned>(command))
+		{
+			if (*choosenRecord - 1 < subscriberIndexes.size())
+			{
+				addressBook.DeleteSubscriber(subscriberIndexes.at(*choosenRecord - 1));
+				return;
+			}
+		}
+
+		if (command == "c")
+		{
+			return;
+		}
+	}
+}
+
+
+void CMenuCLI::AddSubscriber(CAddressBook &addressBook) const
+{
+	CSubscriber newRecord("new record");
+	if (EditSubscriberRecord(newRecord))
+	{
+		addressBook.AddSubscriber(newRecord);
+	}
+}
+
+
+// choose from list functions
+
+boost::optional<vector<size_t>> CMenuCLI::FindSubscribers(CAddressBook const &addressBook) const
 {
 	string menuName = "FindSubscribers";
 
@@ -407,18 +610,21 @@ void CMenuCLI::FindSubscribers(CAddressBook &addressBook) const
 	vector<string> emails;
 	for (;;)
 	{
+		ClearScreen();
+		m_ost << "Enter properties of subscribers you want to find" << endl;
+
+		PrintSubscriberInfo(m_ost, name, address, phones, emails);
 		m_ost << endl;
-		PrintSubscriberInfo(name, address, phones, emails);
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 
 		if (command == "1")
 		{
-			EditName(name);
+			UpdateName(name);
 		}
 		if (command == "2")
 		{
-			EditAddress(address);
+			UpdateAddress(address);
 		}
 		if (command == "3")
 		{
@@ -430,229 +636,19 @@ void CMenuCLI::FindSubscribers(CAddressBook &addressBook) const
 		}
 		if (command == "a")
 		{
-			ChooseSubscriber(addressBook, name, address, phones, emails);
+			return addressBook.FindSubscribers(name, address, phones, emails);
 		}
 		if (command == "c")
 		{
-			return;
+			return boost::none;
 		}
 	}
 }
-
-
-// choose from list functions
-
-void CMenuCLI::ChooseSubscriber(CAddressBook &addressBook,
-	string const &name,
-	CPostAddress const &address, 
-	vector<string> const &phones,
-	vector<string> const &emails) const
-{
-	string menuName = "ChooseSubscriber";
-
-	auto foundRecords = addressBook.FindSubscribers(name, address, phones, emails);
-	for (;;)
-	{
-		m_ost << endl;
-		PrintSubscribersId(m_ost, foundRecords);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		unsigned choosenRecord = ReadFromLine<unsigned>(command) - 1;
-		if (choosenRecord < foundRecords.size())
-		{
-			string action = ChooseSubscriberAction();
-			if (action == "1")
-			{
-				EditSubscriber(foundRecords[choosenRecord]);
-			}
-			if (action == "2")
-			{
-				// addressBook.Delete(foundRecords[choosenRecord]);
-			}
-		}
-
-		if (command == "a")
-		{
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-
-	/*auto copySubscribers = subscribers;
-	for (;;)
-	{
-		m_ost << endl;
-		PrintSubscribersId(m_ost, copySubscribers);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		unsigned choosenSubscriber = ReadFromLine<unsigned>(command) - 1;
-		if (choosenSubscriber < copySubscribers.size())
-		{
-			ChooseSubscriberAction(copySubscribers[choosenSubscriber]);
-			if ()
-		}
-	}*/
-}
-
-
-string CMenuCLI::ChooseSubscriberAction() const
-{
-	string menuName = "ChooseSubscriberAction";
-
-	m_ost << endl;
-	PrintMenuPrompt(menuName);
-	
-	string result = ReadLine(m_ist);
-	trim(result);
-	return result;
-}
-
-
-void CMenuCLI::ChoosePhone(std::vector<std::string> &phones) const
-{
-	string menuName = "ChoosePhone";
-
-	auto copyPhones = phones;
-	for (;;)
-	{
-		m_ost << endl;
-		PrintPhonesId(m_ost, copyPhones);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		unsigned choosenPhone = ReadFromLine<unsigned>(command) - 1;
-		if (choosenPhone < copyPhones.size())
-		{
-			ChoosePhoneAction(copyPhones.at(choosenPhone));
-			if (copyPhones.at(choosenPhone) == "")
-			{
-				copyPhones.erase(copyPhones.begin() + choosenPhone);
-			}
-		}
-		
-		if (command == "a")
-		{
-			phones = move(copyPhones);
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-}
-
-
-void CMenuCLI::ChoosePhoneAction(std::string &phone) const
-{
-	string menuName = "ChoosePhoneAction";
-
-	string copyPhone(phone);
-	for (;;)
-	{
-		m_ost << endl;
-		PrintPhone(m_ost, copyPhone);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		if (command == "1")
-		{
-			EditPhone(copyPhone);
-		}
-		if (command == "2")
-		{
-			DeletePhone(copyPhone);
-		}
-		if (command == "a")
-		{
-			phone = move(copyPhone);
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-}
-
-
-void CMenuCLI::ChooseEmail(std::vector<std::string> &emails) const
-{
-	string menuName = "ChooseEmail";
-
-	auto copyEmails = emails;
-	for (;;)
-	{
-		m_ost << endl;
-		PrintEmailIds(m_ost, copyEmails);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		unsigned chooseEmail = ReadFromLine<unsigned>(command) -1;
-		if (chooseEmail < copyEmails.size())
-		{
-			ChooseEmailAction(copyEmails.at(chooseEmail));
-			if (copyEmails.at(chooseEmail) == "")
-			{
-				copyEmails.erase(copyEmails.begin() + chooseEmail);
-			}
-		}
-
-		if (command == "a")
-		{
-			emails = move(copyEmails);
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-}
-
-
-void CMenuCLI::ChooseEmailAction(std::string &email) const
-{
-	string menuName = "ChooseEmailAction";
-
-	string copyEmail(email);
-	for (;;)
-	{
-		m_ost << endl;
-		PrintEmail(m_ost, copyEmail);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		if (command == "1")
-		{
-			EditEmail(copyEmail);
-		}
-		if (command == "2")
-		{
-			DeleteEmail(copyEmail);
-		}
-		if (command == "a")
-		{
-			email = move(copyEmail);
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-}
-
 
 
 // Edit choice functions
 
-void CMenuCLI::EditAddress(CPostAddress &address) const
+void CMenuCLI::UpdateAddress(CPostAddress &address) const
 {
 	string menuName = "EditAddress";
 
@@ -662,26 +658,27 @@ void CMenuCLI::EditAddress(CPostAddress &address) const
 	unsigned apartment = address.GetApartment();
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintAddress(m_ost, city, street, house, apartment);
+		m_ost << endl;
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 
 		if (command == "1")
 		{
-			EditCity(city);
+			UpdateCity(city);
 		}
 		if (command == "2")
 		{
-			EditStreet(street);
+			UpdateStreet(street);
 		}
 		if (command == "3")
 		{
-			EditHouse(house);
+			UpdateHouse(house);
 		}
 		if (command == "4")
 		{
-			EditApartment(apartment);
+			UpdateApartment(apartment);
 		}
 		if (command == "a")
 		{
@@ -705,22 +702,68 @@ void CMenuCLI::EditPhones(vector<string> &phones) const
 	vector<string> copyPhones(phones);
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintPhonesLine(m_ost, copyPhones);
+		m_ost << endl;
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 
 		if (command == "1")
 		{
-			AddPhone(copyPhones);
+			if (copyPhones.size() > 0)
+			{
+				UpdatePhones(copyPhones);
+			}
 		}
 		if (command == "2")
 		{
-			ChoosePhone(copyPhones);
+			if (copyPhones.size() > 0)
+			{
+				DeletePhones(copyPhones);
+			}
 		}
+		if (command == "3")
+		{
+			AddPhone(copyPhones);
+		}
+
 		if (command == "a")
 		{
 			phones = copyPhones;
+			return;
+		}
+		if (command == "c")
+		{
+			return;
+		}
+	}
+}
+
+
+void CMenuCLI::UpdatePhones(vector<string> &phones) const
+{
+	string menuName = "UpdatePhones";
+
+	auto copyPhones = phones;
+	for (;;)
+	{
+		ClearScreen();
+		PrintPhoneIds(m_ost, copyPhones);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto choosenPhone = ReadFromLine<unsigned>(command))
+		{
+			if (*choosenPhone - 1 < copyPhones.size())
+			{
+				UpdatePhone(copyPhones.at(*choosenPhone - 1));
+			}
+		}
+
+		if (command == "a")
+		{
+			phones = move(copyPhones);
 			return;
 		}
 		if (command == "c")
@@ -737,18 +780,29 @@ void CMenuCLI::EditEmails(vector<string> &emails) const
 	vector<string> copyEmails(emails);
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintEmailsLine(m_ost, copyEmails);
+		m_ost << endl;
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 
 		if (command == "1")
 		{
-			AddEmail(copyEmails);
+			if (copyEmails.size() > 0)
+			{
+				UpdateEmails(copyEmails);
+			}
 		}
 		if (command == "2")
 		{
-			ChooseEmail(copyEmails);
+			if (copyEmails.size() > 0)
+			{
+				DeleteEmails(copyEmails);
+			}
+		}
+		if (command == "3")
+		{
+			AddEmail(copyEmails);
 		}
 		if (command == "a")
 		{
@@ -763,43 +817,30 @@ void CMenuCLI::EditEmails(vector<string> &emails) const
 }
 
 
-// Edit functions
-
-void CMenuCLI::EditSubscriber(CSubscriber &subscriber) const
+void CMenuCLI::UpdateEmails(vector<string> &emails) const
 {
-	string menuName = "EditSubscriber";
+	string menuName = "UpdateEmails";
 
-	string name;
-	CPostAddress address;
-	vector<string> phones;
-	vector<string> emails;
+	auto copyEmails = emails;
 	for (;;)
 	{
+		ClearScreen();
+		PrintEmailIds(m_ost, copyEmails);
 		m_ost << endl;
-		PrintSubscriberInfo(name, address, phones, emails);
 		PrintMenuPrompt(menuName);
 		string command = ReadUserCommand();
 
-		if (command == "1")
+		if (auto choosenEmail = ReadFromLine<unsigned>(command))
 		{
-			EditName(name);
+			if (*choosenEmail - 1 < copyEmails.size())
+			{
+				UpdateEmail(copyEmails.at(*choosenEmail - 1));
+			}
 		}
-		if (command == "2")
-		{
-			EditAddress(address);
-		}
-		if (command == "3")
-		{
-			EditPhones(phones);
-		}
-		if (command == "4")
-		{
-			EditEmails(emails);
-		}
+
 		if (command == "a")
 		{
-			subscriber.SetName(name);
-			subscriber.SetAddress(address);
+			emails = move(copyEmails);
 			return;
 		}
 		if (command == "c")
@@ -809,115 +850,115 @@ void CMenuCLI::EditSubscriber(CSubscriber &subscriber) const
 	}
 }
 
-void CMenuCLI::EditName(string &name) const
+
+// Update functions
+
+void CMenuCLI::UpdateName(string &name) const
 {
 	string menuName = "EditName";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 		
 		name = ReadLine(m_ist);
-		m_ost << "The name has been changed to " << name << endl;
+		trim(name);
 		return;
 	}
 }
 
 
-void CMenuCLI::EditCity(std::string &city) const
+void CMenuCLI::UpdateCity(std::string &city) const
 {
 	string menuName = "EditCity";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
 		city = ReadLine(m_ist);
-		m_ost << "The city has been changed to " << city << endl;
 		return;
 	}
 }
 
 
-void CMenuCLI::EditStreet(std::string &street) const
+void CMenuCLI::UpdateStreet(std::string &street) const
 {
 	string menuName = "EditStreet";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
 		street = ReadLine(m_ist);
-		m_ost << "The street has been changed to " << street << endl;
 		return;
 	}
 }
 
 
-void CMenuCLI::EditHouse(std::string &house) const
+void CMenuCLI::UpdateHouse(std::string &house) const
 {
 	string menuName = "EditHouse";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
 		house = ReadLine(m_ist);
-		m_ost << "The house has been changed to " << house << endl;
 		return;
 	}
 }
 
 
-void CMenuCLI::EditApartment(unsigned &apartment) const
+void CMenuCLI::UpdateApartment(unsigned &apartment) const
 {
 	string menuName = "EditApartment";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
-		apartment = ReadFromStream<unsigned>(m_ist);
-		m_ost << "The apartment number has been changed to " << apartment << endl;
-		return;
+		if (auto newApartmentNumber = ReadFromLine<unsigned>(ReadLine(m_ist)))
+		{
+			apartment = *newApartmentNumber;
+			return;
+		}
 	}
 }
 
 
-void CMenuCLI::EditPhone(string &phone) const
+void CMenuCLI::UpdatePhone(string &phone) const
 {
 	string menuName = "EditPhone";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
 		phone = ReadLine(m_ist);
 		trim(phone);
-		m_ost << "The phone number has been changed to " << phone << endl;
 		return;
 	}
 }
 
 
-void CMenuCLI::EditEmail(string &email) const
+void CMenuCLI::UpdateEmail(string &email) const
 {
 	string menuName = "EditEmail";
 
 	for (;;)
 	{
-		m_ost << endl;
+		ClearScreen();
 		PrintMenuPrompt(menuName);
 
 		email = ReadLine(m_ist);
 		trim(email);
-		m_ost << "The email has been changed to " << email << endl;
 		return;
 	}
 }
@@ -925,53 +966,10 @@ void CMenuCLI::EditEmail(string &email) const
 
 // Add functions
 
-void CMenuCLI::AddSubscriber(CAddressBook &addressBook) const
-{
-	string menuName = "AddSubscriber";
-
-	string name;
-	CPostAddress address;
-	vector<string> phones;
-	vector<string> emails;
-	for (;;)
-	{
-		m_ost << endl;
-		PrintSubscriberInfo(name, address, phones, emails);
-		PrintMenuPrompt(menuName);
-		string command = ReadUserCommand();
-
-		if (command == "1")
-		{
-			EditName(name);
-		}
-		if (command == "2")
-		{
-			EditAddress(address);
-		}
-		if (command == "3")
-		{
-			EditPhones(phones);
-		}
-		if (command == "4")
-		{
-			EditEmails(emails);
-		}
-		if (command == "a")
-		{
-			return;
-		}
-		if (command == "c")
-		{
-			return;
-		}
-	}
-}
-
-
 void CMenuCLI::AddPhone(vector<string> &phones) const
 {
 	string newPhone;
-	EditPhone(newPhone);
+	UpdatePhone(newPhone);
 	if (newPhone != "")
 	{
 		phones.push_back(newPhone);
@@ -982,7 +980,7 @@ void CMenuCLI::AddPhone(vector<string> &phones) const
 void CMenuCLI::AddEmail(vector<string> &emails) const
 {
 	string newEmail;
-	EditEmail(newEmail);
+	UpdateEmail(newEmail);
 	if (newEmail != "")
 	{
 		emails.push_back(newEmail);
@@ -992,14 +990,69 @@ void CMenuCLI::AddEmail(vector<string> &emails) const
 
 // Delete functions
 
-void CMenuCLI::DeletePhone(string &phone) const
-{
-	m_ost << "The phone " << phone << " has been deleted" << endl;
-	phone = "";
+
+void CMenuCLI::DeletePhones(vector<string> &phones) const
+{	
+	string menuName = "DeletePhones";
+
+	auto copyPhones = phones;
+	for (;;)
+	{
+		ClearScreen();
+		PrintPhoneIds(m_ost, copyPhones);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto choosenPhone = ReadFromLine<unsigned>(command))
+		{
+			if (*choosenPhone - 1 < copyPhones.size())
+			{
+				copyPhones.erase(copyPhones.begin() + *choosenPhone - 1);
+			}
+		}
+
+		if (command == "a")
+		{
+			phones = move(copyPhones);
+			return;
+		}
+		if (command == "c")
+		{
+			return;
+		}
+	}
 }
 
-void CMenuCLI::DeleteEmail(string &email) const
+void CMenuCLI::DeleteEmails(vector<string> &emails) const
 {
-	m_ost << "The email " << email << " has been deleted" << endl;
-	email = "";
+	string menuName = "DeleteEmails";
+
+	auto copyEmails = emails;
+	for (;;)
+	{
+		ClearScreen();
+		PrintEmailIds(m_ost, copyEmails);
+		m_ost << endl;
+		PrintMenuPrompt(menuName);
+		string command = ReadUserCommand();
+
+		if (auto choosenEmail = ReadFromLine<unsigned>(command))
+		{
+			if (*choosenEmail - 1 < copyEmails.size())
+			{
+				copyEmails.erase(copyEmails.begin() + *choosenEmail - 1);
+			}
+		}
+
+		if (command == "a")
+		{
+			emails = move(copyEmails);
+			return;
+		}
+		if (command == "c")
+		{
+			return;
+		}
+	}
 }

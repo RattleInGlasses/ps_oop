@@ -13,44 +13,52 @@ namespace
 		string part;
 		while (iss >> part)
 		{
-			boost::to_lower(part);
 			result.insert(part);
 		}
 
+		return result;
+	}
+
+	string Lower(string const &str)
+	{
+		string result = str;
+		boost::to_lower(result, locale(".866"));
 		return result;
 	}
 }
 
 
 CName::CName(string const &name) :
-m_data(name)
+m_name(name)
 {
-	trim(m_data);
+	trim(m_name);
 }
 
 
-string CName::GetValue() const
+CName::CName(char const *pName) :
+m_name(pName)
 {
-	return m_data;
+	trim(m_name);
 }
 
 
-void CName::SetValue(string const &value)
+CName &CName::operator =(std::string const &value)
 {
-	m_data = value;
-	trim(m_data);
+	m_name = value;
+	trim(m_name);
+	return *this;
+}
+
+CName::operator std::string() const
+{
+	return m_name;
 }
 
 
-bool CName::operator ==(string const &name2Str) const
+bool CName::Match(std::string const &name2Str) const
 {
-	auto nameParts1 = BreakNameIntoParts(m_data);
-	auto nameParts2 = BreakNameIntoParts(name2Str);
+	auto nameParts1 = BreakNameIntoParts(Lower(m_name));
+	auto nameParts2 = BreakNameIntoParts(Lower(name2Str));
 	return includes(nameParts1.begin(), nameParts1.end(), nameParts2.begin(), nameParts2.end());
 }
 
-
-bool CName::operator !=(string const &name2Str) const
-{
-	return !(*this == name2Str);
-}

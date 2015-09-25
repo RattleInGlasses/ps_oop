@@ -7,18 +7,29 @@ namespace
 {
 	void CheckNameThrow(CName const &name)
 	{
-		if (name.GetValue() == "")
+		if (string(name) == "")
 		{
 			throw invalid_argument("A subscriber's name must not be empty");
 		}
+	}
+
+	bool VectorHasElements(vector<string> const &base, vector<string> elements)
+	{
+		if (elements.size() == 0)
+		{
+			return true;
+		}
+
+		sort(elements.begin(), elements.end());
+		return includes(base.begin(), base.end(), elements.begin(), elements.end());
 	}
 }
 
 
 CSubscriber::CSubscriber(CName const &name,
 	CPostAddress const &address,
-	initializer_list<string> const &phones,
-	initializer_list<string> const &emails) :
+	vector<string> const &phones,
+	vector<string> const &emails) :
 m_name(name),
 m_address(address),
 m_phones(phones),
@@ -40,89 +51,27 @@ void CSubscriber::SetName(CName const &value)
 }
 
 
-size_t CSubscriber::GetPhonesCount() const
+vector<string> const &CSubscriber::GetPhones() const
 {
-	return m_phones.size();
+	return m_phones;
 }
 
 
-string const &CSubscriber::GetPhone(size_t index) const
+void CSubscriber::SetPhones(std::vector<std::string> const &value)
 {
-	return m_phones.at(index);
+	m_phones = value;
 }
 
 
-string &CSubscriber::GetPhone(size_t index)
+vector<string> const &CSubscriber::GetEmails() const
 {
-	return m_phones.at(index);
+	return m_emails;
 }
 
 
-void CSubscriber::AddPhone(string const &phone)
+void CSubscriber::SetEmails(vector<string> const &value)
 {
-	m_phones.push_back(phone);
-}
-
-
-void CSubscriber::DeletePhone(size_t index)
-{
-	assert(index < m_phones.size());
-	m_phones.erase(m_phones.begin() + index);
-}
-
-
-void CSubscriber::SetPhone(size_t index, std::string const &value)
-{
-	m_phones.at(index) = value;
-}
-
-
-bool CSubscriber::HasPhones(std::vector<std::string> const &phonesToCheck) const
-{
-	return includes(m_phones.begin(), m_phones.end(), phonesToCheck.begin(), phonesToCheck.end());
-}
-
-
-size_t CSubscriber::GetEmailsCount() const
-{
-	return m_emails.size();
-}
-
-
-string const &CSubscriber::GetEmail(size_t index) const
-{
-	return m_emails.at(index);
-}
-
-
-string &CSubscriber::GetEmail(size_t index)
-{
-	return m_emails.at(index);
-}
-
-
-void CSubscriber::AddEmail(string const &email)
-{
-	m_emails.push_back(email);
-}
-
-
-void CSubscriber::DeleteEmail(size_t index)
-{
-	assert(index < m_emails.size());
-	m_emails.erase(m_emails.begin() + index);
-}
-
-
-void CSubscriber::SetEmail(size_t index, std::string const &value)
-{
-	m_emails.at(index) = value;
-}
-
-
-bool CSubscriber::HasEmails(std::vector<std::string> const &emailsToCheck) const
-{
-	return includes(m_emails.begin(), m_emails.end(), emailsToCheck.begin(), emailsToCheck.end());
+	m_emails = value;
 }
 
 
@@ -135,4 +84,30 @@ CPostAddress const &CSubscriber::GetAddress() const
 void CSubscriber::SetAddress(CPostAddress const &value)
 {
 	m_address = value;
+}
+
+
+bool CSubscriber::Match(string const &name,
+	CPostAddress const &address,
+	vector<string> const &phones,
+	vector<string> const &emails) const
+{
+	return ((m_name.Match(name))
+		&& (m_address.Match(address))
+		&& (HavePhones(phones))
+		&& (HaveEmails(emails)));
+}
+
+
+// private methods
+
+bool CSubscriber::HavePhones(std::vector<std::string> const &phonesToCheck) const
+{
+	return VectorHasElements(m_phones, phonesToCheck);
+}
+
+
+bool CSubscriber::HaveEmails(std::vector<std::string> const &emailsToCheck) const
+{
+	return VectorHasElements(m_emails, emailsToCheck);
 }

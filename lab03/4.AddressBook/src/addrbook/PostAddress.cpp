@@ -9,7 +9,7 @@ namespace
 	string Lower(string const &str)
 	{
 		string result(str);
-		boost::to_lower(result);
+		boost::to_lower(result, locale(".866"));
 		return result;
 	}
 }
@@ -79,7 +79,7 @@ unsigned CPostAddress::GetApartment() const
 }
 
 
-bool CPostAddress::operator ==(CPostAddress const &address2) const
+bool CPostAddress::Match(CPostAddress const &address2) const
 {
 	
 	return (((Lower(m_city) == Lower(address2.m_city)) || (address2.m_city == ""))
@@ -88,8 +88,3 @@ bool CPostAddress::operator ==(CPostAddress const &address2) const
 		&& ((m_apartment == address2.m_apartment) || (address2.m_apartment == 0)));
 }
 
-
-bool CPostAddress::operator !=(CPostAddress const &address2) const
-{
-	return !(*this == address2);
-}

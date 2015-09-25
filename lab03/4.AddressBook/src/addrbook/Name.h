@@ -4,13 +4,12 @@ class CName
 {
 public:
 	CName(std::string const & = "");
+	CName(char const *);
 public:
-	std::string GetValue() const;
-	void SetValue(std::string const &);
-public:
-	bool operator ==(std::string const &) const;
-	bool operator !=(std::string const &) const;
+	CName &operator =(std::string const &);
+	operator std::string() const;
+	bool Match(std::string const &) const;
 private:
-	std::string m_data;
+	std::string m_name;
 };
 

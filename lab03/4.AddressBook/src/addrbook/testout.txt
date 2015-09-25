@@ -1,0 +1,2 @@
+subscriber1,Defcon;air;21a;12,112233;332211;111111,email@mail.ru;mail@email.ur
+su\"bs\"criber2,Defcon;;;12,,email@mail.ru;mail@email.ur

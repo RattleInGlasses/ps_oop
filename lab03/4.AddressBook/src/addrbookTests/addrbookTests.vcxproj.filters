@@ -13,12 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Файлы исходного кода\Classes">
+      <UniqueIdentifier>{6ebc7a9d-7d86-40a7-ad02-37a1fc1a4953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Tests">
+      <UniqueIdentifier>{044e6e49-296d-4eb8-ab81-6f4a80452f3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\addrbook\AddressBook.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\addrbook\Name.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\addrbook\PostAddress.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\addrbook\Subscriber.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,8 +47,29 @@
     <ClCompile Include="main.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleTests.cpp">
-      <Filter>Файлы исходного кода</Filter>
+    <ClCompile Include="..\addrbook\AddressBook.cpp">
+      <Filter>Файлы исходного кода\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\addrbook\Name.cpp">
+      <Filter>Файлы исходного кода\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\addrbook\PostAddress.cpp">
+      <Filter>Файлы исходного кода\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\addrbook\Subscriber.cpp">
+      <Filter>Файлы исходного кода\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="NameTests.cpp">
+      <Filter>Файлы исходного кода\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="PostAddressTests.cpp">
+      <Filter>Файлы исходного кода\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriberTests.cpp">
+      <Filter>Файлы исходного кода\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="AddressBookTests.cpp">
+      <Filter>Файлы исходного кода\Tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

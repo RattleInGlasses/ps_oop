@@ -17,8 +17,7 @@ public:
 	std::string GetHouse() const;
 	unsigned GetApartment() const;
 public:
-	bool operator ==(CPostAddress const &) const;
-	bool operator !=(CPostAddress const &) const;
+	bool Match(CPostAddress const &) const;
 private:
 	std::string m_city;
 	std::string m_street;

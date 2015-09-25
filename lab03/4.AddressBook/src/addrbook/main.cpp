@@ -13,8 +13,13 @@ using namespace std;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	CMenuCLI menu(cin, cout);
-	
-	menu.Start(CAddressBook());
+	CAddressBook addressBook;	
+
+	addressBook.LoadSubsribers("test.txt");
+
+	menu.Start(addressBook);
+
+	addressBook.SaveSubsribers("testout.txt");
 	
 	return 0;
 }
