@@ -147,7 +147,6 @@ void CAddressBook::LoadSubsribers(string const &fileName)
 	if (ifs.is_open())
 	{
 		string line;
-		vector<string> splitted;
 		while (getline(ifs, line))
 		{
 			if (auto subscriber = ConstructSubscriberFromLines(SplitMainLine(line)))

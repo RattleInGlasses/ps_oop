@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_SUITE(CPostAddress_)
 			BOOST_CHECK_EQUAL(addr.GetCity(), "");
 			BOOST_CHECK_EQUAL(addr.GetStreet(), "");
 			BOOST_CHECK_EQUAL(addr.GetHouse(), "");
-			BOOST_CHECK_EQUAL(addr.GetApartment(), 0);
+			BOOST_CHECK_EQUAL(addr.GetApartment(), 0u);
 		}
 
 		BOOST_AUTO_TEST_CASE(with_predefinded_properties)
@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_SUITE(CPostAddress_)
 			BOOST_CHECK_EQUAL(addr1.GetCity(), "City1");
 			BOOST_CHECK_EQUAL(addr1.GetStreet(), "Street1");
 			BOOST_CHECK_EQUAL(addr1.GetHouse(), "1h");
-			BOOST_CHECK_EQUAL(addr1.GetApartment(), 10);
+			BOOST_CHECK_EQUAL(addr1.GetApartment(), 10u);
 		}
 	BOOST_AUTO_TEST_SUITE_END()
 
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(CPostAddress_)
 		BOOST_CHECK_EQUAL(addr.GetCity(), "City1");
 		BOOST_CHECK_EQUAL(addr.GetStreet(), "Street1");
 		BOOST_CHECK_EQUAL(addr.GetHouse(), "1h");
-		BOOST_CHECK_EQUAL(addr.GetApartment(), 10);
+		BOOST_CHECK_EQUAL(addr.GetApartment(), 10u);
 
 	}
 

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
 	CMenuCLI menu(cin, cout);
 	CAddressBook addressBook;	

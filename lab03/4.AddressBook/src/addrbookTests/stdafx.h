@@ -14,12 +14,16 @@
 #include <exception>
 #include <set>
 #include <sstream>
+#include <fstream>
 #include <algorithm>
 #include <functional>
 #include <map>
 #include <boost\algorithm\string\case_conv.hpp>
 #include <boost\algorithm\string\trim.hpp>
 #include <boost\optional\optional.hpp>
+
+#include <boost\token_functions.hpp>
+#include <boost\tokenizer.hpp>
 
 
 

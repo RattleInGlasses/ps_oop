@@ -6,8 +6,9 @@ class CMenuCLI
 public:
 	CMenuCLI(std::istream &, std::ostream &);
 	void Start(CAddressBook &);
+	CMenuCLI& operator=(const CMenuCLI &) = delete;
 private:
- 	void PrintMenuPrompt(std::string const &menuName) const;
+	void PrintMenuPrompt(std::string const &menuName) const;
  	std::string ReadUserCommand() const;
 
  	void MainMenu(CAddressBook &) const;
