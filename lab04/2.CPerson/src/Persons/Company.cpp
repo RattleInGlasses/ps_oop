@@ -16,7 +16,7 @@ void CCompany::SetWebsite(string const &value)
 }
 
 
-string const &CCompany::GetWebsite()
+string const &CCompany::GetWebsite() const
 {
 	return m_website;
 }

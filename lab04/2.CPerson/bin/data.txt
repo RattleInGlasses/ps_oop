@@ -1,0 +1,16 @@
+"universities"
+Университет Международных Отношений
+MGU
+GMU
+"students"
+m,Вася,18,150,70,1,MGU
+f,Маша,18,100,80,1,Университет Международных Отношений
+m,Петя,19,160,50,2,MGU
+"companies"
+Trade"," Market"," City & Everithing else,www.trade.co
+DLL,
+AppleSoft,www.microple.com
+"workers"
+m,Николай,31,173,50,разнорабочий,DLL
+f,Елизавета,25,173,100,ген. директор,Trade"," Market"," City & Everithing else
+f,Руслана,21,170,45,матрос,DLL

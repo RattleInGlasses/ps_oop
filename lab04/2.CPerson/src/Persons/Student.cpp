@@ -23,7 +23,7 @@ namespace
 
 	void CheckStudyYearIncreaseThrow(int newStudyYear, int prevStudyYear)
 	{
-		if (newStudyYear <= prevStudyYear)
+		if (newStudyYear < prevStudyYear)
 		{
 			throw invalid_argument("The study year can only increase");
 		}
@@ -67,3 +67,21 @@ void CStudent::SetStudyYear(int value)
 	CheckStudyYearRangeThrow(value);
 	m_studyYear = value;
 }
+
+
+/*
+CStudent &CStudent::operator =(CStudent const &student2)
+{
+	if (GetGender() == student2.GetGender())
+	{
+		m_pUniversity = student2.m_pUniversity;
+		m_studyYear = student2.m_studyYear;
+		SetName(student2.GetName());
+		SetAge(student2.GetAge());
+		SetHeight(student2.GetHeight());
+		SetWeight(student2.GetWeight());
+	}
+	
+	return *this;
+}*/
+

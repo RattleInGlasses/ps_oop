@@ -13,6 +13,8 @@ public:
 	int GetStudyYear() const;
 	void SetUniversity(CUniversity const *value);
 	void SetStudyYear(int value);
+
+	//CStudent &operator =(CStudent const &student2);
 private:
 	CUniversity const *m_pUniversity;
 	int m_studyYear;
