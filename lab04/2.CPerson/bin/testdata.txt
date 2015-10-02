@@ -1,0 +1,13 @@
+"universities"
+\"universities\"
+MGU
+GMU
+"students"
+m,Вася,18,150,70,1,MGU
+f,Маша,18,100,80,1,\"universities\"
+m,Петя,19,160,50,2,MGU
+"companies"
+Trade"," Market"," City & Co,www.trade.co
+DLL,
+AppleSoft,www.microple.com
+"workers"

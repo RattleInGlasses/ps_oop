@@ -9,7 +9,7 @@ public:
 	virtual ~CCompany() override final {};
 public:
 	void SetWebsite(std::string const &value);
-	std::string const &GetWebsite();
+	std::string const &GetWebsite() const;
 private:
 	std::string m_website;
 };

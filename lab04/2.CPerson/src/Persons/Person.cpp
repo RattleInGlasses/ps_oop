@@ -78,7 +78,7 @@ unsigned CPerson::GetWeight() const
 
 void CPerson::SetAge(unsigned value)
 {
-	if (value <= m_age)
+	if (value < m_age)
 	{
 		throw invalid_argument("Age can only increase");
 	}
@@ -96,7 +96,7 @@ void CPerson::SetName(std::string value)
 
 void CPerson::SetHeight(unsigned value)
 {
-	if (value <= m_height)
+	if (value < m_height)
 	{
 		throw invalid_argument("Height can only increase");
 	}

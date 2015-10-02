@@ -21,6 +21,8 @@ public:
 	void SetHeight(unsigned value);
 	void SetWeight(unsigned value);
 private:
+	CPerson &operator =(CPerson &);
+private:
 	Gender const m_gender;
 	unsigned m_age;
 	std::string m_name;
