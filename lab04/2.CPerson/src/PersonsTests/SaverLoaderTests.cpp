@@ -6,7 +6,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_SUITE(SaverLoader)
 
-	BOOST_AUTO_TEST_SUITE(Load_data_is_reversed_to_Save)
+	BOOST_AUTO_TEST_SUITE(Load_is_reversed_to_Save)
 
 		bool UniversitiesCmp(CUniversity const &univer1, CUniversity const &univer2)
 		{

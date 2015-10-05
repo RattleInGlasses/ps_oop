@@ -90,7 +90,7 @@
       <Filter>Заголовочные файлы\Menu\Functions</Filter>
     </ClInclude>
     <ClInclude Include="CliMenu.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +143,7 @@
       <Filter>Файлы исходного кода\Menu\Functions</Filter>
     </ClCompile>
     <ClCompile Include="CliMenu.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
