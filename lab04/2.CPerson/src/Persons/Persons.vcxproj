@@ -77,19 +77,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CLIMenu.h" />
+    <ClInclude Include="Cli.h" />
+    <ClInclude Include="CliFunctions.h" />
+    <ClInclude Include="CliMenu.h" />
+    <ClInclude Include="CompaniesMenu.h" />
     <ClInclude Include="Company.h" />
     <ClInclude Include="Organization.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="SaverLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Student.h" />
+    <ClInclude Include="StudentsMenu.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UniversitiesMenu.h" />
     <ClInclude Include="University.h" />
     <ClInclude Include="Worker.h" />
+    <ClInclude Include="WorkersMenu.h" />
+    <ClInclude Include="CliMenus.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CLIMenu.cpp" />
+    <ClCompile Include="Cli.cpp" />
+    <ClCompile Include="CliFunctions.cpp" />
+    <ClCompile Include="CliMenu.cpp" />
+    <ClCompile Include="CliMenus.cpp" />
+    <ClCompile Include="CompaniesMenu.cpp" />
     <ClCompile Include="Company.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Organization.cpp" />
@@ -100,8 +111,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="StudentsMenu.cpp" />
+    <ClCompile Include="UniversitiesMenu.cpp" />
     <ClCompile Include="University.cpp" />
     <ClCompile Include="Worker.cpp" />
+    <ClCompile Include="WorkersMenu.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

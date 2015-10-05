@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_SUITE(CPerson_)
 			BOOST_CHECK_EQUAL(pPerson2->GetHeight(), 150u);
 		}
 
-		BOOST_AUTO_TEST_CASE(width)
+		BOOST_AUTO_TEST_CASE(weight)
 		{
 			pPerson1->SetWeight(70);
 			BOOST_CHECK_EQUAL(pPerson1->GetWeight(), 70u);

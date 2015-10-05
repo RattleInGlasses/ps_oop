@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Файлы ресурсов">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Файлы исходного кода\SaverLoader">
       <UniqueIdentifier>{365d87a6-65ce-4e4d-8135-5db17f6d9014}</UniqueIdentifier>
     </Filter>
@@ -25,15 +21,30 @@
     <Filter Include="Заголовочные файлы\SaverLoader">
       <UniqueIdentifier>{ec0b4b9f-803c-4418-bf36-61af83c6b624}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Menu">
+      <UniqueIdentifier>{4f455c6f-d03a-4786-b082-96cfbe148d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Menu">
+      <UniqueIdentifier>{fcfb1cf9-b9bc-4e68-896a-2e154060b615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Menu\Classes">
+      <UniqueIdentifier>{14f4d902-4e96-4dbd-b65c-c81b9e82c107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Menu\Functions">
+      <UniqueIdentifier>{a91c75ad-25a7-4c99-9d98-358cc2d242db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Menu\Classes">
+      <UniqueIdentifier>{fe064eb4-4f42-493d-afe6-70f8540867d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Menu\Functions">
+      <UniqueIdentifier>{21ccf2cd-e7ff-43dd-8b50-3e613199bbeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="CLIMenu.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Company.h">
@@ -56,6 +67,30 @@
     </ClInclude>
     <ClInclude Include="SaverLoader.h">
       <Filter>Заголовочные файлы\SaverLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Cli.h">
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CompaniesMenu.h">
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="StudentsMenu.h">
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="UniversitiesMenu.h">
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkersMenu.h">
+      <Filter>Заголовочные файлы\Menu\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CliFunctions.h">
+      <Filter>Заголовочные файлы\Menu\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="CliMenus.h">
+      <Filter>Заголовочные файлы\Menu\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="CliMenu.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,11 +118,32 @@
     <ClCompile Include="Worker.cpp">
       <Filter>Файлы исходного кода\DataClasses</Filter>
     </ClCompile>
-    <ClCompile Include="CLIMenu.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="SaverLoader.cpp">
       <Filter>Файлы исходного кода\SaverLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Cli.cpp">
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkersMenu.cpp">
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="UniversitiesMenu.cpp">
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="StudentsMenu.cpp">
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CompaniesMenu.cpp">
+      <Filter>Файлы исходного кода\Menu\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CliFunctions.cpp">
+      <Filter>Файлы исходного кода\Menu\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="CliMenus.cpp">
+      <Filter>Файлы исходного кода\Menu\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="CliMenu.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

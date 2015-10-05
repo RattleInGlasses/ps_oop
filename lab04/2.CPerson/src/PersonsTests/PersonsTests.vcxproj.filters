@@ -45,6 +45,9 @@
     <ClInclude Include="..\Persons\Worker.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="..\Persons\SaverLoader.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -85,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="WorkerTests.cpp">
       <Filter>Файлы исходного кода\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="SaverLoaderTests.cpp">
+      <Filter>Файлы исходного кода\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Persons\SaverLoader.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

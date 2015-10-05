@@ -247,6 +247,10 @@ string EscapeString(string const &str)
 		{
 			escapedString += "\\\"";
 		}
+		else if (ch == '\\')
+		{
+			escapedString += "\\\\";
+		}
 		else if (ch == ',')
 		{
 			((escapedString += "\"") += ch) += "\"";

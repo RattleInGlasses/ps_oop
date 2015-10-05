@@ -1,0 +1,13 @@
+"universities"
+Huge Big Smally
+RGU
+GMU
+ФГОП (Федеральное гуманитарное образовательное помещение)
+"students"
+m,Николай,21,141,52,4,Huge Big Smally
+f,Валентина,20,201,3,3,Huge Big Smally
+"companies"
+Trades,www.trades.com
+Global Work Technologies,
+"workers"
+f,Галина Бланка,23,123,32,буль-буль,Global Work Technologies

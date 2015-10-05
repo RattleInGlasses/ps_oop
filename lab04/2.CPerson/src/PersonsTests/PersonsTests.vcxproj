@@ -84,6 +84,7 @@
     <ClInclude Include="..\Persons\Company.h" />
     <ClInclude Include="..\Persons\Organization.h" />
     <ClInclude Include="..\Persons\Person.h" />
+    <ClInclude Include="..\Persons\SaverLoader.h" />
     <ClInclude Include="..\Persons\Student.h" />
     <ClInclude Include="..\Persons\University.h" />
     <ClInclude Include="..\Persons\Worker.h" />
@@ -94,12 +95,14 @@
     <ClCompile Include="..\Persons\Company.cpp" />
     <ClCompile Include="..\Persons\Organization.cpp" />
     <ClCompile Include="..\Persons\Person.cpp" />
+    <ClCompile Include="..\Persons\SaverLoader.cpp" />
     <ClCompile Include="..\Persons\Student.cpp" />
     <ClCompile Include="..\Persons\University.cpp" />
     <ClCompile Include="..\Persons\Worker.cpp" />
     <ClCompile Include="CompanyTests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PersonTests.cpp" />
+    <ClCompile Include="SaverLoaderTests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

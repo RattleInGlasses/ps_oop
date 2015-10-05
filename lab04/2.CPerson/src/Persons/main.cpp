@@ -2,12 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "University.h"
-#include "Student.h"
-#include "Company.h"
-#include "Worker.h"
-#include "CLIMenu.h"
 #include "SaverLoader.h"
+#include "Cli.h"
 
 using namespace std;
 
@@ -92,10 +88,10 @@ int main(int argc, char* argv[])
 	list<CUniversity> universities;
 	list<CWorker> workers;
 	list<CCompany> companies;
-	CCLIMenu menu(cout, cin);
+	CCli menu(cout, cin, students, universities, workers, companies);
 
 	LoadFromFile(cout, datafileName, students, universities, workers, companies);	
-	if (menu.Start(students, universities, workers, companies))
+	if (menu.Start())
 	{
 		if (SaveToFilePrompt(cin, cout))
 		{
