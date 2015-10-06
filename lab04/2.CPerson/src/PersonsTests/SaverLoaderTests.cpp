@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Persons\SaverLoader.h"
+#include <boost/filesystem.hpp>
 
 using namespace std;
 
@@ -156,6 +157,28 @@ BOOST_AUTO_TEST_SUITE(SaverLoader)
 			CheckSaveLoadReversedEquality({ university }, { student }, { company }, { worker });
 		}
 
+		class CTempFile
+		{
+		public:
+			using path=boost::filesystem::path;
+			CTempFile()
+				:m_filePath(boost::filesystem::temp_directory_path() / boost::filesystem::unique_path())
+			{
+				
+			}
+
+			path GetPath()const
+			{
+				return m_filePath;
+			}
+
+			~CTempFile()
+			{
+				boost::filesystem::remove(m_filePath);
+			}
+		private:
+			path m_filePath;
+		};
 
 		// this is a cleaning function
 		BOOST_AUTO_TEST_CASE(_)

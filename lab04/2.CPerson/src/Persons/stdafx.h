@@ -24,6 +24,7 @@
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/optional.hpp>
+#include <boost/noncopyable.hpp>
 
 
 

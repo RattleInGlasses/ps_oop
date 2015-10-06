@@ -18,7 +18,10 @@
 #include <exception>
 #include <memory>
 #include <list>
+#pragma warning(push)
+#pragma warning(disable: 4127)
 #include <boost/range/algorithm/equal.hpp>
+#pragma warning(pop)
 #include <boost/optional.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
