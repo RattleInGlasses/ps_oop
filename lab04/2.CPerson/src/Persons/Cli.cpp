@@ -36,6 +36,7 @@ bool CCli::Start()
 	return MainMenu();
 }
 
+
 bool CCli::MainMenu()
 {
 	string menuName = "MainMenu";

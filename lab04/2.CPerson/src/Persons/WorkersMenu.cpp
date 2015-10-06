@@ -23,13 +23,9 @@ namespace
 	list<reference_wrapper<const CWorker>> GetWorkerListByCompany(list<CWorker> const &workers, CCompany const &company)
 	{
 		list<reference_wrapper<const CWorker>> result;
-		for (auto &worker : workers)
-		{
-			if (worker.GetCompany() == &company)
-			{
-				result.push_back(worker);
-			}
-		}
+		push_back_nonmovable_if(workers, result, [&](CWorker const &worker){
+			return worker.GetCompany() == &company;
+		});
 		return result;
 	}
 

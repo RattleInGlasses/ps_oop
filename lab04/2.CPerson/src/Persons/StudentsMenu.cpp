@@ -23,13 +23,9 @@ namespace
 	list<reference_wrapper<const CStudent>> GetStudentListByUniversity(list<CStudent> const &students, CUniversity const &university)
 	{
 		list<reference_wrapper<const CStudent>> result;
-		for (auto &student : students)
-		{
-			if (student.GetUniversity()->GetName() == university.GetName())
-			{
-				result.push_back(student);
-			}
-		}
+		push_back_nonmovable_if(students, result, [&](CStudent const &student){
+			return student.GetUniversity()->GetName() == university.GetName();
+		});
 		return result;
 	}
 

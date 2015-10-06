@@ -28,7 +28,7 @@ namespace
 }
 
 
-CCompaniesMenu::CCompaniesMenu(ostream &ost, istream &ist, std::list<CCompany> &companies, std::list<CWorker> &workers) :
+CCompaniesMenu::CCompaniesMenu(ostream &ost, istream &ist, list<CCompany> &companies, list<CWorker> &workers) :
 m_ost(ost),
 m_ist(ist),
 m_companies(companies),
@@ -55,7 +55,7 @@ bool CCompaniesMenu::Start()
 void CCompaniesMenu::ShowCompanies() const
 {
 	ListChoiseAndReturnWithProcessFunctionMenu<CCompany>(m_ost, m_ist, "ShowCompaniesMenu",	m_companies,
- 		bind(&CCompaniesMenu::ShowCompany, &*this, std::placeholders::_1));
+ 		bind(&CCompaniesMenu::ShowCompany, &*this, placeholders::_1));
 }
 
 
@@ -85,7 +85,7 @@ void CCompaniesMenu::AddCompany()
 void CCompaniesMenu::EditCompanies()
 {
 	ListChoiseAndReturnWithProcessFunctionMenu(m_ost, m_ist, "EditCompaniesMenu", m_companies,
-		bind(&CCompaniesMenu::EditCompany, &*this, std::placeholders::_1));
+		bind(&CCompaniesMenu::EditCompany, &*this, placeholders::_1));
 }
 
 
@@ -126,7 +126,7 @@ void CCompaniesMenu::DeleteCompany()
 {
 	if (m_companies.size() > 0)
 	{
-		if (auto pDeletedCompany = DeleteListElementMenu<CCompany>(m_ost, m_ist, m_companies, "DeleteCompanyMenu"))
+		if (auto pDeletedCompany = DeleteListElementMenu(m_ost, m_ist, m_companies, "DeleteCompanyMenu"))
 		{
 			DeleteWorkersByCompanyPtr(*pDeletedCompany, m_workers);
 			MarkChangesOccurrence();

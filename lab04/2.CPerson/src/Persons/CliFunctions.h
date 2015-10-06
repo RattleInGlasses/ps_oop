@@ -32,6 +32,8 @@ Gender ReadGender(std::ostream &ost, std::istream &ist, std::string const &promp
 
 template <typename Range, typename Pred>
 void remove_nonmovable_if(Range &objects, Pred checkFunction);
+template <typename InRng, typename OutRng, typename Pred>
+void push_back_nonmovable_if(InRng &inRange, OutRng &outRange, Pred checkFunction);
 
 template <typename T>
 bool NameOccupied(std::string const &name, std::list<T> const &dataList);
@@ -84,6 +86,18 @@ void remove_nonmovable_if(Range &objects, Pred checkFunction)
 		else
 		{
 			++it;
+		}
+	}
+}
+
+template <typename InRng, typename OutRng, typename Pred>
+void push_back_nonmovable_if(InRng &inRange, OutRng &outRng, Pred checkFunction)
+{
+	for (auto &el : inRange)
+	{
+		if (checkFunction(el))
+		{
+			outRng.push_back(el);
 		}
 	}
 }
